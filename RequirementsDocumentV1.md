@@ -41,17 +41,27 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 | Stakeholder name | Description |
 | :--------------: | :---------: |
-| Stakeholder x..  |             |
+| Customer         |             |
+| Shop owner      | Manager of the shop |
+| Product companies| Company producing the product sell on the website |
+| Tech admin | Admin of the website |
+| Competitors | Website such as Amazon, MediaWorld..|
+| Control Team ?? | Check stock ?? |
+
+
+
+ ?? Notes : do they put ads ? 
+
 
 # Context Diagram and interfaces
 
-## Context Diagram
+## Context Diagram - Gino
 
-\<Define here Context diagram using UML use case diagram>
+\<Define here Context diagram using UML use case diagram> 
 
 \<actors are a subset of stakeholders>
 
-## Interfaces
+## Interfaces - Ale Sarv Laura
 
 \<describe here each interface in the context diagram>
 
@@ -61,7 +71,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | :-------: | :---------------: | :----------------: |
 | Actor x.. |                   |                    |
 
-# Stories and personas
+# Stories and personas - Everybody
 
 \<A Persona is a realistic impersonation of an actor. Define here a few personas and describe in plain text how a persona interacts with the system>
 
@@ -71,7 +81,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 # Functional and non functional requirements
 
-## Functional Requirements
+## Functional Requirements - Ale
 
 \<In the form DO SOMETHING, or VERB NOUN, describe high level capabilities of the system>
 
@@ -83,7 +93,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  FR2  |             |
 | FRx.. |             |
 
-## Non Functional Requirements
+## Non Functional Requirements - Ale
 
 \<Describe constraints on functional requirements>
 
@@ -96,7 +106,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 # Use case diagram and use cases
 
-## Use case diagram
+## Use case diagram - Laura 
 
 \<define here UML Use case diagram UCD summarizing all use cases, and their relationships>
 
@@ -143,18 +153,18 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ..
 
-# Glossary
+# Glossary - Sarv
 
 \<use UML class diagram to define important terms, or concepts in the domain of the application, and their relationships>
 
 \<concepts must be used consistently all over the document, ex in use cases, requirements etc>
 
-# System Design
+# System Design - Gino
 
 \<describe here system design>
 
 \<must be consistent with Context diagram>
 
-# Deployment Diagram
+# Deployment Diagram - Everybody
 
 \<describe here deployment diagram >
