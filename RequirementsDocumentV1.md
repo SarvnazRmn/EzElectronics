@@ -89,7 +89,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 |  ID   | Description |
 | :---: | :---------: |
-|  FR1  |             |
+| **FR1**  |  User Authentication   |
 |  FR2  |             |
 | FRx.. |             |
 
