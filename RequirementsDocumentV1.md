@@ -87,11 +87,33 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 \<they match to high level use cases>
 
-|  ID   | Description |
-| :---: | :---------: |
-| **FR1**  |  User Authentication   |
-|  FR2  |             |
-| FRx.. |             |
+## Functional Requirements
+
+|  ID   | Description                                    |
+| :---: | :--------------------------------------------  |
+| *FR1* | User Management                               |
+|  FR1.1 | Creates new User                            |
+|  FR1.2 | Retrieves all users                           |
+|  FR1.3 | Retrieves all users with a specific role      |
+|  FR1.4 | Retrieves specific user                     |
+|  FR1.5 | Deletes specific user                       |
+| *FR2* | User Authentication                           |
+|  FR2.1 | User Log_in/Log_out                             |
+| *FR3* | Cart Management                               |
+|  FR3.1 | Retrieves the cart for a specific user        |
+|  FR3.2 | Adds a product to the user's cart             |
+|  FR3.3 | Retrieves all carts/orders for a specific customer |
+|  FR3.4 | Removes a product from the user's cart        |
+|  FR3.5 | Deletes a specific cart                       |
+|  FR3.6 | Deletes all carts                             |
+| *FR4* | Product Management                            |
+|  FR4.1 | Registers the arrival of a new set of products|
+|  FR4.2 | Registers the arrival of a single new product |
+|  FR4.3 | Marks a product as sold                       |
+|  FR4.4 | Returns all products, or only the ones that have been sold or not sold |
+|  FR4.5 | Returns all products of a specific model, or only the ones that have been sold or not sold |
+|  FR4.6 | Deletes all products                          |
+|  FR4.7 | Deletes a specific product                    |
 
 ## Non Functional Requirements - Ale
 
