@@ -122,6 +122,15 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |     Variants     |                      \<other normal executions>                      |
 |    Exceptions    |                        \<exceptions, errors >                        |
 
+### UC1 - Use Case 1: Add product to cart
+| Actors Involved  |  Customer                                                            |
+| :--------------: | :------------------------------------------------------------------: |
+|   Precondition   | The user must be authenticated and a have "customer" (role)          |
+|  Post condition  | The cart should contain the requested product                        |
+| Nominal Scenario | The user add the product successfully to his cart                    |
+|     Variants     | The user add **n** product to his cart                               |
+|    Exceptions    | The product is sold out <br> The product does not exist              |
+
 ##### Scenario 1.1
 
 \<describe here scenarios instances of UC1>
@@ -132,26 +141,78 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 \<only relevant scenarios should be described>
 
-|  Scenario 1.1  |                                                                            |
+|  Scenario 1.1  | The user add 1 product to his cart                                         |
 | :------------: | :------------------------------------------------------------------------: |
-|  Precondition  | \<Boolean expression, must evaluate to true before the scenario can start> |
-| Post condition |  \<Boolean expression, must evaluate to true after scenario is finished>   |
-|     Step#      |                                Description                                 |
-|       1        |                                                                            |
-|       2        |                                                                            |
-|      ...       |                                                                            |
+|  Precondition  | The user must be authenticated and a have "customer" (role)                |
+| Post condition | The cart should contain the requested product                              |
+|     Step#      | **Description**                                                            |
+|       1        | The customer has a list of product                                         |
+|       2        | The customer clicks on one product                                         |
+|       3        | The customer clicks on "Add to cart"                                       |
+|       4        | The system updates the cart and add the product                            |
+|       5        | The customer can click and "Continue ordering" (or "Go to cart")           |
 
 ##### Scenario 1.2
 
-##### Scenario 1.x
+|  Scenario 1.2  | The user add n item of a product to his cart                               |
+| :------------: | :------------------------------------------------------------------------: |
+|  Precondition  | The user must be authenticated and a have "customer" (role)                |
+| Post condition | The cart should contain the **n** requested product                        |
+|     Step#      | **Description**                                                            |
+|       1        | The customer has a list of product                                         |
+|       2        | The customer clicks on one product                                         |
+|       3        | The customer selects the number of item to **n**                           |
+|       4        | The customer clicks on "Add to cart"                                       |
+|       5        | The system updates the cart and add the products                           |
+|       6        | The customer can clicks and "Continue ordering" (or "Go to cart")          |
 
-### Use case 2, UC2
 
-..
+### UC2 - Use case 2 : Add New Product
 
-### Use case x, UCx
+| Actors Involved  | Store Manager                                                            |
+| :--------------: | :----------------------------------------------------------------------: |
+|   Precondition   | Manager is authenticated and has the "manager" role                      |
+|  Post condition  | The new product is added to the system                                   |
+| Nominal Scenario | The manager adds a new product with all required information             |
+|     Variants     | The manager adds a new product with additional details                   |
+|    Exceptions    | Product with the same name already exists <br> Required fields are not filled out correctly|
 
-..
+##### Scenario 2.1: Add a new product
+
+|   Scenario 2.1   | Manager add a new product to the system                                  |
+| :--------------: | :----------------------------------------------------------------------: |
+|   Precondition   | Manager is authenticated and has the "manager" role                      |
+|  Post condition  | The new product is added to the system                                   |
+|      Step#       | **Description**                                                          |
+|        1         | The manager navigates to the "Add New Product" section                   |
+|        2         | The manager enters product information (selling price, model, category, etc.)|
+|        3         | The manager saves the new product                                        |
+|        4         | The system adds the product to the inventory                             |
+
+
+### UC3 - Use Case 3: View Cart History
+
+| Actors Involved  | Customer                                                                 |
+| :--------------: | :----------------------------------------------------------------------: |
+|   Precondition   | The customer authenticated and has the "customer" role                   |
+|  Post condition  | The customer can view their cart history                                 |
+| Nominal Scenario | The customer accesses and views their cart history (only checked out cart)|
+|     Variants     |                                                                          |
+|    Exceptions    | No cart history available for the customer                               |
+
+##### Scenario 3.1: View cart history
+
+|   Scenario 3.1   | Customer views cart history                                              |
+| :--------------: | :----------------------------------------------------------------------: |
+|   Precondition   | The customer is authenticated and has the "customer" role                |
+|  Post condition  | The customer can view their cart history (only cheked out cart)          |
+|      Step#       | **Description**                                                          |
+|        1         | The customer navigates to "Cart" section                                 |
+|        2         | The customer navigates to "History" section                              |
+|        3         | The customer sees a list of their past checket out cart                  |
+|        4         | The customer clicks on a specific cart to view details                   |
+
+---
 
 # Glossary - Sarv
 
