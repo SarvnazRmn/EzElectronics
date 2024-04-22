@@ -39,25 +39,22 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 # Stakeholders
 
-| Stakeholder name | Description |
-| :--------------: | :---------: |
-| Customer         |             |
-| Shop owner      | Manager of the shop |
-| Product companies| Company producing the product sell on the website |
-| Tech admin | Admin of the website |
-| Competitors | Website such as Amazon, MediaWorld..|
-| Control Team ?? | Check stock ?? |
+| Stakeholder name  |                    Description                    |
+| :---------------: | :-----------------------------------------------: |
+|     Customer      |                                                   |
+|    Shop owner     |                Manager of the shop                |
+| Product companies | Company producing the product sell on the website |
+|    Tech admin     |               Admin of the website                |
+|    Competitors    |       Website such as Amazon, MediaWorld..        |
+|  Control Team ??  |                  Check stock ??                   |
 
-
-
- ?? Notes : do they put ads ? 
-
+?? Notes : do they put ads ?
 
 # Context Diagram and interfaces
 
 ## Context Diagram - Gino
 
-\<Define here Context diagram using UML use case diagram> 
+\<Define here Context diagram using UML use case diagram>
 
 \<actors are a subset of stakeholders>
 
@@ -89,46 +86,47 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Functional Requirements
 
-|  ID   | Description                                    |
-| :---: | :--------------------------------------------  |
-| *FR1* | User Management                               |
-|  FR1.1 | Creates new User                            |
-|  FR1.2 | Retrieves all users                           |
-|  FR1.3 | Retrieves all users with a specific role      |
-|  FR1.4 | Retrieves specific user                     |
-|  FR1.5 | Deletes specific user                       |
-| *FR2* | User Authentication                           |
-|  FR2.1 | User Log_in/Log_out                             |
-| *FR3* | Cart Management                               |
-|  FR3.1 | Retrieves the cart for a specific user        |
-|  FR3.2 | Adds a product to the user's cart             |
-|  FR3.3 | Retrieves all carts/orders for a specific customer |
-|  FR3.4 | Removes a product from the user's cart        |
-|  FR3.5 | Deletes a specific cart                       |
-|  FR3.6 | Deletes all carts                             |
-| *FR4* | Product Management                            |
-|  FR4.1 | Registers the arrival of a new set of products|
-|  FR4.2 | Registers the arrival of a single new product |
-|  FR4.3 | Marks a product as sold                       |
-|  FR4.4 | Returns all products, or only the ones that have been sold or not sold |
-|  FR4.5 | Returns all products of a specific model, or only the ones that have been sold or not sold |
-|  FR4.6 | Deletes all products                          |
-|  FR4.7 | Deletes a specific product                    |
+|  ID   | Description                                                                                |
+| :---: | :----------------------------------------------------------------------------------------- |
+| _FR1_ | User Management                                                                            |
+| FR1.1 | Creates new User                                                                           |
+| FR1.2 | Retrieves all users                                                                        |
+| FR1.3 | Retrieves all users with a specific role                                                   |
+| FR1.4 | Retrieves specific user                                                                    |
+| FR1.5 | Deletes specific user                                                                      |
+| _FR2_ | User Authentication                                                                        |
+| FR2.1 | User Log_in/Log_out                                                                        |
+| _FR3_ | Cart Management                                                                            |
+| FR3.1 | Retrieves the cart for a specific user                                                     |
+| FR3.2 | Adds a product to the user's cart                                                          |
+| FR3.3 | Retrieves all carts/orders for a specific customer                                         |
+| FR3.4 | Removes a product from the user's cart                                                     |
+| FR3.5 | Deletes a specific cart                                                                    |
+| FR3.6 | Deletes all carts                                                                          |
+| _FR4_ | Product Management                                                                         |
+| FR4.1 | Registers the arrival of a new set of products                                             |
+| FR4.2 | Registers the arrival of a single new product                                              |
+| FR4.3 | Marks a product as sold                                                                    |
+| FR4.4 | Returns all products, or only the ones that have been sold or not sold                     |
+| FR4.5 | Returns all products of a specific model, or only the ones that have been sold or not sold |
+| FR4.6 | Deletes all products                                                                       |
+| FR4.7 | Deletes a specific product                                                                 |
 
 ## Non Functional Requirements - Ale
 
 \<Describe constraints on functional requirements>
 
-|   ID    | Type (efficiency, reliability, ..) | Description | Refers to |
-| :-----: | :--------------------------------: | :---------: | :-------: |
-|  NFR1   |                                    |             |           |
-|  NFR2   |                                    |             |           |
-|  NFR3   |                                    |             |           |
-| NFRx .. |                                    |             |           |
+|   ID    | Type (efficiency, reliability, ..) |                                                          Description                                                           |   Refers to   |
+| :-----: | :--------------------------------: | :----------------------------------------------------------------------------------------------------------------------------: | :-----------: |
+|  NFR1   |             Efficiency             |                                   All functions on the website should take less than 0.1 sec                                   | All functions |
+|  NFR2   |             Usability              |              The Manager of the store should be able to use the website with no training in less than 15 minutes               |  FR1 and FR4  |
+|  NFR3   |             Usability              |                           The Client of the store should be able to use the website with no training                           |  FR2 and FR3  |
+|  NFR4   |            Portability             | The website should be compatible with different browsers (Chrome, Mozilla, Safari, Edge, Opera...) releases from at least 2023 | All functions |
+| NFRx .. |                                    |                                                                                                                                |               |
 
 # Use case diagram and use cases
 
-## Use case diagram - Laura 
+## Use case diagram - Laura
 
 \<define here UML Use case diagram UCD summarizing all use cases, and their relationships>
 
@@ -145,13 +143,14 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |    Exceptions    |                        \<exceptions, errors >                        |
 
 ### UC1 - Use Case 1: Add product to cart
-| Actors Involved  |  Customer                                                            |
-| :--------------: | :------------------------------------------------------------------: |
-|   Precondition   | The user must be authenticated and a have "customer" (role)          |
-|  Post condition  | The cart should contain the requested product                        |
-| Nominal Scenario | The user add the product successfully to his cart                    |
-|     Variants     | The user add **n** product to his cart                               |
-|    Exceptions    | The product is sold out <br> The product does not exist              |
+
+| Actors Involved  |                          Customer                           |
+| :--------------: | :---------------------------------------------------------: |
+|   Precondition   | The user must be authenticated and a have "customer" (role) |
+|  Post condition  |        The cart should contain the requested product        |
+| Nominal Scenario |      The user add the product successfully to his cart      |
+|     Variants     |           The user add **n** product to his cart            |
+|    Exceptions    |   The product is sold out <br> The product does not exist   |
 
 ##### Scenario 1.1
 
@@ -163,76 +162,74 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 \<only relevant scenarios should be described>
 
-|  Scenario 1.1  | The user add 1 product to his cart                                         |
-| :------------: | :------------------------------------------------------------------------: |
-|  Precondition  | The user must be authenticated and a have "customer" (role)                |
-| Post condition | The cart should contain the requested product                              |
-|     Step#      | **Description**                                                            |
-|       1        | The customer has a list of product                                         |
-|       2        | The customer clicks on one product                                         |
-|       3        | The customer clicks on "Add to cart"                                       |
-|       4        | The system updates the cart and add the product                            |
-|       5        | The customer can click and "Continue ordering" (or "Go to cart")           |
+|  Scenario 1.1  |                The user add 1 product to his cart                |
+| :------------: | :--------------------------------------------------------------: |
+|  Precondition  |   The user must be authenticated and a have "customer" (role)    |
+| Post condition |          The cart should contain the requested product           |
+|     Step#      |                         **Description**                          |
+|       1        |                The customer has a list of product                |
+|       2        |                The customer clicks on one product                |
+|       3        |               The customer clicks on "Add to cart"               |
+|       4        |         The system updates the cart and add the product          |
+|       5        | The customer can click and "Continue ordering" (or "Go to cart") |
 
 ##### Scenario 1.2
 
-|  Scenario 1.2  | The user add n item of a product to his cart                               |
-| :------------: | :------------------------------------------------------------------------: |
-|  Precondition  | The user must be authenticated and a have "customer" (role)                |
-| Post condition | The cart should contain the **n** requested product                        |
-|     Step#      | **Description**                                                            |
-|       1        | The customer has a list of product                                         |
-|       2        | The customer clicks on one product                                         |
-|       3        | The customer selects the number of item to **n**                           |
-|       4        | The customer clicks on "Add to cart"                                       |
-|       5        | The system updates the cart and add the products                           |
-|       6        | The customer can clicks and "Continue ordering" (or "Go to cart")          |
-
+|  Scenario 1.2  |           The user add n item of a product to his cart            |
+| :------------: | :---------------------------------------------------------------: |
+|  Precondition  |    The user must be authenticated and a have "customer" (role)    |
+| Post condition |        The cart should contain the **n** requested product        |
+|     Step#      |                          **Description**                          |
+|       1        |                The customer has a list of product                 |
+|       2        |                The customer clicks on one product                 |
+|       3        |         The customer selects the number of item to **n**          |
+|       4        |               The customer clicks on "Add to cart"                |
+|       5        |         The system updates the cart and add the products          |
+|       6        | The customer can clicks and "Continue ordering" (or "Go to cart") |
 
 ### UC2 - Use case 2 : Add New Product
 
-| Actors Involved  | Store Manager                                                            |
-| :--------------: | :----------------------------------------------------------------------: |
-|   Precondition   | Manager is authenticated and has the "manager" role                      |
-|  Post condition  | The new product is added to the system                                   |
-| Nominal Scenario | The manager adds a new product with all required information             |
-|     Variants     | The manager adds a new product with additional details                   |
-|    Exceptions    | Product with the same name already exists <br> Required fields are not filled out correctly|
+| Actors Involved  |                                        Store Manager                                        |
+| :--------------: | :-----------------------------------------------------------------------------------------: |
+|   Precondition   |                     Manager is authenticated and has the "manager" role                     |
+|  Post condition  |                           The new product is added to the system                            |
+| Nominal Scenario |                The manager adds a new product with all required information                 |
+|     Variants     |                   The manager adds a new product with additional details                    |
+|    Exceptions    | Product with the same name already exists <br> Required fields are not filled out correctly |
 
 ##### Scenario 2.1: Add a new product
 
-|   Scenario 2.1   | Manager add a new product to the system                                  |
-| :--------------: | :----------------------------------------------------------------------: |
-|   Precondition   | Manager is authenticated and has the "manager" role                      |
-|  Post condition  | The new product is added to the system                                   |
-|      Step#       | **Description**                                                          |
-|        1         | The manager navigates to the "Add New Product" section                   |
-|        2         | The manager enters product information (selling price, model, category, etc.)|
-|        3         | The manager saves the new product                                        |
-|        4         | The system adds the product to the inventory                             |
-
+|  Scenario 2.1  |                    Manager add a new product to the system                    |
+| :------------: | :---------------------------------------------------------------------------: |
+|  Precondition  |              Manager is authenticated and has the "manager" role              |
+| Post condition |                    The new product is added to the system                     |
+|     Step#      |                                **Description**                                |
+|       1        |            The manager navigates to the "Add New Product" section             |
+|       2        | The manager enters product information (selling price, model, category, etc.) |
+|       3        |                       The manager saves the new product                       |
+|       4        |                 The system adds the product to the inventory                  |
 
 ### UC3 - Use Case 3: View Cart History
 
-| Actors Involved  | Customer                                                                 |
-| :--------------: | :----------------------------------------------------------------------: |
-|   Precondition   | The customer authenticated and has the "customer" role                   |
-|  Post condition  | The customer can view their cart history                                 |
-| Nominal Scenario | The customer accesses and views their cart history (only checked out cart)|
-|     Variants     |                                                                          |
-|    Exceptions    | No cart history available for the customer                               |
+| Actors Involved  |                                  Customer                                  |
+| :--------------: | :------------------------------------------------------------------------: |
+|   Precondition   |           The customer authenticated and has the "customer" role           |
+|  Post condition  |                  The customer can view their cart history                  |
+| Nominal Scenario | The customer accesses and views their cart history (only checked out cart) |
+|     Variants     |                                                                            |
+|    Exceptions    |                 No cart history available for the customer                 |
 
 ##### Scenario 3.1: View cart history
 
-|   Scenario 3.1   | Customer views cart history                                              |
-| :--------------: | :----------------------------------------------------------------------: |
-|   Precondition   | The customer is authenticated and has the "customer" role                |
-|  Post condition  | The customer can view their cart history (only cheked out cart)          |
-|      Step#       | **Description**                                                          |
-|        1         | The customer navigates to "Cart" section                                 |
-|        2         | The customer navigates to "History" section                              |
-|        3         | The customer sees a list of their past checket out cart                  |
-|        4         | The customer clicks on a specific cart to view details                   |
+|  Scenario 3.1  |                   Customer views cart history                   |
+| :------------: | :-------------------------------------------------------------: |
+|  Precondition  |    The customer is authenticated and has the "customer" role    |
+| Post condition | The customer can view their cart history (only cheked out cart) |
+|     Step#      |                         **Description**                         |
+|       1        |            The customer navigates to "Cart" section             |
+|       2        |           The customer navigates to "History" section           |
+|       3        |     The customer sees a list of their past checket out cart     |
+|       4        |     The customer clicks on a specific cart to view details      |
 
 ---
 
