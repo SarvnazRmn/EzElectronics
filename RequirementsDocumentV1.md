@@ -233,9 +233,8 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 # Glossary - Sarv
 
-\<use UML class diagram to define important terms, or concepts in the domain of the application, and their relationships>
+![GLOSSARYv1.png](Images\GLOSSARYv1.png)
 
-\<concepts must be used consistently all over the document, ex in use cases, requirements etc>
 
 # System Design - Gino
 
