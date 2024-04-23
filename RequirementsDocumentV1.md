@@ -102,15 +102,13 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | FR3.3 | Retrieves all carts/orders for a specific customer                                         |
 | FR3.4 | Removes a product from the user's cart                                                     |
 | FR3.5 | Deletes a specific cart                                                                    |
-| FR3.6 | Deletes all carts                                                                          |
 | _FR4_ | Product Management                                                                         |
 | FR4.1 | Registers the arrival of a new set of products                                             |
 | FR4.2 | Registers the arrival of a single new product                                              |
 | FR4.3 | Marks a product as sold                                                                    |
 | FR4.4 | Returns all products, or only the ones that have been sold or not sold                     |
 | FR4.5 | Returns all products of a specific model, or only the ones that have been sold or not sold |
-| FR4.6 | Deletes all products                                                                       |
-| FR4.7 | Deletes a specific product                                                                 |
+| FR4.6 | Deletes a specific product                                                                 |
 
 ## Non Functional Requirements - Ale
 
