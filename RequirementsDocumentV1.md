@@ -41,17 +41,13 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 |     Stakeholder name      |                                 Description                                 |
 | :-----------------------: | :-------------------------------------------------------------------------: |
-|     Electronics Shop      |                   The shop itself, where to buy products                    |
 |         Customer          |                            Customer of the shop                             |
-|        Shop owner         |                             Manager of the shop                             |
+|          Manager          |                             Manager of the shop                             |
 |     Product companies     |              Company producing the product sell on the website              |
-|        Tech admin         |                            Admin of the website                             |
-|        Competitors        |                    Website such as Amazon, MediaWorld..                     |
+|          Admins           |               Admin of the website (tech) and business admin                |
 | EzElectronics dev company |                The company that develops the software itself                |
-|      Competitors???       | Other companies that want to develop similar softwares for the same purpose |
-|      Control Team ??      |                               Check stock ??                                |
-
-?? Notes : do they put ads ?
+|        Competitors        | Other companies that want to develop similar softwares for the same purpose |
+|       Control Team        |                    Check stock, check available product                     |
 
 # Context Diagram and interfaces
 
@@ -67,9 +63,12 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 \<GUIs will be described graphically in a separate document>
 
-|   Actor   | Logical Interface | Physical Interface |
-| :-------: | :---------------: | :----------------: |
-| Actor x.. |                   |                    |
+|    Actor     | Logical Interface | Physical Interface |
+| :----------: | :---------------: | :----------------: |
+|   Customer   |        GUI        |         PC         |
+|   Manager    |        GUI        |         PC         |
+|    Admin     |        GUI        |         PC         |
+| Control Team |        GUI        |         PC         |
 
 # Stories and personas - Everybody
 
@@ -400,6 +399,6 @@ NB : An arrival consists of many entities of the same product.
 
 Not required
 
-# Deployment Diagram - Everybody
+# Deployment Diagram - Gino 
 
 \<describe here deployment diagram >
