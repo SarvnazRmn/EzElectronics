@@ -39,14 +39,17 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 # Stakeholders
 
-| Stakeholder name  |                    Description                    |
-| :---------------: | :-----------------------------------------------: |
-|     Customer      |                                                   |
-|    Shop owner     |                Manager of the shop                |
-| Product companies | Company producing the product sell on the website |
-|    Tech admin     |               Admin of the website                |
-|    Competitors    |       Website such as Amazon, MediaWorld..        |
-|  Control Team ??  |                  Check stock ??                   |
+|     Stakeholder name      |                                 Description                                 |
+| :-----------------------: | :-------------------------------------------------------------------------: |
+|     Electronics Shop      |                   The shop itself, where to buy products                    |
+|         Customer          |                            Customer of the shop                             |
+|        Shop owner         |                             Manager of the shop                             |
+|     Product companies     |              Company producing the product sell on the website              |
+|        Tech admin         |                            Admin of the website                             |
+|        Competitors        |                    Website such as Amazon, MediaWorld..                     |
+| EzElectronics dev company |                The company that develops the software itself                |
+|      Competitors???       | Other companies that want to develop similar softwares for the same purpose |
+|      Control Team ??      |                               Check stock ??                                |
 
 ?? Notes : do they put ads ?
 
@@ -114,16 +117,20 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 \<Describe constraints on functional requirements>
 
-|   ID    | Type (efficiency, reliability, ..) |                                                          Description                                                           |   Refers to   |
-| :-----: | :--------------------------------: | :----------------------------------------------------------------------------------------------------------------------------: | :-----------: |
-|  NFR1   |             Efficiency             |                                    The loading of the website should take less than 3 secs                                     | All functions |
-|  NFR2   |             Efficiency             |                                  All functions on the website should take less than 0.1 secs                                   | All functions |
-|  NFR3   |             Usability              |              The Manager of the store should be able to use the website with no training in less than 10 minutes               |  FR1 and FR4  |
-|  NFR4   |             Usability              |                           The Client of the store should be able to use the website with no training                           |  FR2 and FR3  |
-|  NFR5   |            Portability             | The website should be compatible with different browsers (Chrome, Mozilla, Safari, Edge, Opera...) releases from at least 2023 | All functions |
-|  NFR6   |            Portability             |             The website should be compatible with different devices (Desktops, laptops, tablets, and smartphones)              | All functions |
-|  NFR7   |              Security              |      Data encryption should be used for transferring sensitive information such as user credentials and payment details.       |      FR2      |
-| NFRx .. |                                    |                                                                                                                                |               |
+|  ID   | Type (efficiency, reliability, ..) |                                                          Description                                                           |   Refers to   |
+| :---: | :--------------------------------: | :----------------------------------------------------------------------------------------------------------------------------: | :-----------: |
+| NFR1  |             Efficiency             |                                    The loading of the website should take less than 3 secs                                     | All functions |
+| NFR2  |             Efficiency             |                                  All functions on the website should take less than 0.5 secs                                   | All functions |
+| NFR3  |             Usability              |              The Manager of the store should be able to use the website with no training in less than 10 minutes               |  FR1 and FR4  |
+| NFR4  |             Usability              |                           The Client of the store should be able to use the website with no training                           |  FR2 and FR3  |
+| NFR5  |            Portability             | The website should be compatible with different browsers (Chrome, Mozilla, Safari, Edge, Opera...) releases from at least 2023 | All functions |
+| NFR6  |            Portability             |             The website should be compatible with different devices (Desktops, laptops, tablets, and smartphones)              | All functions |
+| NFR7  |              Privacy               |                       Employees and company private data should not be disclosed outside the application                       |  FR2 and FR3  |
+| NFR8  |              Security              |                        Employees and managers passwords should be encrypted when saved on the database                         |      FR2      |
+| NFR9  |               Domain               |                             The category of a product should only be Smartphone, Laptop, Appliance                             |      FR4      |
+| NFR10 |               Domain               |                                     The role of a user should only be Manager or Customer                                      |      FR2      |
+| NFR11 |            Availability            |             Availability of the service at least 95% (should manage well the communication with the local server)              |    ALL FR     |
+| NFR12 |             Robustness             |                           The time to restart the website after a failure should be under 5 minutes                            |    ALL FR     |
 
 # Use case diagram and use cases
 
