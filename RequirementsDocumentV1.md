@@ -53,7 +53,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Context Diagram - Gino
 
-![context_diagram.png](./requirement_documents/v1/context_diagram.svg)
+![context_diagram.png](./requirement_documents/v1/context_diagram.png)
 
 ## Interfaces - Ale Sarv Laura
 
