@@ -399,4 +399,4 @@ Not required
 
 # Deployment Diagram - Gino 
 
-\<describe here deployment diagram >
+![deployment_diagram.png](./requirement_documents/v1/deployment_diagram.png)
