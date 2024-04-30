@@ -68,15 +68,6 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |    Admin     |        GUI        |         PC         |
 | Control Team |        GUI        |         PC         |
 
-## Table of rights
-
-| Function | Manager |  Customer  | Admin | Control Team |
-| -------- | :-----: | :--------: | :---: | :----------: |
-| FR1      |   yes   | only FR1.1 |  no   |      no      |
-| FR2      |   yes   |    yes     |  no   |      no      |
-| FR3      |   yes   |    yes     |  no   |      no      |
-| FR4      |   yes   |     no     |  no   |      no      |
-
 # Stories and personas - Everybody
 
 \<A Persona is a realistic impersonation of an actor. Define here a few personas and describe in plain text how a persona interacts with the system>
@@ -120,6 +111,15 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | FR4.4 | Returns all products, or only the ones that have been sold or not sold                     |
 | FR4.5 | Returns all products of a specific model, or only the ones that have been sold or not sold |
 | FR4.6 | Deletes a specific product                                                                 |
+
+## Table of rights
+
+| Function | Manager |  Customer  | Admin | Control Team |
+| -------- | :-----: | :--------: | :---: | :----------: |
+| FR1      |   yes   | only FR1.1 |  no   |      no      |
+| FR2      |   yes   |    yes     |  no   |      no      |
+| FR3      |   yes   |    yes     |  no   |      no      |
+| FR4      |   yes   |     no     |  no   |      no      |
 
 ## Non Functional Requirements - Ale
 
