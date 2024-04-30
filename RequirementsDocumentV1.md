@@ -68,6 +68,15 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |    Admin     |        GUI        |         PC         |
 | Control Team |        GUI        |         PC         |
 
+## Table of rights
+
+| Function | Manager |  Customer  | Admin | Control Team |
+| -------- | :-----: | :--------: | :---: | :----------: |
+| FR1      |   yes   | only FR1.1 |  no   |      no      |
+| FR2      |   yes   |    yes     |  no   |      no      |
+| FR3      |   yes   |    yes     |  no   |      no      |
+| FR4      |   yes   |     no     |  no   |      no      |
+
 # Stories and personas - Everybody
 
 \<A Persona is a realistic impersonation of an actor. Define here a few personas and describe in plain text how a persona interacts with the system>
@@ -75,6 +84,8 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 \<Persona is-an-instance-of actor>
 
 \<stories will be formalized later as scenarios in use cases>
+
+- Brenda is 43 y/o, and she is the manager in the electronics shop of her town. She has been working every day with great efficiency and constancy to reach this position. She has troubles keeping track of the different products in the shop and she always complains with her employees because they often forget to update the status orders of the items in the shop.
 
 # Functional and non functional requirements
 
@@ -397,6 +408,6 @@ NB : An arrival consists of many entities of the same product.
 
 Not required
 
-# Deployment Diagram - Gino 
+# Deployment Diagram - Gino
 
 ![deployment_diagram.png](./requirement_documents/v1/deployment_diagram.png)
