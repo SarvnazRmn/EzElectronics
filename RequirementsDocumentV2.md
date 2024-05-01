@@ -59,8 +59,12 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 |   Actor   | Logical Interface | Physical Interface |
 | :-------: | :---------------: | :----------------: |
-| Actor x.. |                   |                    |
-
+|   Manager-premium manager   | GUI | PC |
+|   Customer                  | GUI | PC |
+|   Admin                     | GUI | PC |
+|   Control team              | GUI | PC |
+|   Payment service           |     | Internet |              
+| Deleivery service           |     | Internet |
 # Stories and personas
 
 \<A Persona is a realistic impersonation of an actor. Define here a few personas and describe in plain text how a persona interacts with the system>
