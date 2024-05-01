@@ -39,9 +39,15 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 # Stakeholders
 
-| Stakeholder name | Description |
-| :--------------: | :---------: |
-| Stakeholder x..  |             |
+|     Stakeholder name      |                                 Description                                 |
+| :-----------------------: | :-------------------------------------------------------------------------: |
+|         Customer          |                            Customer of the shop                             |
+|          Manager          |                             Manager of the shop                             |
+|     Product companies     |              Company producing the product sell on the website              |
+|          Admins           |               Admin of the website (tech) and business admin                |
+| EzElectronics dev company |                The company that develops the software itself                |
+|        Competitors        | Other companies that want to develop similar softwares for the same purpose |
+|       Control Team        |                    Check stock, check available product                     |
 
 # Context Diagram and interfaces
 
