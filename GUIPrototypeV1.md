@@ -10,15 +10,33 @@ Version:
 
 # Customer 
 
+### Products list 
+
+![customer_product_list.png](./requirement_documents/v1/customer_product_list.png)
+
 ### Checkout cart 
-When the customer complete his cart, he can proceed to checkout his cart.
-![customer_checkout1.png](./requirement_documents/v1/customer_checkout1.png)
+
+When the customer completes his cart, he can proceed to checkout his cart.
+
+![customer_checkout.png](./requirement_documents/v1/customer_checkout.png)
 
 After clicking on the confirmation button. The user has to wait for manager's approval.
-![customer_checkout2.png](./requirement_documents/v1/customer_checkout2.png)
 
+![customer_checkout_confirmation.png](./requirement_documents/v1/customer_checkout_confirmation.png)
 
 
 
 --- 
 # Manager 
+
+### Products list 
+
+When the manager enters the website, the landing page is the list of all the products.
+
+![manager_product_list.png](./requirement_documents/v1/manager_product_list.png)
+
+He can click on one product to see all the details and the available action (delete).
+
+![manager_product_detail.png](./requirement_documents/v1/manager_product_detail.png)
+
+
