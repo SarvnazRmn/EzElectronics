@@ -103,7 +103,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | -------- | :-----: | :--------: |
 | FR1      |   yes   | only FR1.1 |
 | FR2      |   yes   |    yes     |
-| FR3      |   yes   |    yes     |
+| FR3      |   no    |    yes     |
 | FR4      |   yes   |     no     |
 
 ## Non Functional Requirements
@@ -124,7 +124,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | NFR12 |              Security              |                        During login a message should be sent if the inserted Username/Password is wrong                        |      FR2      |
 | NFR13 |              Security              |        A 401 error message should be displayed if a user tries to access all the in-domain webpages without logging in         |      FR2      |
 | NFR14 |              Security              |                        Employees and managers passwords should be encrypted when saved on the database                         |      FR2      |
-| NFR14 |              Security              |                 An error message should be displayed if a user tries to sign in with an already used username                  |      FR2      |
+| NFR15 |              Security              |                 An error message should be displayed if a user tries to sign in with an already used username                  |      FR2      |
 
 # Use case diagram and use cases
 
