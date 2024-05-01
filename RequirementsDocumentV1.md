@@ -4,9 +4,9 @@ Date:
 
 Version: V1 - description of EZElectronics in CURRENT form (as received by teachers)
 
-| Version number | Change |
-| :------------: | :----: |
-|       1        |   -    |
+| Version number |            Change             |
+| :------------: | :---------------------------: |
+|       1        | Created Requirements Document |
 
 # Contents
 
@@ -43,8 +43,8 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | :-----------------------: | :-------------------------------------------------------------------------: |
 |         Customer          |                            Customer of the shop                             |
 |          Manager          |                             Manager of the shop                             |
-|     Product companies     |              Company producing the product sell on the website              |
-| EzElectronics dev company |                The company that develops the software itself                |
+|     Product companies     |             Company producing the products sold on the website              |
+| EzElectronics dev company |                The company that develops the website itself                 |
 |        Competitors        | Other companies that want to develop similar softwares for the same purpose |
 
 # Context Diagram and interfaces
@@ -72,29 +72,30 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Functional Requirements
 
-|  ID   | Description                                                                                |
-| :---: | :----------------------------------------------------------------------------------------- |
-| _FR1_ | User Management                                                                            |
-| FR1.1 | Creates new User                                                                           |
-| FR1.2 | Retrieves all users                                                                        |
-| FR1.3 | Retrieves all users with a specific role                                                   |
-| FR1.4 | Retrieves specific user                                                                    |
-| FR1.5 | Deletes specific user                                                                      |
-| _FR2_ | User Authentication                                                                        |
-| FR2.1 | User Log_in/Log_out                                                                        |
-| _FR3_ | Cart Management                                                                            |
-| FR3.1 | Retrieves the cart for a specific user                                                     |
-| FR3.2 | Adds a product to the user's cart                                                          |
-| FR3.3 | Retrieves all carts/orders for a specific customer                                         |
-| FR3.4 | Removes a product from the user's cart                                                     |
-| FR3.5 | Deletes a specific cart                                                                    |
-| _FR4_ | Product Management                                                                         |
-| FR4.1 | Registers the arrival of a new set of products                                             |
-| FR4.2 | Registers the arrival of a single new product                                              |
-| FR4.3 | Marks a product as sold                                                                    |
-| FR4.4 | Returns all products, or only the ones that have been sold or not sold                     |
-| FR4.5 | Returns all products of a specific model, or only the ones that have been sold or not sold |
-| FR4.6 | Deletes a specific product                                                                 |
+|  ID   | Description                                                                                   |
+| :---: | :-------------------------------------------------------------------------------------------- |
+| _FR1_ | User Management                                                                               |
+| FR1.1 | Creates new User                                                                              |
+| FR1.2 | Retrieves all users                                                                           |
+| FR1.3 | Retrieves all users with a specific role                                                      |
+| FR1.4 | Retrieves specific user                                                                       |
+| FR1.5 | Deletes specific user                                                                         |
+| _FR2_ | User Authentication                                                                           |
+| FR2.1 | User Log_in/Log_out                                                                           |
+| _FR3_ | Cart Management                                                                               |
+| FR3.1 | Retrieves the cart for a specific user                                                        |
+| FR3.2 | Adds a product to the user's cart                                                             |
+| FR3.3 | Retrieves all carts/orders for a specific customer                                            |
+| FR3.4 | Removes a product from the user's cart                                                        |
+| FR3.5 | Deletes a specific cart                                                                       |
+| _FR4_ | Product Management                                                                            |
+| FR4.1 | Registers the arrival of a new set of products                                                |
+| FR4.2 | Registers the arrival of a single new product                                                 |
+| FR4.3 | Marks a product as sold                                                                       |
+| FR4.4 | Returns all products, or only the ones that have been sold or not sold                        |
+| FR4.5 | Returns all products of a specific category, or only the ones that have been sold or not sold |
+| FR4.6 | Returns all products of a specific model, or only the ones that have been sold or not sold    |
+| FR4.7 | Deletes a specific product                                                                    |
 
 ## Table of rights
 
@@ -115,14 +116,15 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | NFR4  |             Usability              |                           The Client of the store should be able to use the website with no training                           |  FR2 and FR3  |
 | NFR5  |            Portability             | The website should be compatible with different browsers (Chrome, Mozilla, Safari, Edge, Opera...) releases from at least 2023 | All functions |
 | NFR6  |            Portability             |             The website should be compatible with different devices (Desktops, laptops, tablets, and smartphones)              | All functions |
-| NFR7  |              Privacy               |                       Employees and company private data should not be disclosed outside the application                       |  FR2 and FR3  |
-| NFR8  |              Security              |                        Employees and managers passwords should be encrypted when saved on the database                         |      FR2      |
-| NFR9  |               Domain               |                             The category of a product should only be Smartphone, Laptop, Appliance                             |      FR4      |
-| NFR10 |               Domain               |                                     The role of a user should only be Manager or Customer                                      |      FR2      |
-| NFR11 |            Availability            |             Availability of the service at least 95% (should manage well the communication with the local server)              |    ALL FR     |
-| NFR12 |             Robustness             |                           The time to restart the website after a failure should be under 5 minutes                            |    ALL FR     |
-
--add Log in cases NFR (user taken, not valid password, not valid username)
+| NFR7  |            Availability            |             Availability of the service at least 95% (should manage well the communication with the local server)              |    ALL FR     |
+| NFR8  |             Robustness             |                           The time to restart the website after a failure should be under 5 minutes                            |    ALL FR     |
+| NFR9  |              Privacy               |                       Employees and company private data should not be disclosed outside the application                       |  FR2 and FR3  |
+| NFR10 |               Domain               |                             The category of a product should only be Smartphone, Laptop, Appliance                             |      FR4      |
+| NFR11 |               Domain               |                                     The role of a user should only be Manager or Customer                                      |      FR2      |
+| NFR12 |              Security              |                        During login a message should be sent if the inserted Username/Password is wrong                        |      FR2      |
+| NFR13 |              Security              |        A 401 error message should be displayed if a user tries to access all the in-domain webpages without logging in         |      FR2      |
+| NFR14 |              Security              |                        Employees and managers passwords should be encrypted when saved on the database                         |      FR2      |
+| NFR14 |              Security              |                 An error message should be displayed if a user tries to sign in with an already used username                  |      FR2      |
 
 # Use case diagram and use cases
 
