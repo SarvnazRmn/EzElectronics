@@ -2,11 +2,7 @@
 
 Date:
 
-Version: V1
--not sure if needed, maybe delete later-
-EZElectronics it's an all-in-one solution for efficient electronics store management. Created for store managers, EZElectronics it's a website that simplifies product management, streamlines inventory tracking, and enhances customer experience through a dedicated website platform.
-Managers can add and monitor products, while confirming purchases.
-Customers can explore available products, add items to their cart, and review their purchase history. Experience electronics retail management with EZElectronics.
+Version: V1 - description of EZElectronics in CURRENT form (as received by teachers)
 
 | Version number | Change |
 | :------------: | :----: |
