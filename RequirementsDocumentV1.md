@@ -2,11 +2,11 @@
 
 Date:
 
-Version: V1 - description of EZElectronics in CURRENT form (as received by teachers)
+Version: V1 - EZElectronics (read EaSy Electronics) is a software application designed to help managers of electronics stores to manage their products and offer them to customers through a dedicated website. Managers can assess the available products, record new ones, and confirm purchases. Customers can see available products, add them to a cart and see the history of their past purchases. - NOT FINISHED
 
 | Version number | Change |
 | :------------: | :----: |
-|                |        |
+|       1        |   -    |
 
 # Contents
 
@@ -44,49 +44,31 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |         Customer          |                            Customer of the shop                             |
 |          Manager          |                             Manager of the shop                             |
 |     Product companies     |              Company producing the product sell on the website              |
-|          Admins           |               Admin of the website (tech) and business admin                |
 | EzElectronics dev company |                The company that develops the software itself                |
 |        Competitors        | Other companies that want to develop similar softwares for the same purpose |
-|       Control Team        |                    Check stock, check available product                     |
 
 # Context Diagram and interfaces
 
-## Context Diagram - Gino
+## Context Diagram
 
 ![context_diagram.png](./requirement_documents/v1/context_diagram.png)
 
-## Interfaces - Ale Sarv Laura
-
-\<describe here each interface in the context diagram>
+## Interfaces
 
 \<GUIs will be described graphically in a separate document>
 
-|    Actor     | Logical Interface | Physical Interface |
-| :----------: | :---------------: | :----------------: |
-|   Customer   |        GUI        |         PC         |
-|   Manager    |        GUI        |         PC         |
-|    Admin     |        GUI        |         PC         |
-| Control Team |        GUI        |         PC         |
+|  Actor   | Logical Interface | Physical Interface |
+| :------: | :---------------: | :----------------: |
+| Customer |        GUI        |         PC         |
+| Manager  |        GUI        |         PC         |
 
 # Stories and personas - Everybody
-
-\<A Persona is a realistic impersonation of an actor. Define here a few personas and describe in plain text how a persona interacts with the system>
-
-\<Persona is-an-instance-of actor>
-
-\<stories will be formalized later as scenarios in use cases>
 
 -Brenda is 43 y/o, and she is the manager in the electronics shop of her town. She has been working every day with great efficiency and constancy to reach this position. She has troubles keeping track of the different products in the shop and she always complains with her employees because they often forget to update the status orders of the items in the shop.
 
 -Emily is a 28-year-old elementary school teacher who's passionate about education and technology. As a teacher, Emily seeks electronic products that can enhance her classroom teaching. Emily often browses the EzElectronic website during her free time. She explores categories like "Laptops". While Emily wants quality products, she's mindful of her budget as a teacher. She looks for good value options that fit within her classroom budget. If she finds a laptop that fits her needs, Emily adds it to her cart and continues browsing or proceeds to checkout.
 
 # Functional and non functional requirements
-
-## Functional Requirements - Ale
-
-\<In the form DO SOMETHING, or VERB NOUN, describe high level capabilities of the system>
-
-\<they match to high level use cases>
 
 ## Functional Requirements
 
@@ -116,16 +98,14 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Table of rights
 
-| Function | Manager |  Customer  | Admin | Control Team |
-| -------- | :-----: | :--------: | :---: | :----------: |
-| FR1      |   yes   | only FR1.1 |  no   |      no      |
-| FR2      |   yes   |    yes     |  no   |      no      |
-| FR3      |   yes   |    yes     |  no   |      no      |
-| FR4      |   yes   |     no     |  no   |      no      |
+| Function | Manager |  Customer  |
+| -------- | :-----: | :--------: |
+| FR1      |   yes   | only FR1.1 |
+| FR2      |   yes   |    yes     |
+| FR3      |   yes   |    yes     |
+| FR4      |   yes   |     no     |
 
-## Non Functional Requirements - Ale
-
-\<Describe constraints on functional requirements>
+## Non Functional Requirements
 
 |  ID   | Type (efficiency, reliability, ..) |                                                          Description                                                           |   Refers to   |
 | :---: | :--------------------------------: | :----------------------------------------------------------------------------------------------------------------------------: | :-----------: |
@@ -410,6 +390,6 @@ NB : An arrival consists of many entities of the same product.
 
 Not required
 
-# Deployment Diagram - Gino
+# Deployment Diagram
 
 ![deployment_diagram.png](./requirement_documents/v1/deployment_diagram.png)
