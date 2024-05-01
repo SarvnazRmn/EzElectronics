@@ -2,7 +2,11 @@
 
 Date:
 
-Version: V1 - EZElectronics (read EaSy Electronics) is a software application designed to help managers of electronics stores to manage their products and offer them to customers through a dedicated website. Managers can assess the available products, record new ones, and confirm purchases. Customers can see available products, add them to a cart and see the history of their past purchases. - NOT FINISHED
+Version: V1
+-not sure if needed, maybe delete later-
+EZElectronics it's an all-in-one solution for efficient electronics store management. Created for store managers, EZElectronics it's a website that simplifies product management, streamlines inventory tracking, and enhances customer experience through a dedicated website platform.
+Managers can add and monitor products, while confirming purchases.
+Customers can explore available products, add items to their cart, and review their purchase history. Experience electronics retail management with EZElectronics.
 
 | Version number | Change |
 | :------------: | :----: |
@@ -121,6 +125,8 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | NFR10 |               Domain               |                                     The role of a user should only be Manager or Customer                                      |      FR2      |
 | NFR11 |            Availability            |             Availability of the service at least 95% (should manage well the communication with the local server)              |    ALL FR     |
 | NFR12 |             Robustness             |                           The time to restart the website after a failure should be under 5 minutes                            |    ALL FR     |
+
+-add Log in cases NFR (user taken, not valid password, not valid username)
 
 # Use case diagram and use cases
 
