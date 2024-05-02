@@ -96,15 +96,16 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | FR4.5 | Returns all products of a specific category, or only the ones that have been sold or not sold |
 | FR4.6 | Returns all products of a specific model, or only the ones that have been sold or not sold    |
 | FR4.7 | Deletes a specific product                                                                    |
+| FR4.8 | Returns a specific product by its code                                                        |
 
 ## Table of rights
 
-| Function | Manager |  Customer  |
-| -------- | :-----: | :--------: |
-| FR1      |   yes   | only FR1.1 |
-| FR2      |   yes   |    yes     |
-| FR3      |   no    |    yes     |
-| FR4      |   yes   |     no     |
+| Function | Manager |          Customer          |
+| -------- | :-----: | :------------------------: |
+| FR1      |   yes   |         only FR1.1         |
+| FR2      |   yes   |            yes             |
+| FR3      |   no    |            yes             |
+| FR4      |   yes   | FR4.4, FR4.5, FR4.6, FR4.8 |
 
 ## Non Functional Requirements
 
