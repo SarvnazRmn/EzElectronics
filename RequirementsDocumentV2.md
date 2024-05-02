@@ -4,9 +4,12 @@ Date:
 
 Version: V1 - description of EZElectronics in FUTURE form (as proposed by the team)
 
-| Version number | Change |
-| :------------: | :----: |
-|                |        |
+| Version number |                         Change                         |
+| :------------: | :----------------------------------------------------: |
+|       1        |             Created Requirements Document              |
+|       2        | Added Business Model and payment method for Customers, |
+|                |         Added product details, customer email,         |
+|                |                  Various QOL changes                   |
 
 # Contents
 
@@ -63,14 +66,15 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 \<GUIs will be described graphically in a separate document>
 
-|   Actor   | Logical Interface | Physical Interface |
-| :-------: | :---------------: | :----------------: |
-|   Manager-premium manager   | GUI | PC |
-|   Customer                  | GUI | PC |
-|   Admin                     | GUI | PC |
-|   Control team              | GUI | PC |
-|   Payment service           |     | Internet |              
-| Deleivery service           |     | Internet |
+|          Actor          | Logical Interface | Physical Interface |
+| :---------------------: | :---------------: | :----------------: |
+| Manager-premium manager |        GUI        |         PC         |
+|        Customer         |        GUI        |         PC         |
+|          Admin          |        GUI        |         PC         |
+|      Control team       |        GUI        |         PC         |
+|     Payment service     |                   |      Internet      |
+|    Deleivery service    |                   |      Internet      |
+
 # Stories and personas
 
 \<A Persona is a realistic impersonation of an actor. Define here a few personas and describe in plain text how a persona interacts with the system>
@@ -83,26 +87,62 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Functional Requirements
 
-\<In the form DO SOMETHING, or VERB NOUN, describe high level capabilities of the system>
+|  ID   | Description                                                                                   |
+| :---: | :-------------------------------------------------------------------------------------------- |
+| _FR1_ | User Management                                                                               |
+| FR1.1 | Creates new User                                                                              |
+| FR1.2 | Retrieves all users                                                                           |
+| FR1.3 | Retrieves all users with a specific role                                                      |
+| FR1.4 | Retrieves specific user                                                                       |
+| FR1.5 | Deletes specific user                                                                         |
+| _FR2_ | User Authentication                                                                           |
+| FR2.1 | User Log_in/Log_out                                                                           |
+| _FR3_ | Cart Management                                                                               |
+| FR3.1 | Retrieves the cart for a specific user                                                        |
+| FR3.2 | Adds a product to the user's cart                                                             |
+| FR3.3 | Retrieves all carts/orders for a specific customer                                            |
+| FR3.4 | Removes a product from the user's cart                                                        |
+| FR3.5 | Deletes a specific cart                                                                       |
+| _FR4_ | Product Management                                                                            |
+| FR4.1 | Registers the arrival of a new set of products                                                |
+| FR4.2 | Registers the arrival of a single new product                                                 |
+| FR4.3 | Marks a product as sold                                                                       |
+| FR4.4 | Returns all products, or only the ones that have been sold or not sold                        |
+| FR4.5 | Returns all products of a specific category, or only the ones that have been sold or not sold |
+| FR4.6 | Returns all products of a specific model, or only the ones that have been sold or not sold    |
+| FR4.7 | Deletes a specific product                                                                    |
+| FR4.8 | Returns a specific product by its code                                                        |
+| FR4.9 | Update a specific product delivery stage                                                      |
 
-\<they match to high level use cases>
+## Table of rights
 
-|  ID   | Description |
-| :---: | :---------: |
-|  FR1  |             |
-|  FR2  |             |
-| FRx.. |             |
+| Function |         Manager         |            Customer             |
+| -------- | :---------------------: | :-----------------------------: |
+| FR1      |           yes           |           only FR1.1            |
+| FR2      |           yes           |               yes               |
+| FR3      | all but FR3.4 and FR3.5 |               yes               |
+| FR4      |           yes           | only FR4.4, FR4.5, FR4.6, FR4.8 |
 
 ## Non Functional Requirements
 
-\<Describe constraints on functional requirements>
-
-|   ID    | Type (efficiency, reliability, ..) | Description | Refers to |
-| :-----: | :--------------------------------: | :---------: | :-------: |
-|  NFR1   |                                    |             |           |
-|  NFR2   |                                    |             |           |
-|  NFR3   |                                    |             |           |
-| NFRx .. |                                    |             |           |
+|  ID   | Type (efficiency, reliability, ..) |                                                          Description                                                           |   Refers to   |
+| :---: | :--------------------------------: | :----------------------------------------------------------------------------------------------------------------------------: | :-----------: |
+| NFR1  |             Efficiency             |                                    The loading of the website should take less than 3 secs                                     | All functions |
+| NFR2  |             Efficiency             |                                  All functions on the website should take less than 0.5 secs                                   | All functions |
+| NFR3  |             Usability              |              The Manager of the store should be able to use the website with no training in less than 10 minutes               |  FR1 and FR4  |
+| NFR4  |             Usability              |                           The Client of the store should be able to use the website with no training                           |  FR2 and FR3  |
+| NFR5  |            Portability             | The website should be compatible with different browsers (Chrome, Mozilla, Safari, Edge, Opera...) releases from at least 2023 | All functions |
+| NFR6  |            Portability             |             The website should be compatible with different devices (Desktops, laptops, tablets, and smartphones)              | All functions |
+| NFR7  |            Availability            |             Availability of the service at least 95% (should manage well the communication with the local server)              |    ALL FR     |
+| NFR8  |             Robustness             |                           The time to restart the website after a failure should be under 5 minutes                            |    ALL FR     |
+| NFR9  |              Privacy               |                       Employees and company private data should not be disclosed outside the application                       |  FR2 and FR3  |
+| NFR10 |               Domain               |                             The category of a product should only be Smartphone, Laptop, Appliance                             |      FR4      |
+| NFR11 |               Domain               |                                     The role of a user should only be Manager or Customer                                      |      FR2      |
+| NFR12 |              Security              |                        During login a message should be sent if the inserted Username/Password is wrong                        |      FR2      |
+| NFR13 |              Security              |        A 401 error message should be displayed if a user tries to access all the in-domain webpages without logging in         |      FR2      |
+| NFR14 |              Security              |                        Employees and managers passwords should be encrypted when saved on the database                         |      FR2      |
+| NFR15 |              Security              |                 An error message should be displayed if a user tries to sign in with an already used username                  |      FR2      |
+| NFR16 |             Usability              |                       A warning message should be displayed if the product sold is low/no more in stock                        |     FR4.3     |
 
 # Use case diagram and use cases
 
@@ -111,6 +151,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 \<define here UML Use case diagram UCD summarizing all use cases, and their relationships>
 
 \<next describe here each use case in the UCD>
+
 ### UC1 - Use Case 1: Add product to cart
 
 | Actors Involved  |                          Customer                           |
@@ -365,13 +406,13 @@ NB : An arrival consists of many entities of the same product.
 
 ### UC11 - Use Case 11: Track delivery stages
 
-| Actors Involved  |                         Customer                          |
-| :--------------: | :-------------------------------------------------------: |
+| Actors Involved  |                                             Customer                                             |
+| :--------------: | :----------------------------------------------------------------------------------------------: |
 |   Precondition   | The customer is authenticated and has the "customer" role; the customer has a confirmed purchase |
-|  Post condition  | The delivery stages of its purchase are desplayed          |
-| Nominal Scenario | The customer can see the current delivery stage of his purchase              |
-|     Variants     | The customer can see the stage of every product in his purchase               |
-|    Exceptions    |                   No current deliveries <br> There are no delivered products                   |
+|  Post condition  |                        The delivery stages of its purchase are desplayed                         |
+| Nominal Scenario |                 The customer can see the current delivery stage of his purchase                  |
+|     Variants     |                 The customer can see the stage of every product in his purchase                  |
+|    Exceptions    |                    No current deliveries <br> There are no delivered products                    |
 
 # Glossary
 
