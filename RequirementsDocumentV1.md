@@ -259,31 +259,31 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |     Step#      |                    **Description**                     |
 |       1        |       The manager navigates to "Product" section       |
 |       2        |   The manager searches for the product to be deleted   |
-|       3        | The manager selects the product to delete and confirms |
+|       3        | The manager selects the product to delete and selects the deletion option |
 |       4        |   The system removes the product from the inventory    |
 
 ### UC6 - Use Case 6: Sell Product 
 
-| Actors Involved  |                      Manager                       |
+| Actors Involved  |                      Manager, Customer                       |
 | :--------------: | :----------------------------------------------------------: |
 |   Precondition   |   The manager is authenticated and has the "manager" role <br> The product is in inventory and has not already been sold    |
-|  Post condition  |       The product is marked as sold and the inventory updated       |
-| Nominal Scenario | The manager marks a selected product as sold, providing its identification code  |
+|  Post condition  |       The product is marked as sold       |
+| Nominal Scenario | The manager marks a selected product as sold  |
 |     Variants     |                                                              |
-|    Exceptions    |   No product in inventory with provided code |
+|    Exceptions    |    |
 
 ##### Scenario 6.1: Sell Product
 
 |  Scenario 6.1  |        Manager sells a Product       |
 | :------------: | :---------------------------------------------------------: |
 |  Precondition  |   The manager is authenticated and has the "manager" role <br> The product is in inventory and has not already been sold      |
-| Post condition |      The product is marked as sold and the inventory updated       |
+| Post condition |      The product is marked as sold      |
 |     Step#      |                       **Description**                       |
-|       1        |         The manager navigates to "Product" section         |
-|       2        | The manager selects the "sell" option |
-|       3        | The manager enters a selling date (optional, the default it's the current date) and the identification code of the product to sell |
-|       4        | Thr manager confirms the selling of the product |
-|       5        | The system marks the products as sold and updates inventory |
+|       1        |       The Customer communicates to the Manager the identification code of the Product they are buying |
+|       2        |         The manager navigates to "Product" section         |
+|       3        |   The manager searches for the product to be sold   |
+|       4        | The manager selects the product to sell and selects the selling option |
+|       5        | The system marks the product as sold |
 
 ### UC7 - Use Case 7: Search for Product
 
@@ -333,17 +333,17 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 | Actors Involved  |                         Customer                          |
 | :--------------: | :-------------------------------------------------------: |
-|   Precondition   | The customer is authenticated and has the "customer" role <br> All product in cart have the current date as selling date |
+|   Precondition   | The customer is authenticated and has the "customer" role |
 |  Post condition  |             The cart is marked as checked out and added to the customer's cart history <br> Current cart is emptied           |
 | Nominal Scenario |      The customer checks out the product in their cart      |
 |     Variants     |                                                           |
-|    Exceptions    | Cart is empty |
+|    Exceptions    | Cart is empty <br> Not all product in cart have the current date as selling date  |
 
 ##### Scenario 8.1: Checkout Cart
 
 |  Scenario 8.1  |                      Customer checks out the items in their cart                      |
 | :------------: | :-----------------------------------------------------------------------------------: |
-|  Precondition  |               The customer is authenticated and has the "customer" role <br> All products in cart have the current day as selling date              |
+|  Precondition  |               The customer is authenticated and has the "customer" role              |
 | Post condition |                           The cart is marked as checked out and added to the customer's cart history <br> Current cart is emptied                          |
 |     Step#      |                                    **Description**                                    |
 |       1        |                    The customer navigates to their "Cart" section                     |
