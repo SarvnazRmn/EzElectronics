@@ -240,7 +240,7 @@ NB : An arrival consists of many entities of the same product.
 |       4        | The manager enters product information (selling price, model, category, etc.) |
 |       5        |       The manager enters selects the quantity of product in the arrival       |
 |       6        |                         The manager save the arrival                          |
-|       7        |      The system adds all the product to the inventory with different ID       |
+|       7        |      The system adds all the product to the inventory with different identification codes      |
 
 ### UC5 - Use Case 5: Delete Product from Inventory
 
@@ -270,7 +270,7 @@ NB : An arrival consists of many entities of the same product.
 | :--------------: | :----------------------------------------------------------: |
 |   Precondition   |   The manager is authenticated and has the "manager" role <br> The product is in inventory and has not already been sold    |
 |  Post condition  |       The product is marked as sold and the inventory updated       |
-| Nominal Scenario | The manager marks a selected product as sold, providing its code  |
+| Nominal Scenario | The manager marks a selected product as sold, providing its identification code  |
 |     Variants     |                                                              |
 |    Exceptions    |   No product in inventory with provided code |
 
@@ -283,7 +283,7 @@ NB : An arrival consists of many entities of the same product.
 |     Step#      |                       **Description**                       |
 |       1        |         The manager navigates to "Product" section         |
 |       2        | The manager selects the "sell" option |
-|       3        | The manager enters a selling date (optional, the default it's the current date) and the code of the product to sell |
+|       3        | The manager enters a selling date (optional, the default it's the current date) and the identification code of the product to sell |
 |       4        | Thr manager confirms the selling of the product |
 |       5        | The system marks the products as sold and updates inventory |
 
