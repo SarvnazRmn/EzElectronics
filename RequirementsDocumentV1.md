@@ -225,7 +225,7 @@ NB : An arrival consists of many entities of the same product.
 |  Post condition  |                         All the products are added to the inventory                         |
 | Nominal Scenario |              The manager adds **n** items of the same product to the inventory              |
 |     Variants     |                The manager adds 1 item of the same product to the inventory                 |
-|    Exceptions    | Product with the code name already exists <br> Required fields are not filled out correctly |
+|    Exceptions    | Required fields are not filled out correctly |
 
 ##### Scenario 4.1: Register arrival of a set (n items) of products
 
