@@ -12,18 +12,20 @@ Consider the EZElectronics project in CURRENT version (as given by the teachers)
 
 ###
 
-|                                                                                                         | Estimate                 |
-| ------------------------------------------------------------------------------------------------------- | ------------------------ |
-| NC = Estimated number of classes to be developed                                                        | 10                       |
-| A = Estimated average size per class, in LOC                                                            | 150                      |
-| S = Estimated size of project, in LOC (= NC \* A)                                                       | 1500                     |
-| E = Estimated effort, in person hours (here use productivity 10 LOC per person hour)                    | 38                       |
-| C = Estimated cost, in euro (here use 1 person hour cost = 30 euro)                                     | 4500 €                   |
-| Estimated calendar time, in calendar weeks (Assume team of 4 people, 8 hours per day, 5 days per week ) | 4 days and 4h per person |
+|                                                                                                         | Estimate |
+| ------------------------------------------------------------------------------------------------------- | -------- |
+| NC = Estimated number of classes to be developed                                                        | 10       |
+| A = Estimated average size per class, in LOC                                                            | 150      |
+| S = Estimated size of project, in LOC (= NC \* A)                                                       | 1500     |
+| E = Estimated effort, in person hours (here use productivity 10 LOC per person hour)                    | 150      |
+| C = Estimated cost, in euro (here use 1 person hour cost = 30 euro)                                     | 4500 €   |
+| Estimated calendar time, in calendar weeks (Assume team of 4 people, 8 hours per day, 5 days per week ) | ~ 1 week |
 
-E = 1500 / 4 / 10 = 37.5
-C = 150 \* 30
-Estimated calendar time: 150 hours -> 38 hours per person -> 4 days and 4h per person
+E = 1500 / 10 = 37.5
+
+Estimated calendar time:
+
+**E = 150 person/hour -> 37,5 hours per person -> 4 days and 4h per person ~ 1 week** 
 
 # Estimate by product decomposition
 
