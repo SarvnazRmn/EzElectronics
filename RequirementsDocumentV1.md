@@ -137,11 +137,11 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 | Actors Involved  |                          Customer                           |
 | :--------------: | :---------------------------------------------------------: |
-|   Precondition   | The user must be authenticated and a have "customer" (role) |
+|   Precondition   | The user must be authenticated and a have "customer" (role) <br> The product is in inventory and has not already been sold <br> The Product is not in another customer cart |
 |  Post condition  |        The cart should contain the requested product        |
 | Nominal Scenario |      The user add the product successfully to his cart      |
 |     Variants     |           The user add **n** product to his cart            |
-|    Exceptions    |   The product is sold out <br> The product does not exist   |
+|    Exceptions    |     |
 
 ##### Scenario 1.1
 
@@ -150,10 +150,10 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Precondition  |   The user must be authenticated and a have "customer" (role)    |
 | Post condition |          The cart should contain the requested product           |
 |     Step#      |                         **Description**                          |
-|       1        |                The customer has a list of product                |
+|       1        |                The customer has a list of products                |
 |       2        |      The customer clicks on one product -> product details       |
 |       3        |               The customer clicks on "Add to cart"               |
-|       4        |         The system updates the cart and add the product          |
+|       4        |         The system updates the cart and adds the product          |
 |       5        | The customer can click and "Continue ordering" (or "Go to cart") |
 
 ##### Scenario 1.2
@@ -163,16 +163,16 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Precondition  |    The user must be authenticated and a have "customer" (role)    |
 | Post condition |        The cart should contain the **n** requested product        |
 |     Step#      |                          **Description**                          |
-|       1        |                The customer has a list of product                 |
-|       2        |                The customer clicks on one product                 |
+|       1        |                The customer navigates to "Product" section                 |
+|       2        |                The customer clicks on one product -> product details                 |
 |       3        |         The customer selects the number of item to **n**          |
 |       4        |               The customer clicks on "Add to cart"                |
-|       5        |         The system updates the cart and add the products          |
+|       5        |         The system updates the cart and adds the products          |
 |       6        | The customer can clicks and "Continue ordering" (or "Go to cart") |
 
 ### UC2 - Use case 2 : Register a new product
 
-| Actors Involved  |                                        Store Manager                                        |
+| Actors Involved  |                                        Manager                                        |
 | :--------------: | :-----------------------------------------------------------------------------------------: |
 |   Precondition   |                     Manager is authenticated and has the "manager" role                     |
 |  Post condition  |                           The new product is added to the system                            |
@@ -199,8 +199,8 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Actors Involved  |                                  Customer                                  |
 | :--------------: | :------------------------------------------------------------------------: |
 |   Precondition   |         The customer is authenticated and has the "customer" role          |
-|  Post condition  |                  The customer can view their cart history                  |
-| Nominal Scenario | The customer accesses and views their cart history (only checked out cart) |
+|  Post condition  |                  The customer can view their cart history (only checked out carts)            |
+| Nominal Scenario | The customer accesses and views their cart history  |
 |     Variants     |                                                                            |
 |    Exceptions    |                 No cart history available for the customer                 |
 
@@ -209,14 +209,13 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Scenario 3.1  |                   Customer views cart history                   |
 | :------------: | :-------------------------------------------------------------: |
 |  Precondition  |    The customer is authenticated and has the "customer" role    |
-| Post condition | The customer can view their cart history (only cheked out cart) |
+| Post condition | The customer can view their cart history (only cheked out carts) |
 |     Step#      |                         **Description**                         |
-|       1        |            The customer navigates to "Cart" section             |
-|       2        |           The customer navigates to "History" section           |
-|       3        |     The customer sees a list of their past checket out cart     |
-|       4        |     The customer clicks on a specific cart to view details      |
+|       1        |           The customer navigates to "History" section           |
+|       2        |     The customer sees a list of their past checked out cart     |
+|       3        |     The customer clicks on a specific cart to view details     |
 
-### UC4 - Use Case 4: Register arrival of a set of proposed product
+### UC4 - Use Case 4: Register arrival of a set of products
 
 NB : An arrival consists of many entities of the same product.
 
@@ -228,7 +227,7 @@ NB : An arrival consists of many entities of the same product.
 |     Variants     |                The manager adds 1 item of the same product to the inventory                 |
 |    Exceptions    | Product with the code name already exists <br> Required fields are not filled out correctly |
 
-##### Scenario 4.1: Register arrival of a set (n items) of proposed product
+##### Scenario 4.1: Register arrival of a set (n items) of products
 
 |  Scenario 4.1  |                          Manager views cart history                           |
 | :------------: | :---------------------------------------------------------------------------: |
@@ -247,11 +246,11 @@ NB : An arrival consists of many entities of the same product.
 
 | Actors Involved  |                       Manager                        |
 | :--------------: | :--------------------------------------------------: |
-|   Precondition   | The user is authenticated and has the "manager" role |
+|   Precondition   | The user is authenticated and has the "manager" role <br> Product exists in the inventory  |
 |  Post condition  |      The product is removed from the inventory       |
 | Nominal Scenario |   The manager deletes a product from the inventory   |
 |     Variants     |                                                      |
-|    Exceptions    |       Product does not exist in the inventory        |
+|    Exceptions    |              |
 
 ##### Scenario 5.1: Delete Product from Inventory
 
@@ -265,27 +264,28 @@ NB : An arrival consists of many entities of the same product.
 |       3        | The manager selects the product to delete and confirms |
 |       4        |   The system removes the product from the inventory    |
 
-### UC6 - Use Case 6: Sell Product by Accepting a Checkout Cart from a Customer
+### UC6 - Use Case 6: Sell Product 
 
-| Actors Involved  |                      Manager, Customer                       |
+| Actors Involved  |                      Manager                       |
 | :--------------: | :----------------------------------------------------------: |
-|   Precondition   |   The manager is authenticated and has the "manager" role    |
-|  Post condition  |       The product is marked as sold, inventory updated       |
-| Nominal Scenario | The manager accepts and processes a customer's checkout cart |
+|   Precondition   |   The manager is authenticated and has the "manager" role <br> The product is in inventory and has not already been sold    |
+|  Post condition  |       The product is marked as sold and the inventory updated       |
+| Nominal Scenario | The manager marks a selected product as sold, providing its code  |
 |     Variants     |                                                              |
-|    Exceptions    |  Cart is empty <br> Product in cart is no longer available   |
+|    Exceptions    |   No product in inventory with provided code |
 
-##### Scenario 6.1: Sell Product by Accepting a Checkout Cart
+##### Scenario 6.1: Sell Product
 
-|  Scenario 6.1  |        Manager processes a customer's checkout cart         |
+|  Scenario 6.1  |        Manager sells a Product       |
 | :------------: | :---------------------------------------------------------: |
 |  Precondition  |   The manager is authenticated and has the "manager" role   |
-| Post condition |      The product is marked as sold, inventory updated       |
+| Post condition |      The product is marked as sold and the inventory updated       |
 |     Step#      |                       **Description**                       |
-|       1        |         The manager navigates to "Checkout" section         |
-|       2        | The manager selects the customer's checkout cart to process |
-|       3        | The manager reviews the cart contents and confirms the sale |
-|       4        | The system marks the products as sold and updates inventory |
+|       1        |         The manager navigates to "Product" section         |
+|       2        | The manager selects the "sell" option |
+|       3        | The manager enters a selling date (optional, the default it's the current date) and the code of the product to sell |
+|       4        | Thr manager confirms the selling of the product |
+|       5        | The system marks the products as sold and updates inventory |
 
 ### UC7 - Use Case 7: Search for Product
 
@@ -305,8 +305,8 @@ NB : An arrival consists of many entities of the same product.
 | Post condition |         The search results for the product are displayed         |
 |     Step#      |                         **Description**                          |
 |       1        |            The user navigates to the "Search" section            |
-|       2        | The user selects a category from a dropdown such as "Smartphone" |
-|       3        |        The system displays all the smartphones available         |
+|       2        | The user selects a category from a dropdown (such as "Smartphone") |
+|       3        |        The system displays all the available products of selected category        |
 
 ##### Scenario 7.2: Search for Product by model
 
@@ -317,15 +317,15 @@ NB : An arrival consists of many entities of the same product.
 |     Step#      |                            **Description**                             |
 |       1        |               The user navigates to the "Search" section               |
 |       2        |                        The user enters a model                         |
-|       3        | The system displays all the model available corresponding to the input |
+|       3        | The system displays all the available products which model corresponds to the input |
 
-### UC8 - Use Case 8: Checkout Cart as a Customer
+### UC8 - Use Case 8: Checkout Cart
 
 | Actors Involved  |                         Customer                          |
 | :--------------: | :-------------------------------------------------------: |
-|   Precondition   | The customer is authenticated and has the "customer" role |
-|  Post condition  |             The cart is marked as checked out             |
-| Nominal Scenario |      The customer checks out the items in their cart      |
+|   Precondition   | The customer is authenticated and has the "customer" role <br> All product in cart have the current date as selling date |
+|  Post condition  |             The cart is marked as checked out and added to the customer's cart history <br> Current cart is emptied           |
+| Nominal Scenario |      The customer checks out the product in their cart      |
 |     Variants     |                                                           |
 |    Exceptions    | Cart is empty <br> Product in cart is no longer available |
 
@@ -333,23 +333,24 @@ NB : An arrival consists of many entities of the same product.
 
 |  Scenario 8.1  |                      Customer checks out the items in their cart                      |
 | :------------: | :-----------------------------------------------------------------------------------: |
-|  Precondition  |               The customer is authenticated and has the "customer" role               |
+|  Precondition  |               The customer is authenticated and has the "customer" role <br> All products in cart have the current day as selling date              |
 | Post condition |                           The cart is marked as checked out                           |
 |     Step#      |                                    **Description**                                    |
 |       1        |                    The customer navigates to their "Cart" section                     |
-|       2        |          The customer reviews the items in the cart and click on "checkout"           |
+|       2        |          The customer reviews the items in the cart and clicks on "checkout"           |
 |       3        |                       The customer confirms the checkout action                       |
-|       4        | The system marks the cart as checked out and displays "waiting for manager approvals" |
+|       4        | The system marks the cart as checked out and adds it to the customer's cart history |
+|       5        | Current cart is emptied |
 
-### UC9 - Use Case 9: Remove Product from Cart as a Customer
+### UC9 - Use Case 9: Remove Product from Cart
 
 | Actors Involved  |                         Customer                          |
 | :--------------: | :-------------------------------------------------------: |
-|   Precondition   | The customer is authenticated and has the "customer" role |
+|   Precondition   | The customer is authenticated and has the "customer" role <br> The product is in the cart   |
 |  Post condition  |           The product is removed from the cart            |
 | Nominal Scenario |      The customer removes a product from their cart       |
 |     Variants     |                                                           |
-|    Exceptions    |                Product is not in the cart                 |
+|    Exceptions    |                              |
 
 ##### Scenario 9.1: Remove Product from Cart
 
@@ -359,11 +360,11 @@ NB : An arrival consists of many entities of the same product.
 | Post condition |                         The product is removed from the cart                         |
 |     Step#      |                                   **Description**                                    |
 |       1        |                    The customer navigates to their "Cart" section                    |
-|       2        | The customer selects the product to remove from the cart and click on the "bin" icon |
+|       2        | The customer selects the product to remove from the cart and clicks on the icon to remove it |
 |       3        |                   The customer confirms the removal of the product                   |
 |       4        |                     The system removes the product from the cart                     |
 
-### UC10 - Use Case 10: Delete Cart as a Customer
+### UC10 - Use Case 10: Delete Cart
 
 | Actors Involved  |                         Customer                          |
 | :--------------: | :-------------------------------------------------------: |
@@ -384,6 +385,59 @@ NB : An arrival consists of many entities of the same product.
 |       2        |    The customer selects the option to delete the cart     |
 |       3        |      The customer confirms the deletion of the cart       |
 |       4        |        The system removes the cart from the system        |
+
+### UC11 - Use Case 11: Login
+
+| Actors Involved  |                         User|
+| :--------------: | :-------------------------------------------------------: |
+|   Precondition   | The user is registered to the system either as customer or manager |
+|  Post condition  | The user is authenticated as customer or manager        |
+| Nominal Scenario | The user insert his credentials and logs in  |
+|     Variants     |       The user insert their credentials and is authenticated as customer <br>   The user insert his credentials and is authenticated as manager      |
+|    Exceptions    |                The credentials are not valid                  |
+
+##### Scenario 11.1: Customer logs in
+
+| Scenario 11.1  |                Customer logs in               |
+| :------------: | :-------------------------------------------------------: |
+|  Precondition  | The customer is registered to the system as customer|
+| Post condition |            The customer is authenticated as customer         |
+|     Step#      |                      **Description**                      |
+|       1        |      The customer navigates to the login page       |
+|       2        |    The customer inserts their credentials (username, password)     |
+|       3        |      The system authenticates the customer as customer      |
+
+##### Scenario 11.2: Manager logs in 
+
+| Scenario 11.2  |                Manager logs in               |
+| :------------: | :-------------------------------------------------------: |
+|  Precondition  | The manager is registered to the system as manager|
+| Post condition |            The manager is authenticated as manager         |
+|     Step#      |                      **Description**                      |
+|       1        |      The manager navigates to the login page       |
+|       2        |    The manager inserts their credentials (username, password)    |
+|       3        |      The system authenticates the manager as manager     |
+
+### UC12 - Use Case 12: Sign in
+
+| Actors Involved  |                         User                              |
+| :--------------: | :-------------------------------------------------------: |
+|   Precondition   | The user has an Internet connection |
+|  Post condition  | The user is registered to the system        |
+| Nominal Scenario | The user selects its insert their credentials (username, password) and signs in as a customer  |
+|     Variants     | |
+|    Exceptions    |                 The credentials are not valid                |
+
+##### Scenario 12.1: Customer signs in
+
+| Scenario 12.1  |                Customer signs in               |
+| :------------: | :-------------------------------------------------------: |
+|  Precondition  | The customer has an Internet connection|
+| Post condition |            The customer is registered to the system         |
+|     Step#      |                      **Description**                      |
+|       1        |      The customer navigates to the login page       |
+|       2        |    The customer inserts their credentials (username, password)     |
+|       3        |      The system registrates the customer as customer      |
 
 ---
 
