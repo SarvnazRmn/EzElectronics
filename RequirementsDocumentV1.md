@@ -139,13 +139,13 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | :--------------: | :---------------------------------------------------------: |
 |   Precondition   | The user must be authenticated and a have "customer" (role) <br> The product is in inventory and has not already been sold <br> The Product is not in another customer cart |
 |  Post condition  |        The cart should contain the requested product        |
-| Nominal Scenario |      The user add the product successfully to his cart      |
-|     Variants     |           The user add **n** product to his cart            |
+| Nominal Scenario |      The user add the product successfully to their cart      |
+|     Variants     |           The user adds **n** items of the same Product to their cart            |
 |    Exceptions    |     |
 
 ##### Scenario 1.1
 
-|  Scenario 1.1  |                The user add 1 product to his cart                |
+|  Scenario 1.1  |                The user add 1 Product to their cart                |
 | :------------: | :--------------------------------------------------------------: |
 |  Precondition  |   The user must be authenticated and a have "customer" (role) <br> The product is in inventory and has not already been sold <br> The Product is not in another customer cart    |
 | Post condition |          The cart should contain the requested product           |
@@ -158,7 +158,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ##### Scenario 1.2
 
-|  Scenario 1.2  |           The user add n items of a product to his cart            |
+|  Scenario 1.2  |           The user add n items of a product to their cart            |
 | :------------: | :---------------------------------------------------------------: |
 |  Precondition  |    The user must be authenticated and a have "customer" (role) <br> There are n available items for the Product   |
 | Post condition |        The cart should contain the **n** requested product        |
