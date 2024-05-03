@@ -147,7 +147,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 |  Scenario 1.1  |                The user add 1 product to his cart                |
 | :------------: | :--------------------------------------------------------------: |
-|  Precondition  |   The user must be authenticated and a have "customer" (role)    |
+|  Precondition  |   The user must be authenticated and a have "customer" (role) <br> The product is in inventory and has not already been sold <br> The Product is not in another customer cart    |
 | Post condition |          The cart should contain the requested product           |
 |     Step#      |                         **Description**                          |
 |       1        |                The customer has a list of products                |
@@ -160,7 +160,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 |  Scenario 1.2  |           The user add n item of a product to his cart            |
 | :------------: | :---------------------------------------------------------------: |
-|  Precondition  |    The user must be authenticated and a have "customer" (role)    |
+|  Precondition  |    The user must be authenticated and a have "customer" (role) <br> The product is in inventory and has not already been sold <br> The Product is not in another customer cart    |
 | Post condition |        The cart should contain the **n** requested product        |
 |     Step#      |                          **Description**                          |
 |       1        |                The customer navigates to "Product" section                 |
@@ -240,7 +240,7 @@ NB : An arrival consists of many entities of the same product.
 |       4        | The manager enters product information (selling price, model, category, etc.) |
 |       5        |       The manager enters selects the quantity of product in the arrival       |
 |       6        |                         The manager save the arrival                          |
-|       7        |      The system adds all the product to the inventory with different identification codes      |
+|       7        |      The system adds all the product to the inventory with different identification codes       |
 
 ### UC5 - Use Case 5: Delete Product from Inventory
 
@@ -256,7 +256,7 @@ NB : An arrival consists of many entities of the same product.
 
 |  Scenario 5.1  |        Manager deletes a product from inventory        |
 | :------------: | :----------------------------------------------------: |
-|  Precondition  |  The user is authenticated and has the "manager" role  |
+|  Precondition  |  The user is authenticated and has the "manager" role <br> Product exists in the inventory  |
 | Post condition |       The product is removed from the inventory        |
 |     Step#      |                    **Description**                     |
 |       1        |       The manager navigates to "Product" section       |
@@ -278,7 +278,7 @@ NB : An arrival consists of many entities of the same product.
 
 |  Scenario 6.1  |        Manager sells a Product       |
 | :------------: | :---------------------------------------------------------: |
-|  Precondition  |   The manager is authenticated and has the "manager" role   |
+|  Precondition  |   The manager is authenticated and has the "manager" role <br> The product is in inventory and has not already been sold      |
 | Post condition |      The product is marked as sold and the inventory updated       |
 |     Step#      |                       **Description**                       |
 |       1        |         The manager navigates to "Product" section         |
@@ -294,7 +294,7 @@ NB : An arrival consists of many entities of the same product.
 |   Precondition   |   The user is authenticated as customer or manager   |
 |  Post condition  |   The search results for the product are displayed   |
 | Nominal Scenario | The user searches for a product by model or category |
-|     Variants     |                                                      |
+|     Variants     |    The user searches for an already sold product by model or category                          |
 |    Exceptions    |    Product not found <br> Invalid search criteria    |
 
 ##### Scenario 7.1: Search for Product by category
@@ -319,6 +319,18 @@ NB : An arrival consists of many entities of the same product.
 |       2        |                        The user enters a model                         |
 |       3        | The system displays all the available products which model corresponds to the input |
 
+##### Scenario 7.3: Search for already sold Product, by model or by category
+
+|  Scenario 7.3  |                  User searches for a product by model                  |
+| :------------: | :--------------------------------------------------------------------: |
+|  Precondition  |            The user is authenticated as customer or manager            |
+| Post condition |            The search results for the product are displayed            |
+|     Step#      |                            **Description**                             |
+|       1        |               The user navigates to the "Search" section               |
+|       2        |                        The user enters a model or selects a category                        |
+|       3        | The user checks the "sold" option to see only the already sold products  |
+|       4        | The system displays all the already sold products which model corresponds to the input or with the selected category |
+
 ### UC8 - Use Case 8: Checkout Cart
 
 | Actors Involved  |                         Customer                          |
@@ -334,7 +346,7 @@ NB : An arrival consists of many entities of the same product.
 |  Scenario 8.1  |                      Customer checks out the items in their cart                      |
 | :------------: | :-----------------------------------------------------------------------------------: |
 |  Precondition  |               The customer is authenticated and has the "customer" role <br> All products in cart have the current day as selling date              |
-| Post condition |                           The cart is marked as checked out                           |
+| Post condition |                           The cart is marked as checked out and added to the customer's cart history <br> Current cart is emptied                          |
 |     Step#      |                                    **Description**                                    |
 |       1        |                    The customer navigates to their "Cart" section                     |
 |       2        |          The customer reviews the items in the cart and clicks on "checkout"           |
@@ -346,7 +358,7 @@ NB : An arrival consists of many entities of the same product.
 
 | Actors Involved  |                         Customer                          |
 | :--------------: | :-------------------------------------------------------: |
-|   Precondition   | The customer is authenticated and has the "customer" role <br> The product is in the cart   |
+|   Precondition   | The customer is authenticated and has the "customer" role <br> The product is in the cart <br> The cart is not in the cart history |
 |  Post condition  |           The product is removed from the cart            |
 | Nominal Scenario |      The customer removes a product from their cart       |
 |     Variants     |                                                           |
@@ -356,7 +368,7 @@ NB : An arrival consists of many entities of the same product.
 
 |  Scenario 9.1  |                      Customer removes a product from their cart                      |
 | :------------: | :----------------------------------------------------------------------------------: |
-|  Precondition  |              The customer is authenticated and has the "customer" role               |
+|  Precondition  |              The customer is authenticated and has the "customer" role <br> The product is in the cart <br> The cart is not in the cart history              |
 | Post condition |                         The product is removed from the cart                         |
 |     Step#      |                                   **Description**                                    |
 |       1        |                    The customer navigates to their "Cart" section                    |
