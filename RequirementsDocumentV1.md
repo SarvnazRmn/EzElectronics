@@ -337,7 +337,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Post condition  |             The cart is marked as checked out and added to the customer's cart history <br> Current cart is emptied           |
 | Nominal Scenario |      The customer checks out the product in their cart      |
 |     Variants     |                                                           |
-|    Exceptions    | Cart is empty <br> Product in cart is no longer available |
+|    Exceptions    | Cart is empty |
 
 ##### Scenario 8.1: Checkout Cart
 
