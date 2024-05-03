@@ -158,14 +158,14 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ##### Scenario 1.2
 
-|  Scenario 1.2  |           The user add n item of a product to his cart            |
+|  Scenario 1.2  |           The user add n items of a product to his cart            |
 | :------------: | :---------------------------------------------------------------: |
-|  Precondition  |    The user must be authenticated and a have "customer" (role) <br> The product is in inventory and has not already been sold <br> The Product is not in another customer cart    |
+|  Precondition  |    The user must be authenticated and a have "customer" (role) <br> There are n available items for the Product   |
 | Post condition |        The cart should contain the **n** requested product        |
 |     Step#      |                          **Description**                          |
 |       1        |                The customer navigates to "Product" section                 |
 |       2        |                The customer clicks on one product -> product details                 |
-|       3        |         The customer selects the number of item to **n**          |
+|       3        |         The customer selects the number of items to add          |
 |       4        |               The customer clicks on "Add to cart"                |
 |       5        |         The system updates the cart and adds the products          |
 |       6        | The customer can clicks and "Continue ordering" (or "Go to cart") |
@@ -215,9 +215,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |       2        |     The customer sees a list of their past checked out cart     |
 |       3        |     The customer clicks on a specific cart to view details     |
 
-### UC4 - Use Case 4: Register arrival of a set of products
-
-NB : An arrival consists of many entities of the same product.
+### UC4 - Use Case 4: Register arrival of n items of the same Product
 
 | Actors Involved  |                                           Manager                                           |
 | :--------------: | :-----------------------------------------------------------------------------------------: |
@@ -227,7 +225,7 @@ NB : An arrival consists of many entities of the same product.
 |     Variants     |                The manager adds 1 item of the same product to the inventory                 |
 |    Exceptions    | Required fields are not filled out correctly |
 
-##### Scenario 4.1: Register arrival of a set (n items) of products
+##### Scenario 4.1: Register arrival of n items of the same Product
 
 |  Scenario 4.1  |                          Manager views cart history                           |
 | :------------: | :---------------------------------------------------------------------------: |
@@ -238,9 +236,9 @@ NB : An arrival consists of many entities of the same product.
 |       2        |               The manager selects on the "New arrival" dropdown               |
 |       3        |               The manager selects "Register a set of arrivals"                |
 |       4        | The manager enters product information (selling price, model, category, etc.) |
-|       5        |       The manager enters selects the quantity of product in the arrival       |
+|       5        |       The manager enters the quantity of products in the arrival       |
 |       6        |                         The manager save the arrival                          |
-|       7        |      The system adds all the product to the inventory with different identification codes       |
+|       7        |      The system adds all the products to the inventory with different identification codes       |
 
 ### UC5 - Use Case 5: Delete Product from Inventory
 
