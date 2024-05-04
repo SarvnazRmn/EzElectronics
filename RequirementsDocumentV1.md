@@ -176,17 +176,17 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Actors Involved  |                                        Manager                                        |
 | :--------------: | :-----------------------------------------------------------------------------------------: |
 |   Precondition   |                     Manager is authenticated and has the "manager" role                     |
-|  Post condition  |                           The new product is added to the system when arrival date equals current date                            |
+|  Post condition  |                           The new product is added to the inventory                        |
 | Nominal Scenario |                The manager adds a new product with all required information                 |
 |     Variants     |                   The manager adds a new product with additional details                    |
 |    Exceptions    | Product with the same code already exists <br> Required fields are not filled out correctly |
 
 ##### Scenario 2.1: Register a new product
 
-|  Scenario 2.1  |                   Manager adds a new product to the system                    |
+|  Scenario 2.1  |                   Manager adds a new product to the inventory                    |
 | :------------: | :---------------------------------------------------------------------------: |
 |  Precondition  |              Manager is authenticated and has the "manager" role              |
-| Post condition |                    The new product is added to the system when arrival date equals current date                    |
+| Post condition |                    The new product is added to the inventory                 |
 |     Step#      |                                **Description**                                |
 |       1        |                  The manager navigates to "Product" section                   |
 |       2        |               The manager selects on the "New arrival" dropdown               |
@@ -221,7 +221,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Actors Involved  |                                           Manager                                           |
 | :--------------: | :-----------------------------------------------------------------------------------------: |
 |   Precondition   |                    The user is authenticated and has the "manager" role                     |
-|  Post condition  |                         All the products are added to the inventory when arrival date equals current date                         |
+|  Post condition  |                         All the products are added to the inventory                      |
 | Nominal Scenario |              The manager adds **n** items of the same product to the inventory              |
 |     Variants     |                The manager adds 1 item of the same product to the inventory                 |
 |    Exceptions    | Required fields are not filled out correctly |
@@ -231,7 +231,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Scenario 4.1  |                          Manager views cart history                           |
 | :------------: | :---------------------------------------------------------------------------: |
 |  Precondition  |             The user is authenticated and has the "manager" role              |
-| Post condition |                  All the products are added to the inventory when arrival date equals current date                  |
+| Post condition |                  All the products are added to the inventory               |
 |     Step#      |                                **Description**                                |
 |       1        |                  The manager navigates to "Product" section                   |
 |       2        |               The manager selects on the "New arrival" dropdown               |
@@ -383,7 +383,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Actors Involved  |                         Customer                          |
 | :--------------: | :-------------------------------------------------------: |
 |   Precondition   | The customer is authenticated and has the "customer" role |
-|  Post condition  |            The cart is deleted from the system            |
+|  Post condition  |            The cart is deleted from the inventory           |
 | Nominal Scenario |              The customer deletes their cart              |
 |     Variants     |                                                           |
 |    Exceptions    |                   Cart is already empty                   |
@@ -393,12 +393,12 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Scenario 10.1  |                Customer deletes their cart                |
 | :------------: | :-------------------------------------------------------: |
 |  Precondition  | The customer is authenticated and has the "customer" role |
-| Post condition |            The cart is deleted from the system            |
+| Post condition |            The cart is deleted from the inventory            |
 |     Step#      |                      **Description**                      |
 |       1        |      The customer navigates to their "Cart" section       |
 |       2        |    The customer selects the option to delete the cart     |
 |       3        |      The customer confirms the deletion of the cart       |
-|       4        |        The system removes the cart from the system        |
+|       4        |        The system removes the cart from the inventory        |
 
 ### UC11 - Use Case 11: Login
 
