@@ -27,19 +27,6 @@ Version:
 
 
 
-
-### Checkout cart 
-
-When the customer completes his cart, he can proceed to checkout his cart.
-
-![customer_checkout.png](./requirement_documents/v1/customer_checkout.png)
-
-After clicking on the confirmation button. The user has to wait for manager's approval.
-
-![customer_checkout_confirmation.png](./requirement_documents/v1/customer_checkout_confirmation.png)
-
-
-
 --- 
 # Manager 
 
