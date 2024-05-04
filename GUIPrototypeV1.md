@@ -18,6 +18,10 @@ Version:
 
 ![customer_product_list.png](./requirement_documents/v1/customer_product_list.png)
 
+### Products details
+
+![customer_product_details.png](./requirement_documents/v1/customer_product_details.png)
+
 ### Cart
 ![CustomerCartV1.png](requirement_documents/v1/CustomerCartV1.png)
 
