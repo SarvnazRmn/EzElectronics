@@ -40,17 +40,35 @@ Version: V1 - description of EZElectronics in FUTURE form (as proposed by the te
 
 EZElectronics (read EaSy Electronics) is a software application designed to help managers of electronics stores to manage their products and offer them to customers through a dedicated website. Managers can assess the available products, record new ones, and confirm purchases. Customers can see available products, add them to a cart and see the history of their past purchases.
 
+#### Key Features and Improvements:
+
+- Low Stock and No Stock Alerts: Managers receive notifications to address inventory shortages.
+- Product Visuals: V2 improves the product browsing experience by incorporating images and brand information for each listed item. 
+- Total Stock Count: V2 provides a view of total stock counts.
+- Post-Checkout Payment: V2 enables customers to complete transactions. Payment processing occurs after cart checkout.
+- Shop Admin Role: V2 introduces a specialized shop admin role. Shop admins have restricted functionalities compared to managers, ensuring efficient delegation of responsibilities.
+- Account Management: V2 add new fields for address and email information in user accounts. 
+- Delivery Stage Tracking: Managers and shop admins can update delivery stages, providing customers with visibility into the status of their orders.
+- Premium Account Option: Premium features offer new functionality.
+
 # Stakeholders
 
-|     Stakeholder name      |                                 Description                                 |
-| :-----------------------: | :-------------------------------------------------------------------------: |
-|         Customer          |                            Customer of the shop                             |
-|          Manager          |                             Manager of the shop                             |
-|     Product companies     |              Company producing the product sell on the website              |
-|          Admins           |               Admin of the website (tech) and business admin                |
-| EzElectronics dev company |                The company that develops the software itself                |
-|        Competitors        | Other companies that want to develop similar softwares for the same purpose |
-|       Control Team        |                    Check stock, check available product                     |
+|     Stakeholder name      |                                 Description                                  |
+| :-----------------------: | :--------------------------------------------------------------------------: |
+|         Customer          |                             Customer of the shop                             |
+|          Manager          |                             Manager of the shop                              |
+|     Product companies     |              Company producing the product sell on the website               |
+|        Tech Admin         |                             Admin of the website                             |
+|      Business admin       |                 Responsible for the marketing of the product                 |
+|        Shop admin         | Responsible for managing product with less responsabilities than the manager |
+| EzElectronics dev company |                The company that develops the software itself                 |
+|        Competitors        | Other companies that want to develop similar softwares for the same purpose  |
+|       Control Team        |                     Check stock, check available product                     |
+|      Cloud provider       |                     Provider for hosting the application                     |
+|  Quality assurance team   |           Group of people responsible for testing the application            |
+| Payment Service  |                         For customer payment option                          |
+|    Logistics Partners     |                       For show delivery stages option                        |
+|   Customer Support Team   |                        Assisting customers with order                        |
 
 # Context Diagram and interfaces
 
@@ -419,6 +437,8 @@ NB : An arrival consists of many entities of the same product.
 \<use UML class diagram to define important terms, or concepts in the domain of the application, and their relationships>
 
 \<concepts must be used consistently all over the document, ex in use cases, requirements etc>
+
+![glossary-v2.png](./requirement_documents/v2/Glossary-v2.png)
 
 # System Design
 
