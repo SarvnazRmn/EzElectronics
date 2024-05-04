@@ -33,21 +33,44 @@ Estimated calendar time:
 
 | component name       | Estimated effort (person hours) |
 | -------------------- | ------------------------------- |
-| requirement document |                                 |
-| GUI prototype        |                                 |
-| design document      |                                 |
-| code                 |                                 |
-| unit tests           |                                 |
-| api tests            |                                 |
-| management documents |                                 |
+| requirement document |               15                  |
+| GUI prototype        |               8                  |
+| design document      |               4                 |
+| code                 |                40                |
+| unit tests           |                 7               |
+| api tests            |                 9               |
+| management documents |                 3                |
 
 # Estimate by activity decomposition
 
 ###
 
 | Activity name | Estimated effort (person hours) |
-| ------------- | ------------------------------- |
-|               |                                 |
+| ------------------------ | -------------------------|
+|   **Requirements planning**     |                    |
+|  Review existing systems        |         2          |
+| Perform work analysis           |            3       |
+|  Model process                  |             2      |
+| Identify user requirements                |       4       |
+| Identify performance requirements         |     4         |
+| **Design**                                |               |
+|    Develop the prototype design           |         2     |
+|Developing the GUI                         |            8  |
+| **Implementation**                        |               |
+|   Develop  code                           |         15     |
+|   Developing models                       |         5      |
+|   Developing controllers                  |         30     |
+|  **TESTING**                              |                |
+|  Testing  API                             |       5        |
+|  Testing  UI                              |       5        |
+| Testing of NF req                         |        2       |
+   
+
+
+
+
+
+
 
 ###
 
