@@ -272,7 +272,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Post condition  |       The product is marked as sold       |
 | Nominal Scenario | The manager marks a selected product as sold  |
 |     Variants     |                                                              |
-|    Exceptions    |    |
+|    Exceptions    |  Invalid selling date  |
 
 ##### Scenario 6.1: Sell Product
 
@@ -285,8 +285,9 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |       2        |         The manager navigates to "Product" section         |
 |       3        |   The manager searches for the product to be sold   |
 |       4        | The manager selects the product to sell -> product details |
-|       5        | The manager selects the selling option |
-|       6        | The system marks the product as sold |
+|       5        | The manager inserts a selling date (optional, default is current date) |
+|       6        | The manager selects the selling option |
+|       7        | The system marks the product as sold |
 
 ### UC7 - Use Case 7: Search for Product
 
