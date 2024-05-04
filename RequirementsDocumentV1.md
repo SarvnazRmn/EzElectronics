@@ -505,7 +505,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 # Glossary
 
-![GLOSSARY.png](./requirement_documents/v1/GLOSSARY.png)
+![GLOSSARY.png](./requirement_documents/v1/GLOSSARYv1.png)
 
 # System Design
 
