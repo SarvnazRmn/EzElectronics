@@ -501,7 +501,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Precondition  |   The user must be authenticated as customer or manager <br> The product is in inventory  |
 | Post condition |          The details of a selected Product are desplayed          |
 |     Step#      |                         **Description**                          |
-|       1        |                The user navigates to any section but login               |
+|       1        |                The user navigates to their "Product" section               |
 |       2        |      The user clicks on one product -> product details       |
 |       3        |               The user reads the details of the selected Product               |
 
