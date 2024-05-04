@@ -8,11 +8,21 @@ Version:
 
 \<Report here the GUI that you propose for EZElectronics in CURRENT form, as received by teachers. You are free to organize it as you prefer. A suggested presentation matches the Use cases and scenarios defined in the Requirement document. The GUI can be shown as a sequence of graphical files (jpg, png) >
 
+# Home page
+
+
+![HomepageV1.png](./requirement_documents/v1/HomepageV1.png)
 # Customer 
 
 ### Products list 
 
 ![customer_product_list.png](./requirement_documents/v1/customer_product_list.png)
+
+### Cart
+![CustomerCartV1.png](requirement_documents/v1/CustomerCartV1.png)
+
+
+
 
 ### Checkout cart 
 
