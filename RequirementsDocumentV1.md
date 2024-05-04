@@ -235,7 +235,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |     Step#      |                                **Description**                                |
 |       1        |                  The manager navigates to "Product" section                   |
 |       2        |               The manager selects on the "New arrival" dropdown               |
-|       3        |               The manager selects "Register a set of arrivals"                |
+|       3        |               The manager selects "Register an arrival"                |
 |       4        | The manager enters product information (selling price, model, category, arrival date, etc.) |
 |       5        |       The manager enters the quantity of products in the arrival       |
 |       6        |                         The manager save the arrival                          |
