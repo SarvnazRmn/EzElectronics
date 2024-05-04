@@ -259,8 +259,9 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |     Step#      |                    **Description**                     |
 |       1        |       The manager navigates to "Product" section       |
 |       2        |   The manager searches for the product to be deleted   |
-|       3        | The manager selects the product to delete and selects the deletion option |
-|       4        |   The system removes the product from the inventory    |
+|       3        | The manager selects the product to delete -> product details |
+|       4        | The manager selects the deletion option |
+|       5        |   The system removes the product from the inventory    |
 
 ### UC6 - Use Case 6: Sell Product 
 
@@ -282,8 +283,9 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |       1        |       The Customer communicates to the Manager the identification code of the Product they are buying |
 |       2        |         The manager navigates to "Product" section         |
 |       3        |   The manager searches for the product to be sold   |
-|       4        | The manager selects the product to sell and selects the selling option |
-|       5        | The system marks the product as sold |
+|       4        | The manager selects the product to sell -> product details |
+|       5        | The manager selects the selling option |
+|       6        | The system marks the product as sold |
 
 ### UC7 - Use Case 7: Search for Product
 
