@@ -144,7 +144,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |     Variants     |           The user adds **n** items of the same Product to their cart            |
 |    Exceptions    |     |
 
-##### Scenario 1.1
+##### Scenario 1.1: Add 1 product to cart
 
 |  Scenario 1.1  |                The user add 1 Product to their cart                |
 | :------------: | :--------------------------------------------------------------: |
@@ -157,7 +157,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |       4        |         The system updates the cart and adds the product          |
 |       5        | The customer can click and "Continue ordering" (or "Go to cart") |
 
-##### Scenario 1.2
+##### Scenario 1.2: Add n items of a product to cart
 
 |  Scenario 1.2  |           The user add n items of a product to their cart            |
 | :------------: | :---------------------------------------------------------------: |
@@ -171,12 +171,12 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |       5        |         The system updates the cart and adds the products          |
 |       6        | The customer can clicks and "Continue ordering" (or "Go to cart") |
 
-### UC2 - Use case 2 : Register a new product
+### UC2 - Use case 2: Register a new product
 
 | Actors Involved  |                                        Manager                                        |
 | :--------------: | :-----------------------------------------------------------------------------------------: |
 |   Precondition   |                     Manager is authenticated and has the "manager" role                     |
-|  Post condition  |                           The new product is added to the system                            |
+|  Post condition  |                           The new product is added to the system when arrival date equals current date                            |
 | Nominal Scenario |                The manager adds a new product with all required information                 |
 |     Variants     |                   The manager adds a new product with additional details                    |
 |    Exceptions    | Product with the same code already exists <br> Required fields are not filled out correctly |
@@ -186,12 +186,12 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Scenario 2.1  |                   Manager adds a new product to the system                    |
 | :------------: | :---------------------------------------------------------------------------: |
 |  Precondition  |              Manager is authenticated and has the "manager" role              |
-| Post condition |                    The new product is added to the system                     |
+| Post condition |                    The new product is added to the system when arrival date equals current date                    |
 |     Step#      |                                **Description**                                |
 |       1        |                  The manager navigates to "Product" section                   |
 |       2        |               The manager selects on the "New arrival" dropdown               |
 |       3        |                   The manager selects "Register a product"                    |
-|       4        | The manager enters product information (selling price, model, category, etc.) |
+|       4        | The manager enters product information (selling price, model, category, arrival date, etc.) |
 |       5        |                       The manager saves the new product                       |
 |       6        |                 The system adds the product to the inventory                  |
 
@@ -221,7 +221,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Actors Involved  |                                           Manager                                           |
 | :--------------: | :-----------------------------------------------------------------------------------------: |
 |   Precondition   |                    The user is authenticated and has the "manager" role                     |
-|  Post condition  |                         All the products are added to the inventory                         |
+|  Post condition  |                         All the products are added to the inventory when arrival date equals current date                         |
 | Nominal Scenario |              The manager adds **n** items of the same product to the inventory              |
 |     Variants     |                The manager adds 1 item of the same product to the inventory                 |
 |    Exceptions    | Required fields are not filled out correctly |
@@ -231,12 +231,12 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Scenario 4.1  |                          Manager views cart history                           |
 | :------------: | :---------------------------------------------------------------------------: |
 |  Precondition  |             The user is authenticated and has the "manager" role              |
-| Post condition |                  All the products are added to the inventory                  |
+| Post condition |                  All the products are added to the inventory when arrival date equals current date                  |
 |     Step#      |                                **Description**                                |
 |       1        |                  The manager navigates to "Product" section                   |
 |       2        |               The manager selects on the "New arrival" dropdown               |
 |       3        |               The manager selects "Register a set of arrivals"                |
-|       4        | The manager enters product information (selling price, model, category, etc.) |
+|       4        | The manager enters product information (selling price, model, category, arrival date, etc.) |
 |       5        |       The manager enters the quantity of products in the arrival       |
 |       6        |                         The manager save the arrival                          |
 |       7        |      The system adds all the products to the inventory with different identification codes       |
@@ -271,7 +271,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |   Precondition   |   The manager is authenticated and has the "manager" role <br> The product is in inventory and has not already been sold    |
 |  Post condition  |       The product is marked as sold       |
 | Nominal Scenario | The manager marks a selected product as sold  |
-|     Variants     |                                                              |
+|     Variants     |         The manager marks a selected product as sold, specifying arrival date  |
 |    Exceptions    |  Invalid selling date  |
 
 ##### Scenario 6.1: Sell Product
