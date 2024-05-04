@@ -138,7 +138,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Actors Involved  |                          Customer                           |
 | :--------------: | :---------------------------------------------------------: |
 |   Precondition   | The user must be authenticated and a have "customer" (role) <br> The product is in inventory and has not already been sold <br> The Product is not in another customer cart |
-|  Post condition  |        The cart should contain the requested product        |
+|  Post condition  |        The cart contains the requested product        |
 | Nominal Scenario |      The user add the product successfully to their cart      |
 |     Variants     |           The user adds **n** items of the same Product to their cart            |
 |    Exceptions    |     |
@@ -150,7 +150,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Precondition  |   The user must be authenticated and a have "customer" (role) <br> The product is in inventory and has not already been sold <br> The Product is not in another customer cart    |
 | Post condition |          The cart should contain the requested product           |
 |     Step#      |                         **Description**                          |
-|       1        |                The customer has a list of products                |
+|       1        |                The customer navigates to "Product" section                |
 |       2        |      The customer clicks on one product -> product details       |
 |       3        |               The customer clicks on "Add to cart"               |
 |       4        |         The system updates the cart and adds the product          |
@@ -302,7 +302,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Precondition  |         The user is authenticated as customer or manager         |
 | Post condition |         The search results for the product are displayed         |
 |     Step#      |                         **Description**                          |
-|       1        |            The user navigates to the "Search" section            |
+|       1        |            The user navigates to the "Product" section |
 |       2        | The user selects a category from a dropdown (such as "Smartphone") |
 |       3        |        The system displays all the available products of selected category        |
 
@@ -313,7 +313,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Precondition  |            The user is authenticated as customer or manager            |
 | Post condition |            The search results for the product are displayed            |
 |     Step#      |                            **Description**                             |
-|       1        |               The user navigates to the "Search" section               |
+|       1        |               The user navigates to the "Product" section |
 |       2        |                        The user enters a model                         |
 |       3        | The system displays all the available products which model corresponds to the input |
 
@@ -324,7 +324,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Precondition  |            The user is authenticated as customer or manager            |
 | Post condition |            The search results for the product are displayed            |
 |     Step#      |                            **Description**                             |
-|       1        |               The user navigates to the "Search" section               |
+|       1        |               The user navigates to the "Product" section               |
 |       2        |                        The user enters a model or selects a category                        |
 |       3        | The user checks the "sold" option to see only the already sold products  |
 |       4        | The system displays all the already sold products which model corresponds to the input or with the selected category |
@@ -398,12 +398,12 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ### UC11 - Use Case 11: Login
 
-| Actors Involved  |                         User|
+| Actors Involved  |                         Customer, Manager |
 | :--------------: | :-------------------------------------------------------: |
 |   Precondition   | The user is registered to the system either as customer or manager |
 |  Post condition  | The user is authenticated as customer or manager        |
 | Nominal Scenario | The user insert his credentials and logs in  |
-|     Variants     |       The user insert their credentials and is authenticated as customer <br>   The user insert his credentials and is authenticated as manager      |
+|     Variants     |       The user inserts their credentials and is authenticated as customer <br>   The user insert his credentials and is authenticated as manager      |
 |    Exceptions    |                The credentials are not valid                  |
 
 ##### Scenario 11.1: Customer logs in
@@ -414,7 +414,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Post condition |            The customer is authenticated as customer         |
 |     Step#      |                      **Description**                      |
 |       1        |      The customer navigates to the login page       |
-|       2        |    The customer inserts their credentials (username, password)     |
+|       2        |    The customer inserts their credentials (username, password) and confirms    |
 |       3        |      The system authenticates the customer as customer      |
 
 ##### Scenario 11.2: Manager logs in 
@@ -425,16 +425,16 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Post condition |            The manager is authenticated as manager         |
 |     Step#      |                      **Description**                      |
 |       1        |      The manager navigates to the login page       |
-|       2        |    The manager inserts their credentials (username, password)    |
+|       2        |    The manager inserts their credentials (username, password) and confirms   |
 |       3        |      The system authenticates the manager as manager     |
 
 ### UC12 - Use Case 12: Sign in
 
-| Actors Involved  |                         User                              |
+| Actors Involved  |                         Customer                              |
 | :--------------: | :-------------------------------------------------------: |
-|   Precondition   | The user has an Internet connection |
-|  Post condition  | The user is registered to the system        |
-| Nominal Scenario | The user selects its insert their credentials (username, password) and signs in as a customer  |
+|   Precondition   | The Customer has an Internet connection |
+|  Post condition  | The Customer is registered to the system        |
+| Nominal Scenario | The Customer inserts their credentials (username, password) and signs in as a customer  |
 |     Variants     | |
 |    Exceptions    |                 The credentials are not valid                |
 
@@ -446,8 +446,60 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Post condition |            The customer is registered to the system         |
 |     Step#      |                      **Description**                      |
 |       1        |      The customer navigates to the login page       |
-|       2        |    The customer inserts their credentials (username, password)     |
+|       2        |    The customer inserts their credentials (username, password) and confirms    |
 |       3        |      The system registrates the customer as customer      |
+
+### UC14 - Use Case 14: Logout
+
+| Actors Involved  |                         Customer, Manager |
+| :--------------: | :-------------------------------------------------------: |
+|   Precondition   | The user is authenticated to the system either as customer or manager |
+|  Post condition  | The user is no more authenticated as customer or manager and they are redirected to login page        |
+| Nominal Scenario | The user logs out  |
+|     Variants     |       The user is authenticated as customer and logs out <br> The user is authenticated as manager and logs out      |
+|    Exceptions    |                          |
+
+##### Scenario 14.1: Customer logs out
+
+| Scenario 14.1  |                Customer logs out               |
+| :------------: | :-------------------------------------------------------: |
+|  Precondition  | The customer is authenticated to the system as customer|
+| Post condition |            The customer is no more authenticated as customer and they are redirected to login page        |
+|     Step#      |                      **Description**                      |
+|       1        |      The customer navigates to any page       |
+|       2        |    The customer selects logout option and confirms     |
+|       3        |      The authentication of the customer expires      |
+
+##### Scenario 14.2: Manager logs out 
+
+| Scenario 14.2  |                Manager logs out               |
+| :------------: | :-------------------------------------------------------: |
+|  Precondition  | The manager is authenticated to the system as manager|
+| Post condition |            The manager is no more authenticated as manager and they are redirected to login page        |
+|     Step#      |                      **Description**                      |
+|       1        |      The manager navigates to any page       |
+|       2        |    The manager selects logout option and confirms   |
+|       3        |      The authentication of the manager expires     |
+
+### UC15 - Use Case 15: View Product details
+
+| Actors Involved  |                          Customer, Manager                           |
+| :--------------: | :---------------------------------------------------------: |
+|   Precondition   | The user must be authenticated as customer or manager <br> The product is in inventory |
+| Nominal Scenario |      The details of a selected Product are desplayed     |
+|     Variants     |           The user reads the details of a selected Product            |
+|    Exceptions    |     |
+
+##### Scenario 15.1: View Product details 
+
+|  Scenario 15.1  |                The user views Product details                |
+| :------------: | :--------------------------------------------------------------: |
+|  Precondition  |   The user must be authenticated as customer or manager <br> The product is in inventory  |
+| Post condition |          The details of a selected Product are desplayed          |
+|     Step#      |                         **Description**                          |
+|       1        |                The user navigates to any section but login               |
+|       2        |      The user clicks on one product -> product details       |
+|       3        |               The user reads the details of the selected Product               |
 
 ---
 
