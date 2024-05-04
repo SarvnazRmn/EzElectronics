@@ -54,9 +54,9 @@ to add new products to the inventory:
 
 "Register a product"
 
-![manager_product_detail.png](./requirement_documents/v1/product_registration.png)
+![manager_product_registration.png](./requirement_documents/v1/product_registration.png)
 
 "Register an arrival"
 
-![manager_product_detail.png](./requirement_documents/v1/arrival_registration.png)
+![manager_arrival_registration.png](./requirement_documents/v1/arrival_registration.png)
 
