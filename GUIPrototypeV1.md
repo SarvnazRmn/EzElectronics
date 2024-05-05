@@ -16,6 +16,10 @@ Version: v1
 
 
 ![HomepageV1.png](./requirement_documents/v1/GUI/HomepageV1.png)
+
+# Sign Up
+![signUp.png](./requirement_documents/v1/GUI/signUp.png)
+
 # Customer 
 
 ### Products list 
