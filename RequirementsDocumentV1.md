@@ -336,7 +336,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Actors Involved  |                         Customer                          |
 | :--------------: | :-------------------------------------------------------: |
 |   Precondition   | The customer is authenticated and has the "customer" role |
-|  Post condition  |             The cart is marked as checked out and added to the customer's cart history <br> Current cart is emptied           |
+|  Post condition  |             The cart is marked as checked out and added to the customer's cart history <br> Current cart is empty          |
 | Nominal Scenario |      The customer checks out the product in their cart      |
 |     Variants     |                                                           |
 |    Exceptions    | Cart is empty <br> Not all product in cart have the current date as sale date  |
@@ -346,7 +346,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Scenario 8.1  |                      Customer checks out the items in their cart                      |
 | :------------: | :-----------------------------------------------------------------------------------: |
 |  Precondition  |               The customer is authenticated and has the "customer" role              |
-| Post condition |                           The cart is marked as checked out and added to the customer's cart history <br> Current cart is emptied                          |
+| Post condition |                           The cart is marked as checked out and added to the customer's cart history <br> Current cart is empty                          |
 |     Step#      |                                    **Description**                                    |
 |       1        |                    The customer navigates to their "Cart" section                     |
 |       2        |          The customer reviews the items in the cart and clicks on "checkout"           |
