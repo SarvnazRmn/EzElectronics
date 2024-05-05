@@ -33,13 +33,13 @@ Estimated calendar time:
 
 | component name       | Estimated effort (person hours) |
 | -------------------- | ------------------------------- |
-| requirement document | 25                              |
+| requirement document | 60                              |
 | GUI prototype        | 15                              |
-| design document      | 6                               |
-| code                 | 65                              |
-| unit tests           | 15                              |
-| api tests            | 15                              |
-| management documents | 6                               |
+| design document      | 30                              |
+| code                 | 120                             |
+| unit tests           | 50                              |
+| api tests            | 50                              |
+| management documents | 50                              |
 
 # Estimate by activity decomposition
 
@@ -75,10 +75,11 @@ Estimated calendar time:
 
 # Summary
 
-Report here the results of the three estimation approaches. The estimates may differ. Discuss here the possible reasons for the difference
+The difference, regarding the estimated duration, between the three techniques comes from the different approach in evaluating the distribution of efforts and resources over the available time, because putting the temporal relationships between the activities on an actual calendar, some activities can overlap and be done in parallel, but counting weekends enlarges the duration estimation.
+Instead, the estimated effort is slightly different because the estimation by activity decomposition is a more detailed analysis of the WBS subactivities and then more person hours are considered with respect to the more general estimation by product, which considers only the deliverables.
 
 |                                    | Estimated effort | Estimated duration |
 | ---------------------------------- | ---------------- | ------------------ |
 | estimate by size                   | 150ph            | about 1 week       |
-| estimate by product decomposition  | 147ph            | about 2 weeks      |
+| estimate by product decomposition  | 450ph            | about 2 weeks      |
 | estimate by activity decomposition | 380ph            | about 3 weeks      |
