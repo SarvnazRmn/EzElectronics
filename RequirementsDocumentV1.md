@@ -322,7 +322,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ##### Scenario 7.3: Search for already sold Product, by model or by category
 
-|  Scenario 7.3  |                                         User searches for a product by model, category or brand                                         |
+|  Scenario 7.3  |                                         User searches for a product by model or category                                       |
 | :------------: | :------------------------------------------------------------------------------------------------------------------: |
 |  Precondition  |                                       The manager is authenticated as manager                                        |
 | Post condition |                                   The search results for the product are displayed                                   |
