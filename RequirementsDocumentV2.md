@@ -83,14 +83,14 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 |          Actor          | Logical Interface | Physical Interface |
 | :---------------------: | :---------------: | :----------------: |
-| Manager-premium manager |        GUI        |         PC         |
+| Manager                 |        GUI        |         PC         |
 |        Customer         |        GUI        |         PC         |
 |          Admin          |        GUI        |         PC         |
 |      Control team       |        GUI        |         PC         |
 |  Customer Support Team  |        GUI        |        PC          |
 |     Payment service     |                   |      Internet      |
 |    Logistics Partners   |                   |      Internet     |
-|Quality assurance team   |         GUI       |       PC           |
+|Quality assurance team   |         GUI - code     |       PC           |
 
 # Stories and personas
 
