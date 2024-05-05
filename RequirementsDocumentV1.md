@@ -155,7 +155,6 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |       2        |      The customer clicks on one product -> product details       |
 |       3        |               The customer clicks on "Add to cart"               |
 |       4        |         The system updates the cart and adds the product          |
-|       5        | The customer can click and "Continue ordering" (or "Go to cart") |
 
 ##### Scenario 1.2: Add n items of a product to cart
 
@@ -169,7 +168,6 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |       3        |         The customer selects the number of items to add          |
 |       4        |               The customer clicks on "Add to cart"                |
 |       5        |         The system updates the cart and adds the products          |
-|       6        | The customer can clicks and "Continue ordering" (or "Go to cart") |
 
 ### UC2 - Use case 2: Register a new product
 
@@ -191,7 +189,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |       1        |                  The manager navigates to "Product" section                   |
 |       2        |               The manager selects on the "New arrival" dropdown               |
 |       3        |                   The manager selects "Register a product"                    |
-|       4        | The manager enters product information (selling price, model, category, arrival date, etc.) |
+|       4        | The manager enters product information (sale price, model, category, arrival date, etc.) |
 |       5        |                       The manager saves the new product                       |
 |       6        |                 The system adds the product to the inventory                  |
 
@@ -205,12 +203,12 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |     Variants     |                                                                            |
 |    Exceptions    |                 No cart history available for the customer                 |
 
-##### Scenario 3.1: View cart history
+##### Scenario 3.1: View Cart history
 
 |  Scenario 3.1  |                   Customer views cart history                   |
 | :------------: | :-------------------------------------------------------------: |
 |  Precondition  |    The customer is authenticated and has the "customer" role    |
-| Post condition | The customer can view their cart history (only cheked out carts) |
+| Post condition | The customer can view their cart history (only checked out carts) |
 |     Step#      |                         **Description**                         |
 |       1        |           The customer navigates to "History" section           |
 |       2        |     The customer sees a list of their past checked out cart     |
@@ -236,7 +234,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |       1        |                  The manager navigates to "Product" section                   |
 |       2        |               The manager selects on the "New arrival" dropdown               |
 |       3        |               The manager selects "Register an arrival"                |
-|       4        | The manager enters product information (selling price, model, category, arrival date, etc.) |
+|       4        | The manager enters product information (sale price, model, category, arrival date, etc.) |
 |       5        |       The manager enters the quantity of products in the arrival       |
 |       6        |                         The manager save the arrival                          |
 |       7        |      The system adds all the products to the inventory with different identification codes       |
@@ -272,7 +270,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Post condition  |       The product is marked as sold       |
 | Nominal Scenario | The manager marks a selected product as sold  |
 |     Variants     |         The manager marks a selected product as sold, specifying arrival date  |
-|    Exceptions    |  Invalid selling date  |
+|    Exceptions    |  Invalid sale date  |
 
 ##### Scenario 6.1: Sell Product
 
@@ -285,8 +283,8 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |       2        |         The manager navigates to "Product" section         |
 |       3        |   The manager searches for the product to be sold   |
 |       4        | The manager selects the product to sell -> product details |
-|       5        | The manager inserts a selling date (optional, default is current date) |
-|       6        | The manager selects the selling option |
+|       5        | The manager inserts a sale date (optional, default is current date) |
+|       6        | The manager selects the sale option |
 |       7        | The system marks the product as sold |
 
 ### UC7 - Use Case 7: Search for Product
@@ -296,7 +294,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |   Precondition   |   The user is authenticated as customer or manager   |
 |  Post condition  |   The search results for the product are displayed   |
 | Nominal Scenario | The user searches for a product by model or category |
-|     Variants     |    The user searches for an already sold product by model or category                          |
+|     Variants     |    The manager searches for an already sold product by model or category                          |
 |    Exceptions    |    Product not found <br> Invalid search criteria    |
 
 ##### Scenario 7.1: Search for Product by category
@@ -325,12 +323,12 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 |  Scenario 7.3  |                  User searches for a product by model                  |
 | :------------: | :--------------------------------------------------------------------: |
-|  Precondition  |            The user is authenticated as customer or manager            |
+|  Precondition  |            The manager is authenticated as manager            |
 | Post condition |            The search results for the product are displayed            |
 |     Step#      |                            **Description**                             |
-|       1        |               The user navigates to the "Product" section               |
-|       2        |                        The user enters a model or selects a category                        |
-|       3        | The user checks the "sold" option to see only the already sold products  |
+|       1        |               The manager navigates to the "Product" section               |
+|       2        |                        The manager enters a model or selects a category                        |
+|       3        | The manager checks the "sold" option to see only the already sold products  |
 |       4        | The system displays all the already sold products which model corresponds to the input or with the selected category |
 
 ### UC8 - Use Case 8: Checkout Cart
@@ -341,7 +339,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Post condition  |             The cart is marked as checked out and added to the customer's cart history <br> Current cart is emptied           |
 | Nominal Scenario |      The customer checks out the product in their cart      |
 |     Variants     |                                                           |
-|    Exceptions    | Cart is empty <br> Not all product in cart have the current date as selling date  |
+|    Exceptions    | Cart is empty <br> Not all product in cart have the current date as sale date  |
 
 ##### Scenario 8.1: Checkout Cart
 
@@ -438,7 +436,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | :--------------: | :-------------------------------------------------------: |
 |   Precondition   | The Customer has an Internet connection |
 |  Post condition  | The Customer is registered to the system        |
-| Nominal Scenario | The Customer inserts their credentials (username, password) and signs in as a customer  |
+| Nominal Scenario | The Customer inserts their credentials (username, password, name, surname) and signs in as a customer  |
 |     Variants     | |
 |    Exceptions    |                 The credentials are not valid                |
 
@@ -450,7 +448,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Post condition |            The customer is registered to the system         |
 |     Step#      |                      **Description**                      |
 |       1        |      The customer navigates to the login page       |
-|       2        |    The customer inserts their credentials (username, password) and confirms    |
+|       2        |    The customer inserts their credentials (username, password, name, surname) and confirms    |
 |       3        |      The system registrates the customer as customer      |
 
 ### UC14 - Use Case 14: Logout
@@ -504,6 +502,27 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |       1        |                The user navigates to their "Product" section               |
 |       2        |      The user clicks on one product -> product details       |
 |       3        |               The user reads the details of the selected Product               |
+
+### UC16 - Use Case 16: View Cart
+
+| Actors Involved  |                                  Customer                                  |
+| :--------------: | :------------------------------------------------------------------------: |
+|   Precondition   |         The customer is authenticated and has the "customer" role          |
+|  Post condition  |                  The customer can view their cart, including its total price            |
+| Nominal Scenario | The customer accesses and reviews their cart |
+|     Variants     |                               The customer accesses and views their cart's total price                                             |
+|    Exceptions    |        |
+
+##### Scenario 16.1: View Cart
+
+|  Scenario 3.1  |                   Customer views cart                   |
+| :------------: | :-------------------------------------------------------------: |
+|  Precondition  |    The customer is authenticated and has the "customer" role    |
+| Post condition | The customer can view their cart, including its total price |
+|     Step#      |                         **Description**                         |
+|       1        |           The customer navigates to "Cart" section           |
+|       2        |     The customer sees their cart     |
+|       3        |   The customer sees the total price of their current purchase |
 
 ---
 
