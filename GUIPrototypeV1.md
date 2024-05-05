@@ -34,14 +34,15 @@ Version:
 
 When the manager enters the website, the landing page is the list of all the products.
 
-![manager_product_list.png](./requirement_documents/v1/manager_product_list.png)
+![manager_product_list2.png](./requirement_documents/v1/manager_product_list2.png)
 
-They can click on one product to see all the details and the available action (delete).
+![manager_product_list1.png](./requirement_documents/v1/manager_product_list1.png)
+
+They can click on one product to see all the details and the available action (delete and sell).
 
 ![manager_product_detail.png](./requirement_documents/v1/manager_product_detail.png)
 
-They can click on the "New arrival" dropdown and select "Register a product" or "Register an arrival" 
-to add new products to the inventory:
+They can click on the "New arrival" dropdown and select "Register a product" or "Register an arrival" to add new products to the inventory:
 
 "Register a product"
 
