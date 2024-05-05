@@ -33,13 +33,13 @@ Estimated calendar time:
 
 | component name       | Estimated effort (person hours) |
 | -------------------- | ------------------------------- |
-| requirement document | 15                              |
-| GUI prototype        | 8                               |
-| design document      | 4                               |
-| code                 | 40                              |
-| unit tests           | 7                               |
-| api tests            | 9                               |
-| management documents | 3                               |
+| requirement document | 25                              |
+| GUI prototype        | 15                              |
+| design document      | 6                               |
+| code                 | 65                              |
+| unit tests           | 15                               |
+| api tests            | 15                               |
+| management documents | 6                               |
 
 # Estimate by activity decomposition
 
@@ -79,6 +79,6 @@ Report here the results of the three estimation approaches. The estimates may di
 
 |                                    | Estimated effort | Estimated duration |
 | ---------------------------------- | ---------------- | ------------------ |
-| estimate by size                   |                  |
-| estimate by product decomposition  |                  |
-| estimate by activity decomposition |                  |
+| estimate by size                   |      150ph            |about 1 week
+| estimate by product decomposition  |   147ph           |about 2weeks 
+| estimate by activity decomposition |    380ph         |  about 3 weeks 
