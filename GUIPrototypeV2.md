@@ -14,18 +14,23 @@ Version: v2
 
 # Home page
 
+![HomePageV2.png](./requirement_documents/v2/GUI/HomePageV2.png)
+ # Sign up
+![SignUpV2.png](./requirement_documents/v2/GUI/SignUpV2.png)
+
 # Customer 
 
 ### Products list 
 
-![customer_product_list.png]()
+![customer_product_list.png](requirement_documents/v2/GUI/CUSTOMER_product_list.png)
 
 ### Products details
 
-![customer_product_details.png]()
+![customer_product_details.png](requirement_documents/v2/GUI/CUSTOMER_product_detail.png)
 
 ### Cart
-![CustomerCartV1.png]()
+![CartV2.png](./requirement_documents/v2/GUI/CartV2.png)
+
 
 ### Checkout
 
@@ -53,6 +58,9 @@ He can also use another address.
 
 ![CustomerCheckout.png](./requirement_documents/v2/GUI/CUSTOMER_confirmation_2.png)
 
+### Payment
+
+![CUSTOMER_Payment.png](./requirement_documents/v2/GUI/CUSTOMER_Payment.png)
 
 
 --- 
@@ -74,9 +82,9 @@ They can click on the "New arrival" dropdown and select "Register a product" or 
 
 "Register a product"
 
-![manager_product_registration.png]()
+![manager_product_registration.png](requirement_documents/v2/GUI/MANAGER_register_product.png)
 
 "Register an arrival"
 
-![manager_arrival_registration.png]()
+![manager_arrival_registration.png](requirement_documents/v2/GUI/MANAGER_register_arrival.png)
 
