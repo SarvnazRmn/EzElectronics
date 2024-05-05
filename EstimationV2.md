@@ -27,21 +27,36 @@ Consider the EZElectronics project in FUTURE version (as proposed by your team i
 
 | component name       | Estimated effort (person hours) |
 | -------------------- | ------------------------------- |
-| requirement document |                                 |
-| GUI prototype        |                                 |
-| design document      |                                 |
-| code                 |                                 |
-| unit tests           |                                 |
-| api tests            |                                 |
-| management documents |                                 |
+| requirement document |            18                     |
+| GUI prototype        |              6                   |
+| design document      |              4                   |
+| code                 |               60                  |
+| unit tests           |            10                     |
+| api tests            |             12                    |
+| management documents |            4                     |
 
 # Estimate by activity decomposition
 
 ###
-
 | Activity name | Estimated effort (person hours) |
-| ------------- | ------------------------------- |
-|               |                                 |
+| ------------------------ | -------------------------|
+|   **Requirements planning**     |                    |
+|  Review existing systems        |         3          |
+| Perform work analysis           |            4       |
+|  Model process                  |             4      |
+| Identify user requirements                |       3       |
+| Identify performance requirements         |     4         |
+| **Design**                                |               |
+|    Develop the prototype design           |         2     |
+|Developing the GUI                         |            7  |
+| **Implementation**                        |               |
+|   Develop  code                           |         25     |
+|   Developing models                       |         7      |
+|   Developing controllers                  |         30     |
+|  **TESTING**                              |                |
+|  Testing  API                             |       7        |
+|  Testing  UI                              |       7        |
+| Testing of NF req                         |        3       |
 
 ###
 
