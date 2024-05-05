@@ -516,7 +516,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ##### Scenario 16.1: View Cart
 
-|  Scenario 3.1  |                     Customer views cart                     |
+|  Scenario 16.1  |                     Customer views cart                     |
 | :------------: | :---------------------------------------------------------: |
 |  Precondition  |  The customer is authenticated and has the "customer" role  |
 | Post condition | The customer can view their cart, including its total price |
