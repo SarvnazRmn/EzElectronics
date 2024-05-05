@@ -1,8 +1,8 @@
 # Project Estimation - CURRENT
 
-Date:
+Date: 05/05/2024
 
-Version:
+Version: 1
 
 # Estimation approach
 
@@ -45,25 +45,29 @@ Estimated calendar time:
 
 ###
 
-| Activity name                     | Estimated effort (person hours) |
-| --------------------------------- | ------------------------------- |
-| **Requirements planning**         |                                 |
-| Review existing systems           | 2                               |
-| Perform work analysis             | 3                               |
-| Model process                     | 2                               |
-| Identify user requirements        | 4                               |
-| Identify performance requirements | 4                               |
-| **Design**                        |                                 |
-| Develop the prototype design      | 2                               |
-| Developing the GUI                | 8                               |
-| **Implementation**                |                                 |
-| Develop code                      | 15                              |
-| Developing models                 | 5                               |
-| Developing controllers            | 30                              |
-| **TESTING**                       |                                 |
-| Testing API                       | 5                               |
-| Testing UI                        | 5                               |
-| Testing of NF req                 | 2                               |
+| Activity name                             | Estimated effort (person hours) |
+| ----------------------------------------- | ------------------------------- |
+| **Requirements planning**                 |                                 |
+| Stakeholders/Actors analysis              | 10                              |
+| Requirements analysis                     | 20                              |
+| Use cases analysis                        | 30                              |
+| Diagrams design                           | 10                              |
+| **GUI Design**                            |                                 |
+| GUI (on paper) - prototype sketches       | 5                               |
+| GUI (on Balsamiq) - first version         | 15                              |
+| Project planning and resources assignment | 10                              |
+| **Design**                                |                                 |
+| Design analysis                           | 15                              |
+| Design document                           | 25                              |
+| Database definition                       | 10                              |
+| **Implementation**                        |                                 |
+| Develop code                              | 65                              |
+| Developing models                         | 20                              |
+| Developing controllers                    | 25                              |
+| **TESTING**                               |                                 |
+| Testing API                               | 40                              |
+| Testing UI                                | 30                              |
+| Testing of NF req                         | 50                              |
 
 ###
 

@@ -65,7 +65,7 @@ Consider the EZElectronics project in FUTURE version (as proposed by your team i
 
 ###
 
-![gantt_diagram](./requirements_documents/v2/gantt_chart_v2.png)
+![gantt_diagram](./requirement_documents/v2/gantt_chart_v2.png)
 
 # Summary
 
