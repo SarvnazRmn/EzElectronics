@@ -1,15 +1,15 @@
 # Requirements Document - future EZElectronics
 
-Date:
+Date: 05/05/2024
 
-Version: V1 - description of EZElectronics in FUTURE form (as proposed by the team)
+Version: V2 - description of EZElectronics in FUTURE form (as proposed by the team)
 
-| Version number |                                                           Change                                                            |
-| :------------: | :-------------------------------------------------------------------------------------------------------------------------: |
-|       1        |                                                Created Requirements Document                                                |
-|       2        | Added Business Model and payment method for Customers, <br> Added product details, customer email, <br> Various QOL changes |
-|                |                                                                                                                             |
-|                |                                                                                                                             |
+| Version number |                                                                                Change                                                                                 |
+| :------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|       1        |                                                                     Created Requirements Document                                                                     |
+|       2        | Added Business Model and payment method for Customers, <br> Added delivery options and tracking, <br> Added product details, customer email, <br> Various QOL changes |
+|                |                                                                                                                                                                       |
+|                |                                                                                                                                                                       |
 
 # Contents
 
@@ -65,7 +65,6 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  Quality assurance team   |           Group of people responsible for testing the application           |
 |      Payment Service      |                         For customer payment option                         |
 |    Logistics Partners     |                       For show delivery stages option                       |
-|   Customer Support Team   |                       Assisting customers with order                        |
 
 # Context Diagram and interfaces
 
@@ -83,9 +82,8 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | :--------------------: | :---------------: | :----------------: |
 |        Manager         |        GUI        |         PC         |
 |        Customer        |        GUI        |         PC         |
-|         Admin          |        GUI        |         PC         |
+|         Admin          |    GUI - code     |         PC         |
 |      Control team      |        GUI        |         PC         |
-| Customer Support Team  |        GUI        |         PC         |
 |    Payment service     |                   |      Internet      |
 |   Logistics Partners   |                   |      Internet      |
 | Quality assurance team |    GUI - code     |         PC         |
@@ -100,55 +98,56 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Functional Requirements
 
-|  ID   | Description                                                                                                 |
-| :---: | :---------------------------------------------------------------------------------------------------------- |
-| _FR1_ | User Management                                                                                             |
-| FR1.1 | Creates new User                                                                                            |
-| FR1.2 | Retrieves all users                                                                                         |
-| FR1.3 | Retrieves all users with a specific role                                                                    |
-| FR1.4 | Retrieves specific user                                                                                     |
-| FR1.5 | Deletes specific user                                                                                       |
-| _FR2_ | User Authentication                                                                                         |
-| FR2.1 | User Log_in/Log_out                                                                                         |
-| _FR3_ | Cart Management                                                                                             |
-| FR3.1 | Retrieves the cart for a specific user                                                                      |
-| FR3.2 | Adds a product to the user's cart                                                                           |
-| FR3.3 | Retrieves all carts/orders for a specific customer                                                          |
-| FR3.4 | Removes a product from the user's cart                                                                      |
-| FR3.5 | Deletes a specific cart                                                                                     |
-| FR3.6 | Checks out a specific cart                                                                                  |
-| _FR4_ | Product Management                                                                                          |
-| FR4.1 | Registers the arrival of a new set of products                                                              |
-| FR4.2 | Registers the arrival of a single new product                                                               |
-| FR4.3 | Marks a product as sold                                                                                     |
-| FR4.4 | Marks a product as not_sold                                                                                 |
-| FR4.5 | Returns all products, or only the ones that have been sold or not sold                                      |
-| FR4.6 | Returns all products of a specific category, or only the ones that have been sold or not sold               |
-| FR4.7 | Returns all products of a specific model, or only the ones that have been sold or not sold                  |
-| FR4.8 | Deletes a specific product                                                                                  |
-| FR4.9 | Returns a specific product by its code                                                                      |
-| _FR5_ | Payment Management                                                                                          |
-| FR5.1 | Require payment (ask name, surname, credit card details...)                                                 |
-| FR5.2 | Manage payment information with a payment service (send, ask to check card, ask to debit, ask to credit...) |
-| FR5.3 | Updates the payment status of a specific cart                                                               |
-| FR5.4 | Updates the payment date for a specific cart                                                                |
-| FR5.5 | Sends email confirmation for a successful payment                                                           |
-| FR5.6 | Sends email confirmation for a rejected/unsuccessful payment                                                |
-| _FR6_ | Delivery Management                                                                                         |
-| FR6.1 | The user chooses the delivery option (deliver to address / retrieve it from the shop)                       |
-| FR6.2 | Manage delivery information                                                                                 |
-| FR6.3 | Updates the delivery status of a specific cart                                                              |
+|   ID   | Description                                                                                                 |
+| :----: | :---------------------------------------------------------------------------------------------------------- |
+| _FR1_  | User Management                                                                                             |
+| FR1.1  | Creates new User                                                                                            |
+| FR1.2  | Retrieves all users                                                                                         |
+| FR1.3  | Retrieves all users with a specific role                                                                    |
+| FR1.4  | Retrieves specific user                                                                                     |
+| FR1.5  | Deletes specific user                                                                                       |
+| _FR2_  | User Authentication                                                                                         |
+| FR2.1  | User Log_in/Log_out                                                                                         |
+| _FR3_  | Cart Management                                                                                             |
+| FR3.1  | Retrieves the cart for a specific user                                                                      |
+| FR3.2  | Adds a product to the user's cart                                                                           |
+| FR3.3  | Retrieves all carts/orders for a specific customer                                                          |
+| FR3.4  | Removes a product from the user's cart                                                                      |
+| FR3.5  | Deletes a specific cart                                                                                     |
+| FR3.6  | Checks out a specific cart                                                                                  |
+| _FR4_  | Product Management                                                                                          |
+| FR4.1  | Registers the arrival of a new set of products                                                              |
+| FR4.2  | Registers the arrival of a single new product                                                               |
+| FR4.3  | Marks a product as sold                                                                                     |
+| FR4.4  | Marks a product as not_sold                                                                                 |
+| FR4.5  | Returns all products, or only the ones that have been sold or not sold                                      |
+| FR4.6  | Returns all products of a specific category, or only the ones that have been sold or not sold               |
+| FR4.7  | Returns all products of a specific model, or only the ones that have been sold or not sold                  |
+| FR4.8  | Returns all products of a specific brand, or only the ones that have been sold or not sold                  |
+| FR4.9  | Deletes a specific product                                                                                  |
+| FR4.10 | Returns a specific product by its code                                                                      |
+| _FR5_  | Payment Management                                                                                          |
+| FR5.1  | Require payment (ask name, surname, credit card details...)                                                 |
+| FR5.2  | Manage payment information with a payment service (send, ask to check card, ask to debit, ask to credit...) |
+| FR5.3  | Updates the payment status of a specific cart                                                               |
+| FR5.4  | Updates the payment date for a specific cart                                                                |
+| FR5.5  | Sends email confirmation for a successful payment                                                           |
+| FR5.6  | Sends email confirmation for a rejected/unsuccessful payment                                                |
+| _FR6_  | Delivery Management                                                                                         |
+| FR6.1  | Chooses the delivery option (deliver to address / retrieve it from the shop)                                |
+| FR6.2  | Manage delivery information                                                                                 |
+| FR6.3  | Updates the delivery status of a specific cart                                                              |
 
 ## Table of rights
 
-| Function |         Manager         |            Customer             | Admin | Control Team | Customer Support Team    | Payment Service | Logistics Partners | Quality Assurance Team |
-| -------- | :---------------------: | :-----------------------------: | ----- | ------------ | ------------------------ | --------------- | ------------------ | ---------------------- |
-| FR1      |           yes           |           only FR1.1            |       | no ?         | yes                      | no              | no                 | no                     |
-| FR2      |           yes           |               yes               |       | no ?         | no                       | no              | no                 | no                     |
-| FR3      | all but FR3.4 and FR3.5 |               yes               |       | no           | yes                      | no              | no                 | no                     |
-| FR4      |           yes           | only FR4.4, FR4.5, FR4.6, FR4.8 |       | no           | only FR4.3, FR4.4, FR4.9 | no              | no                 | no                     |
-| FR5      | all but FR5.4 and FR5.5 |           only FR5.1            |       | no           | only FR5.2, FR5.3        | yes             | no                 | no                     |
-| FR6      |           no            |           only FR6.1            |       | no           | no                       | no              | all but FR6.1      | no                     |
+| Function |         Manager         |                Customer                 | Admin | Control Team | Payment Service | Logistics Partners | Quality Assurance Team |
+| -------- | :---------------------: | :-------------------------------------: | ----- | ------------ | --------------- | ------------------ | ---------------------- |
+| FR1      |           no            |               only FR1.1                | yes   | no           | no              | no                 | no                     |
+| FR2      |           yes           |                   yes                   | no    | no           | no              | no                 | no                     |
+| FR3      |      all but FR3.4      |                   yes                   | no    | no           | no              | no                 | no                     |
+| FR4      |           yes           | only FR4.5, FR4.6, FR4.7, FR4.8, FR4.10 | no    | no           | no              | no                 | no                     |
+| FR5      | all but FR5.4 and FR5.5 |               only FR5.1                | no    | no           | yes             | no                 | no                     |
+| FR6      |           no            |               only FR6.1                | no    | no           | no              | all but FR6.1      | no                     |
 
 ## Non Functional Requirements
 
@@ -169,7 +168,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | NFR13 |              Security              |                              A 401 error message should be displayed if a user tries to access all the in-domain webpages without logging in                               |      FR2      |
 | NFR14 |              Security              |                                              Employees and managers passwords should be encrypted when saved on the database                                               |      FR2      |
 | NFR15 |              Security              |                                       An error message should be displayed if a user tries to sign in with an already used username                                        |      FR2      |
-| NFR16 |             Usability              |                                             A warning message should be displayed if the product sold is low/no more in stock                                              |     FR4.3     |
+| NFR16 |             Usability              |                                              A warning message should be displayed if some products are low/no more in stock                                               |     FR2.1     |
 | NFR17 |              Security              |    The integration with the external payment circuit should comply with industry-standard security protocols to ensure the protection of sensitive payment information     |      FR5      |
 | NFR18 |              Security              | Data exchanged during the payment process should be encrypted using secure communication protocols (e.g., HTTPS) to prevent interception or tampering by malicious parties |      FR5      |
 | NFR19 |            Reliability             |        The integration with the external delivery service's API should ensure reliable communication and data exchange to prevent order processing errors or delays        |      FR6      |
