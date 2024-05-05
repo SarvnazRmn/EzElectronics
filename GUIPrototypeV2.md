@@ -14,6 +14,10 @@ Version: v2
 
 # Home page
 
+![HomePageV2.png](./requirement_documents/v2/GUI/HomePageV2.png)
+ # Sign up
+![SignUpV2.png](./requirement_documents/v2/GUI/SignUpV2.png)
+
 # Customer 
 
 ### Products list 
@@ -25,7 +29,8 @@ Version: v2
 ![customer_product_details.png]()
 
 ### Cart
-![CustomerCartV1.png]()
+![CartV2.png](./requirement_documents/v2/GUI/CartV2.png)
+
 
 ### Checkout
 
@@ -53,6 +58,9 @@ He can also use another address.
 
 ![CustomerCheckout.png](./requirement_documents/v2/GUI/CUSTOMER_confirmation_2.png)
 
+### Payment
+
+![CUSTOMER_Payment.png](./requirement_documents/v2/GUI/CUSTOMER_Payment.png)
 
 
 --- 
