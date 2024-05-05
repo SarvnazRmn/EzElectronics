@@ -80,5 +80,5 @@ Report here the results of the three estimation approaches. The estimates may di
 |                                    | Estimated effort | Estimated duration |
 | ---------------------------------- | ---------------- | ------------------ |
 | estimate by size                   | 150ph            | about 1 week       |
-| estimate by product decomposition  | 147ph            | about 2weeks       |
+| estimate by product decomposition  | 147ph            | about 2 weeks      |
 | estimate by activity decomposition | 380ph            | about 3 weeks      |
