@@ -48,30 +48,30 @@ Estimated calendar time:
 | Activity name                             | Estimated effort (person hours) |
 | ----------------------------------------- | ------------------------------- |
 | **Requirements planning**                 |                                 |
-| Stakeholders/Actors analysis              | 10                              |
-| Requirements analysis                     | 20                              |
-| Use cases analysis                        | 30                              |
-| Diagrams design                           | 10                              |
+| Stakeholders/Actors analysis              | 5                               |
+| Requirements analysis                     | 10                              |
+| Use cases analysis                        | 15                              |
+| Diagrams design                           | 5                               |
 | **GUI Design**                            |                                 |
-| GUI (on paper) - prototype sketches       | 5                               |
-| GUI (on Balsamiq) - first version         | 15                              |
-| Project planning and resources assignment | 10                              |
+| GUI (on paper) - prototype sketches       | 2                               |
+| GUI (on Balsamiq) - first version         | 8                               |
+| Project planning and resources assignment | 5                               |
 | **Design**                                |                                 |
-| Design analysis                           | 15                              |
-| Design document                           | 25                              |
-| Database definition                       | 10                              |
+| Design analysis                           | 5                               |
+| Design document                           | 5                               |
+| Database definition                       | 5                               |
 | **Implementation**                        |                                 |
-| Develop code                              | 65                              |
-| Developing models                         | 20                              |
-| Developing controllers                    | 25                              |
+| Develop code                              | 25                              |
+| Developing models                         | 5                               |
+| Developing controllers                    | 10                              |
 | **TESTING**                               |                                 |
-| Testing API                               | 40                              |
-| Testing UI                                | 30                              |
-| Testing of NF req                         | 50                              |
+| Testing API                               | 9                               |
+| Testing UI                                | 5                               |
+| Testing of NF req                         | 5                               |
 
 ###
 
-Insert here Gantt chart with above activities
+![gantt_diagram](./requirement_documents/v1/gantt_chart_v1.png)
 
 # Summary
 
