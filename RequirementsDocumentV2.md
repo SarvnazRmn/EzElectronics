@@ -42,63 +42,59 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 #### Key Features and Improvements:
 
-- Low Stock and No Stock Alerts: Managers receive notifications to address inventory shortages.
-- Product Visuals: V2 improves the product browsing experience by incorporating images and brand information for each listed item. 
-- Total Stock Count: V2 provides a view of total stock counts.
+- Low Stock and No Stock Alerts: Managers receive notifications to address inventory shortages (GUI and email)
+- Product Visuals: V2 improves the product browsing experience by incorporating images and brand information for each listed item.
+- Total Stock Count: V2 provides a view of total stock counts for each model.
 - Post-Checkout Payment: V2 enables customers to complete transactions. Payment processing occurs after cart checkout.
-- Shop Admin Role: V2 introduces a specialized shop admin role. Shop admins have restricted functionalities compared to managers, ensuring efficient delegation of responsibilities.
-- Account Management: V2 add new fields for address and email information in user accounts. 
-- Delivery Stage Tracking: Managers and shop admins can update delivery stages, providing customers with visibility into the status of their orders.
-- Premium Account Option: Premium features offer new functionality.
+- Account Management: V2 add new fields for address and email information in user accounts.
+- Delivery and status tracking: Using external postal companies, we provide customers delivery option with visibility into the status of their orders (easypost API)
 
 # Stakeholders
 
-|     Stakeholder name      |                                 Description                                  |
-| :-----------------------: | :--------------------------------------------------------------------------: |
-|         Customer          |                             Customer of the shop                             |
-|          Manager          |                             Manager of the shop                              |
-|     Product companies     |              Company producing the product sell on the website               |
-|        Tech Admin         |                             Admin of the website                             |
-|      Business admin       |                 Responsible for the marketing of the product                 |
-|        Shop admin         | Responsible for managing product with less responsabilities than the manager |
-| EzElectronics dev company |                The company that develops the software itself                 |
-|        Competitors        | Other companies that want to develop similar softwares for the same purpose  |
-|       Control Team        |                     Check stock, check available product                     |
-|      Cloud provider       |                     Provider for hosting the application                     |
-|  Quality assurance team   |           Group of people responsible for testing the application            |
-| Payment Service  |                         For customer payment option                          |
-|    Logistics Partners     |                       For show delivery stages option                        |
-|   Customer Support Team   |                        Assisting customers with order                        |
+|     Stakeholder name      |                                 Description                                 |
+| :-----------------------: | :-------------------------------------------------------------------------: |
+|         Customer          |                            Customer of the shop                             |
+|          Manager          |                             Manager of the shop                             |
+|     Product companies     |              Company producing the product sell on the website              |
+|        Tech Admin         |                            Admin of the website                             |
+|      Business admin       |                Responsible for the marketing of the product                 |
+| EzElectronics dev company |                The company that develops the software itself                |
+|        Competitors        | Other companies that want to develop similar softwares for the same purpose |
+|       Control Team        |                    Check stock, check available product                     |
+|      Cloud provider       |                    Provider for hosting the application                     |
+|  Quality assurance team   |           Group of people responsible for testing the application           |
+|      Payment Service      |                         For customer payment option                         |
+|    Logistics Partners     |                       For show delivery stages option                       |
+|   Customer Support Team   |                       Assisting customers with order                        |
 
 # Context Diagram and interfaces
 
 ## Context Diagram
 
 ![ContextDiagramV2.png](./requirement_documents/v2/ContextDiagramV2.png)
+
 ## Interfaces
 
 \<describe here each interface in the context diagram>
 
 \<GUIs will be described graphically in a separate document>
 
-|          Actor          | Logical Interface | Physical Interface |
-| :---------------------: | :---------------: | :----------------: |
-| Manager                 |        GUI        |         PC         |
-|        Customer         |        GUI        |         PC         |
-|          Admin          |        GUI        |         PC         |
-|      Control team       |        GUI        |         PC         |
-|  Customer Support Team  |        GUI        |        PC          |
-|     Payment service     |                   |      Internet      |
-|    Logistics Partners   |                   |      Internet     |
-|Quality assurance team   |         GUI - code     |       PC           |
+|         Actor          | Logical Interface | Physical Interface |
+| :--------------------: | :---------------: | :----------------: |
+|        Manager         |        GUI        |         PC         |
+|        Customer        |        GUI        |         PC         |
+|         Admin          |        GUI        |         PC         |
+|      Control team      |        GUI        |         PC         |
+| Customer Support Team  |        GUI        |         PC         |
+|    Payment service     |                   |      Internet      |
+|   Logistics Partners   |                   |      Internet      |
+| Quality assurance team |    GUI - code     |         PC         |
 
 # Stories and personas
 
-\<A Persona is a realistic impersonation of an actor. Define here a few personas and describe in plain text how a persona interacts with the system>
+- Brenda is 43 y/o, and she is the manager in the electronics shop of her town. She has been working every day with great efficiency and constancy to reach this position. She has troubles keeping track of the different products in the shop and she always complains with her employees because they often forget to update the status orders of the items in the shop.
 
-\<Persona is-an-instance-of actor>
-
-\<stories will be formalized later as scenarios in use cases>
+- Emily is a 28-year-old elementary school teacher who's passionate about education and technology. As a teacher, Emily seeks electronic products that can enhance her classroom teaching. Emily often browses the EzElectronic website during her free time. She explores categories like "Laptops". While Emily wants quality products, she's mindful of her budget as a teacher. She looks for good value options that fit within her classroom budget. If she finds a laptop that fits her needs, Emily adds it to her cart and continues browsing or proceeds to checkout.
 
 # Functional and non functional requirements
 
@@ -437,13 +433,11 @@ NB : An arrival consists of many entities of the same product.
 
 \<concepts must be used consistently all over the document, ex in use cases, requirements etc>
 
-![glossary-v2.png](./requirement_documents/v2/Glossary-v2.png)
+![glossary-v2.png](./requirement_documents/v2/GLOSSARYv2.png)
 
 # System Design
 
-\<describe here system design>
-
-\<must be consistent with Context diagram>
+Not required
 
 # Deployment Diagram
 

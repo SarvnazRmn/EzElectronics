@@ -63,7 +63,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Customer |        GUI        |         PC         |
 | Manager  |        GUI        |         PC         |
 
-# Stories and personas - Everybody
+# Stories and personas 
 
 -Brenda is 43 y/o, and she is the manager in the electronics shop of her town. She has been working every day with great efficiency and constancy to reach this position. She has troubles keeping track of the different products in the shop and she always complains with her employees because they often forget to update the status orders of the items in the shop.
 
