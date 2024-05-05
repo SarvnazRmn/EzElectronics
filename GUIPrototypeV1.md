@@ -31,8 +31,18 @@ Version: v1
 ![customer_product_details.png](./requirement_documents/v1/GUI/customer_product_details.png)
 
 ### Cart
+
 ![CustomerCartV1.png](requirement_documents/v1/GUI/CustomerCartV1.png)
 
+### Checkout confirmation
+
+
+![CustomerCheckout2.png](requirement_documents/v1/GUI/customer_checkout_confirmation.png)
+
+
+### Cart History 
+
+![CustomerCartHistory.png](requirement_documents/v1/GUI/Cart_History_Customer_V1.jpg)
 
 
 --- 

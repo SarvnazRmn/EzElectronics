@@ -31,6 +31,9 @@ Version: v2
 ### Cart
 ![CartV2.png](./requirement_documents/v2/GUI/CartV2.png)
 
+### Cart History
+
+![CartHistory.png](./requirement_documents/v2/GUI/CUSTOMER_Carts_History.png)
 
 ### Checkout
 
@@ -74,9 +77,13 @@ When the manager enters the website, the landing page is the list of all the pro
 
 ![manager_product_list1.png](./requirement_documents/v2/GUI/MANAGER_product_list2.png)
 
+### Product detail
+
 They can click on one product to see all the details and the available action (delete product).
 
 ![manager_product_detail.png](./requirement_documents/v2/GUI/MANAGER_product_detail.png)
+
+### Product registration
 
 They can click on the "New arrival" dropdown and select "Register a product" or "Register an arrival" to add new products to the inventory:
 
@@ -88,3 +95,8 @@ They can click on the "New arrival" dropdown and select "Register a product" or 
 
 ![manager_arrival_registration.png](requirement_documents/v2/GUI/MANAGER_register_arrival.png)
 
+### Customer checkout 
+
+The manager can see the state of all cart and manage them. He can also track if customer already paid or not.
+
+![manager_arrival_registration.png](./requirement_documents/v2/GUI/MANAGER_Customer_checkout_validation.png)

@@ -8,8 +8,6 @@ Version: V2 - description of EZElectronics in FUTURE form (as proposed by the te
 | :------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |       1        |                                                                     Created Requirements Document                                                                     |
 |       2        | Added Business Model and payment method for Customers, <br> Added delivery options and tracking, <br> Added product details, customer email, <br> Various QOL changes |
-|                |                                                                                                                                                                       |
-|                |                                                                                                                                                                       |
 
 # Contents
 
@@ -78,15 +76,15 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 \<GUIs will be described graphically in a separate document>
 
-|         Actor          | Logical Interface | Physical Interface |
-| :--------------------: | :---------------: | :----------------: |
-|        Manager         |        GUI        |         PC         |
-|        Customer        |        GUI        |         PC         |
-|         Admin          |    GUI - code     |         PC         |
-|      Control team      |        GUI        |         PC         |
-|    Payment service     |                   |      Internet      |
-|   Logistics Partners   |                   |      Internet      |
-| Quality assurance team |    GUI - code     |         PC         |
+|         Actor          |    Logical Interface     | Physical Interface |
+| :--------------------: | :----------------------: | :----------------: |
+|        Manager         |           GUI            |         PC         |
+|        Customer        |           GUI            |         PC         |
+|         Admin          |        GUI - code        |         PC         |
+|      Control team      |           GUI            |         PC         |
+|    Payment service     |   https://stripe.com/    |      Internet      |
+|   Logistics Partners   | https://www.easypost.com |      Internet      |
+| Quality assurance team |        GUI - code        |         PC         |
 
 # Stories and personas
 
