@@ -22,11 +22,11 @@ Version: v2
 
 ### Products list 
 
-![customer_product_list.png]()
+![customer_product_list.png](requirement_documents/v2/GUI/CUSTOMER_product_list.png)
 
 ### Products details
 
-![customer_product_details.png]()
+![customer_product_details.png](requirement_documents/v2/GUI/CUSTOMER_product_detail.png)
 
 ### Cart
 ![CartV2.png](./requirement_documents/v2/GUI/CartV2.png)
@@ -82,9 +82,9 @@ They can click on the "New arrival" dropdown and select "Register a product" or 
 
 "Register a product"
 
-![manager_product_registration.png]()
+![manager_product_registration.png](requirement_documents/v2/GUI/MANAGER_register_product.png)
 
 "Register an arrival"
 
-![manager_arrival_registration.png]()
+![manager_arrival_registration.png](requirement_documents/v2/GUI/MANAGER_register_arrival.png)
 
