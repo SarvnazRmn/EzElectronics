@@ -114,7 +114,8 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | FR3.3  | Retrieves all carts/orders for a specific customer                                                          |
 | FR3.4  | Removes a product from the user's cart                                                                      |
 | FR3.5  | Deletes a specific cart                                                                                     |
-| FR3.6  | Checks out a specific cart                                                                                  |
+| FR3.6  | Checks out a specific cart (as Customer)                                                                    |
+| FR3.7  | Checks out a specific cart (as Manager)                                                                     |
 | _FR4_  | Product Management                                                                                          |
 | FR4.1  | Registers the arrival of a new set of products                                                              |
 | FR4.2  | Registers the arrival of a single new product                                                               |
@@ -144,7 +145,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | -------- | :---------------------: | :-------------------------------------: | ----- | ------------ | --------------- | ------------------ | ---------------------- |
 | FR1      |           no            |               only FR1.1                | yes   | no           | no              | no                 | no                     |
 | FR2      |           yes           |                   yes                   | no    | no           | no              | no                 | no                     |
-| FR3      |      all but FR3.4      |                   yes                   | no    | no           | no              | no                 | no                     |
+| FR3      |  all but FR3.4, FR3.6   |              yes but FR3.7              | no    | no           | no              | no                 | no                     |
 | FR4      |           yes           | only FR4.5, FR4.6, FR4.7, FR4.8, FR4.10 | no    | no           | no              | no                 | no                     |
 | FR5      | all but FR5.4 and FR5.5 |               only FR5.1                | no    | no           | yes             | no                 | no                     |
 | FR6      |           no            |               only FR6.1                | no    | no           | no              | all but FR6.1      | no                     |
