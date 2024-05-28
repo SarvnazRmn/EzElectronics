@@ -36,17 +36,25 @@ class ReviewRoutes {
          */
         this.router.post(
             "/",
-            body("model").isString().isLength({ min: 1 }),
+            param('model').isString().isLength({ min: 1 }).withMessage('Model must be a non-empty string'),
             body('score').isInt({ min: 1, max: 5 }).withMessage('Score must be an integer between 1 and 5'),
             body("comment").isString().isLength({ min: 1 }),
             this.errorHandler.validateRequest,
-            (req: any, res: any, next: any) => this.controller.addReview(req.params.model, req.user, req.body.score, req.body.comment)
-                .then(() => res.status(200).send())
-                .catch((err: Error) => {
-                    console.log(err)
-                    next(err)
-                })
-        )
+            (req: any, res: any, next: any) => {
+                this.controller.addReview(req.params.model, req.user, req.body.score, req.body.comment)
+                    .then(() => {
+                        res.status(200).send();
+                    })
+                    .catch((err: Error) => {
+                        if (err instanceof ExistingReviewError) {
+                            res.status(err.customCode).send(err.customMessage);
+                        } else {
+                            next(err);
+                        }
+                    });
+            }
+        )       
+    // should we handle and mention error here?
 
         /**
          * Route for retrieving all reviews of a product.
@@ -56,6 +64,9 @@ class ReviewRoutes {
          */
         this.router.get(
             "/:model",
+            this.authenticator.authenticate(), // Ensure the user is authenticated
+            param('model').isString().isLength({ min: 1 }).withMessage('Model must be a non-empty string'),
+            this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => this.controller.getProductReviews(req.params.model)
                 .then((reviews: any/*ProductReview[]*/) => res.status(200).json(reviews))
                 .catch((err: Error) => next(err))
@@ -69,6 +80,10 @@ class ReviewRoutes {
          */
         this.router.delete(
             "/:model",
+            this.authenticator.authenticate(), 
+            this.authenticator.authorize('Customer'),
+            param('model').isString().isLength({ min: 1 }).withMessage('Model must be a non-empty string'),
+            this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => this.controller.deleteReview(req.params.model, req.user)
                 .then(() => res.status(200).send())
                 .catch((err: Error) => {
@@ -85,6 +100,10 @@ class ReviewRoutes {
          */
         this.router.delete(
             "/:model/all",
+            this.authenticator.authenticate(), 
+            this.authenticator.authorize(['Admin', 'Manager']), // role of 'Admin' or 'Manager'
+            param('model').isString().isLength({ min: 1 }).withMessage('Model must be a non-empty string'),
+            this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => this.controller.deleteReviewsOfProduct(req.params.model)
                 .then(() => res.status(200).send())
                 .catch((err: Error) => next(err))
@@ -97,6 +116,8 @@ class ReviewRoutes {
          */
         this.router.delete(
             "/",
+            this.authenticator.authenticate(),
+            this.authenticator.authorize(['Admin', 'Manager']), // role of 'Admin' or 'Manager'
             (req: any, res: any, next: any) => this.controller.deleteAllReviews()
                 .then(() => res.status(200).send())
                 .catch((err: Error) => next(err))
