@@ -84,13 +84,20 @@ class ReviewRoutes {
             this.authenticator.authorize('Customer'),
             param('model').isString().isLength({ min: 1 }).withMessage('Model must be a non-empty string'),
             this.errorHandler.validateRequest,
-            (req: any, res: any, next: any) => this.controller.deleteReview(req.params.model, req.user)
-                .then(() => res.status(200).send())
-                .catch((err: Error) => {
-                    console.log(err)
-                    next(err)
-                })
-        )
+            (req: any, res: any, next: any) => {
+                this.controller.deleteReview(req.params.model, req.user)
+                    .then(() => {
+                        res.status(200).send();
+                    })
+                    .catch((err: Error) => {
+                        if (err instanceof NoReviewProductError) {
+                            res.status(err.customCode).send(err.customMessage);
+                        } else {
+                            next(err);
+                        }
+                    });
+            }
+        );
 
         /**
          * Route for deleting all reviews of a product.
@@ -104,11 +111,20 @@ class ReviewRoutes {
             this.authenticator.authorize(['Admin', 'Manager']), // role of 'Admin' or 'Manager'
             param('model').isString().isLength({ min: 1 }).withMessage('Model must be a non-empty string'),
             this.errorHandler.validateRequest,
-            (req: any, res: any, next: any) => this.controller.deleteReviewsOfProduct(req.params.model)
-                .then(() => res.status(200).send())
-                .catch((err: Error) => next(err))
-        )
-
+            (req: any, res: any, next: any) => {
+                this.controller.deleteReview(req.params.model, req.user)
+                    .then(() => {
+                        res.status(200).send();
+                    })
+                    .catch((err: Error) => {
+                        if (err instanceof NoReviewProductError) {
+                            res.status(err.customCode).send(err.customMessage);
+                        } else {
+                            next(err);
+                        }
+                    });
+            }
+        );
         /**
          * Route for deleting all reviews of all products.
          * It requires the user to be authenticated and to be either an admin or a manager
