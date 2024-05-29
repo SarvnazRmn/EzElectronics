@@ -1,14 +1,20 @@
 import db from "../db/db"
 import { User } from "../components/user"
 import { ProductReview } from "../components/review";
+import ProductController from "../controllers/productController";
 import { ExistingReviewError, NoReviewProductError } from "../errors/reviewError"
 /**
  * A class that implements the interaction with the database for all review-related operations.
  * You are free to implement any method you need here, as long as the requirements are satisfied.
  */
 class ReviewDAO {
-    productController: any;
+    productController: ProductController;
 
+    constructor() {
+        this.productController = new ProductController();
+    }
+
+    
     addReview(review: ProductReview): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             try {
