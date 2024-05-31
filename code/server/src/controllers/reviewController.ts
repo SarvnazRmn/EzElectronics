@@ -2,12 +2,14 @@ import { User } from "../components/user";
 import { ProductReview } from "../components/review";
 import ReviewDAO from "../dao/reviewDAO";
 import { ExistingReviewError, NoReviewProductError } from "../errors/reviewError"
+import ProductController from "../controllers/productController"
 
 class ReviewController {
     private dao: ReviewDAO
-
+    private productController: ProductController;
     constructor() {
-        this.dao = new ReviewDAO
+        this.dao = new ReviewDAO;
+        this.productController = new ProductController(); 
     }
 
     /**
