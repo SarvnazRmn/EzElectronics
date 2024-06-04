@@ -23,7 +23,7 @@ class ReviewController {
 
     async addReview(model: string, user: User, score: number, comment: string): Promise<void> {
         const product = await this.dao.productController.getProducts("model", null, model);
-        if (!product) {
+        if (product===null) {
             throw new NoReviewProductError();
         }
 
@@ -56,7 +56,7 @@ class ReviewController {
 
     async deleteReview(model: string, user: User) :Promise<void> { 
             const product = await this.productController.getProducts("model", null, model);
-            if (!product) {
+            if (product===null) {
                 throw new NoReviewProductError();
             }
             const reviews = await this.dao.getProductReviews(model);
@@ -76,7 +76,7 @@ class ReviewController {
 
     async deleteReviewsOfProduct(model: string):Promise<void> {
         const product = await this.dao.productController.getProducts("model", null, model);
-        if (!product) {
+        if (product===null) {
             throw new NoReviewProductError();
         }
 
