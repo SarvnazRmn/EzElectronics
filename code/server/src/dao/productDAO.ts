@@ -173,7 +173,7 @@ class ProductDAO {
                     }
 					if (!model) {
 						reject(new ProductNotFoundError())
-                    else {
+                    } else {
 						const sql = "DELETE FROM products WHERE model = ?"
 						db.get(sql, [model], (err: Error | null) => {
 							if (err) {
