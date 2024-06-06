@@ -35,7 +35,9 @@ class ReviewRoutes {
          * It returns a 200 status code.
          */
         this.router.post(
-            "/",
+            "/:model",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isCustomer,
             param('model').isString().isLength({ min: 1 }),
             body('score').isInt({ min: 1, max: 5 }),
             body("comment").isString().isLength({ min: 1 }),
@@ -46,15 +48,12 @@ class ReviewRoutes {
                         res.status(200).send();
                     })
                     .catch((err: Error) => {
-                        if (err instanceof ExistingReviewError) {
-                            res.status(err.customCode).send(err.customMessage);
-                        } else {
-                            next(err);
-                        }
-                    });
+                        console.log(err)
+                        next(err)
+                    })
             }
         )       
-    // should we handle and mention error here?
+    
 
         /**
          * Route for retrieving all reviews of a product.
@@ -64,6 +63,7 @@ class ReviewRoutes {
          */
         this.router.get(
             "/:model",
+            this.authenticator.isLoggedIn,
             param('model').isString().isLength({ min: 1 }).withMessage('Model must be a non-empty string'),
             this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => {
@@ -81,19 +81,16 @@ class ReviewRoutes {
          */
         this.router.delete(
             "/:model",
-            param('model').isString().isLength({ min: 1 }).withMessage('Model must be a non-empty string'),
-            this.errorHandler.validateRequest,
+            this.authenticator.isLoggedIn,
+            this.authenticator.isCustomer,
             (req: any, res: any, next: any) => {
                 this.controller.deleteReview(req.params.model, req.user)
                     .then(() => {
                         res.status(200).send();
                     })
                     .catch((err: Error) => {
-                        if (err instanceof NoReviewProductError) {
-                            res.status(err.customCode).send(err.customMessage);
-                        } else {
-                            next(err);
-                        }
+                        console.log(err)
+                        next(err)
                     });
             }
         );
@@ -106,20 +103,15 @@ class ReviewRoutes {
          */
         this.router.delete(
             "/:model/all",
-            param('model').isString().isLength({ min: 1 }).withMessage('Model must be a non-empty string'),
-            this.errorHandler.validateRequest,
+            this.authenticator.isLoggedIn,
+            this.authenticator.isAdminOrManager,
             (req: any, res: any, next: any) => {
                 this.controller.deleteReviewsOfProduct(req.params.model)
                     .then(() => {
                         res.status(200).send();
                     })
-                    .catch((err: Error) => {
-                        if (err instanceof NoReviewProductError) {
-                            res.status(err.customCode).send(err.customMessage);
-                        } else {
-                            next(err);
-                        }
-                    });
+                    .catch((err: Error) => next(err))
+        
             }
         );
         /**
@@ -129,6 +121,8 @@ class ReviewRoutes {
          */
         this.router.delete(
             "/",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isAdminOrManager,
             (req, res, next) => {
                 this.controller.deleteAllReviews()
                     .then(() => res.status(200).send())
