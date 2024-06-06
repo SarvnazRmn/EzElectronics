@@ -5,9 +5,11 @@ FROM node:14
 WORKDIR /app
 
 # Copy package.json and package-lock.json to the container
-COPY . .
+COPY package*.json ./
 
 RUN npm install
+
+COPY . .
 
 # Expose port 3001 to the outside world
 EXPOSE 3001

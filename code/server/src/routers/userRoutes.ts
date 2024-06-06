@@ -56,6 +56,12 @@ class UserRoutes {
          */
         this.router.post(
             "/",
+            body('username').isString().notEmpty(),
+            body('name').isString().notEmpty(),
+            body('surname').isString().notEmpty(),
+            body('password').isString().notEmpty(),
+            body('role').isString().notEmpty(),
+            this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => this.controller.createUser(req.body.username, req.body.name, req.body.surname, req.body.password, req.body.role)
                 .then(() => res.status(200).end())
                 .catch((err) => {
@@ -70,8 +76,10 @@ class UserRoutes {
          */
         this.router.get(
             "/",
+            this.authService.isLoggedIn,
+            this.authService.isAdmin,
             (req: any, res: any, next: any) => this.controller.getUsers()
-                .then((users: any /**User[] */) => res.status(200).json(users))
+                .then((users: User[]) => res.status(200).json(users))
                 .catch((err) => next(err))
         )
 
@@ -83,8 +91,10 @@ class UserRoutes {
          */
         this.router.get(
             "/roles/:role",
+            this.authService.isLoggedIn,
+            this.authService.isAdmin,
             (req: any, res: any, next: any) => this.controller.getUsersByRole(req.params.role)
-                .then((users: any /**User[] */) => res.status(200).json(users))
+                .then((users: User[]) => res.status(200).json(users))
                 .catch((err) => next(err))
         )
 
@@ -96,9 +106,19 @@ class UserRoutes {
          */
         this.router.get(
             "/:username",
-            (req: any, res: any, next: any) => this.controller.getUserByUsername(req.user, req.params.username)
-                .then((user: any /**User */) => res.status(200).json(user))
-                .catch((err) => next(err))
+            this.authService.isLoggedIn,
+            (req: any, res: any, next: any) => {
+                const currentUser = req.user as User;
+                const { username } = req.params;
+
+                if (currentUser.role !== "Admin" || currentUser.username !== username) {
+                    res.status(403).json({ error: "You do not have permission to retrieve this user's data" });
+                } else {
+                    this.controller.getUserByUsername(req.user, username)
+                        .then((user: User) => res.status(200).json(user))
+                        .catch((err) => next(err));
+                }
+            }
         )
 
         /**
@@ -109,9 +129,32 @@ class UserRoutes {
          */
         this.router.delete(
             "/:username",
-            (req: any, res: any, next: any) => this.controller.deleteUser(req.user, req.params.username)
-                .then(() => res.status(200).end())
-                .catch((err: any) => next(err))
+            this.authService.isLoggedIn,
+            (req: any, res: any, next: any) => {
+
+                const currentUser = req.user as User;
+                const { username } = req.params;
+
+                const isAdmin = currentUser.role == "Admin"
+
+                var isTargetUserAdmin = true
+
+                this.controller.getUserByUsername(currentUser, username)
+                    .then((user) => isTargetUserAdmin = user.address == "Admin")
+                    .catch((err: any) => next(err))
+                
+                // Admins can delete any user except other Admins
+                if (isAdmin && isTargetUserAdmin && currentUser.username !== username) {
+                    return res.status(403).json({ error: "Admins cannot delete other Admins" });
+                } else {
+                    if (currentUser.username !== username) {
+                        return res.status(403).json({ error: "You do not have permission to delete this user" });
+                    }
+                }
+                this.controller.deleteUser(req.user, req.params.username)
+                    .then(() => res.status(200).end())
+                    .catch((err: any) => next(err))
+            } 
         )
 
         /**
@@ -121,6 +164,8 @@ class UserRoutes {
          */
         this.router.delete(
             "/",
+            this.authService.isLoggedIn,
+            this.authService.isAdmin,
             (req: any, res: any, next: any) => this.controller.deleteAll()
                 .then(() => res.status(200).end())
                 .catch((err: any) => next(err))
@@ -139,11 +184,30 @@ class UserRoutes {
          */
         this.router.patch(
             "/:username",
-            (req: any, res: any, next: any) => this.controller.updateUserInfo(req.user, req.body.name, req.body.surname, req.body.address, req.body.birthdate, req.params.username)
-                .then((user: any /**User */) => res.status(200).json(user))
-                .catch((err: any) => next(err))
+            this.authService.isLoggedIn,
+            param('username').isString().notEmpty(),
+            body('name').isString().notEmpty(),
+            body('surname').isString().notEmpty(),
+            body('address').isString().notEmpty(),
+            body('birthdate').isDate({ format: 'YYYY-MM-DD' }).notEmpty().isBefore(new Date().toISOString().split('T')[0]).withMessage('Birthdate must be a valid date and not in the future'),
+            this.errorHandler.validateRequest,
+            (req: any, res: any, next: any) =>  {
+                try {
+                    const currentUser = req.user as User;
+                    const usernameToEdit = req.params.username;
+                    if (currentUser.role !== 'Admin' && currentUser.username !== usernameToEdit) {
+                        return res.status(403).json({ error: 'Unauthorized access' });
+                    }
+                    this.controller.updateUserInfo(req.user, req.body.name, req.body.surname, req.body.address, req.body.birthdate, req.params.username)
+                    .then((user: User) => res.status(200).json(user))
+                    .catch((err: any) => next(err))
+                }
+                catch(err) {
+                    console.error(err);
+                    next(err); 
+                }
+            }
         )
-
     }
 }
 
