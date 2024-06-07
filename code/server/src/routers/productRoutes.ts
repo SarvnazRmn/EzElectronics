@@ -129,7 +129,7 @@ class ProductRoutes {
             "/",
 			query("grouping").optional().isIn(["category", "model"]),
 			query("model").exists().isString().isLength({ min: 1 }).if(query("grouping").isIn(["category"]).not(),
-		    query("category").exists().isString().isIn(["Smartphone", "Laptop", "Appliance"]).if(query("grouping").isIn(["model"]).not(), 
+		    query("category").exists().isString().isIn(["Smartphone", "Laptop", "Appliance"]).if(query("grouping").isIn(["model"])).not(), 
 			this.errorHandler.validateRequest, 
 			this.authenticator.isAdminOrManager,
             (req: any, res: any, next: any) => this.controller.getProducts(req.query.grouping, req.query.category, req.query.model)
