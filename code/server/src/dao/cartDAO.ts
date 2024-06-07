@@ -266,7 +266,7 @@ class CartDAO {
                       cart.products.push(
                         new ProductInCart(
                           row.product_model,
-                          row.quantity,
+                          row.quantity_in_cart,
                           product.category,
                           product.sellingPrice
                         )
@@ -327,7 +327,7 @@ class CartDAO {
 
               // Check availability of all the products in the cart
               const cartItemQuery =
-                "SELECT quantity_in_cart, quantity FROM cartItems, products WHERE cart_id = ?";
+                "SELECT quantity_in_cart, quantity FROM cartItems, products WHERE cart_id = ? AND products.model = cartItems.model";
               db.all(
                 cartItemQuery,
                 [cartId],
@@ -439,7 +439,7 @@ class CartDAO {
                         cart.products.push(
                           new ProductInCart(
                             itemRow.product_model,
-                            itemRow.quantity,
+                            itemRow.quantity_in_cart,
                             product.category,
                             product.sellingPrice
                           )
@@ -745,7 +745,7 @@ class CartDAO {
                         cart.products.push(
                           new ProductInCart(
                             itemRow.product_model,
-                            itemRow.quantity,
+                            itemRow.quantity_in_cart,
                             product.category,
                             product.sellingPrice
                           )
