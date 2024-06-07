@@ -76,57 +76,57 @@ class CartDAO {
 
                     // If there is no current cart, create a new one
                     if (!row) {
-                      // Get the max cartId from the cartItems table
-                      const maxCartIdQuery =
-                        "SELECT MAX(cartId) AS maxCartId FROM cartItems";
-                      db.get(
-                        maxCartIdQuery,
-                        [],
-                        (err: Error | null, result: { maxCartId: number }) => {
-                          if (err) {
-                            reject(err);
-                            return;
-                          }
-
-                          cartId = result.maxCartId ? result.maxCartId + 1 : 1;
-
-                          // Insert a new cart with the generated cartId
+                          // Insert a new cart with the automatically generated cartId
                           const insertCartQuery =
-                            "INSERT INTO carts (cartId, customer, paid, paymentDate, total) VALUES (?, ?, 0, NULL, ?)";
+                            "INSERT INTO carts (customer, paid, paymentDate, total) VALUES (?, 0, NULL, ?)";
                           db.run(
                             insertCartQuery,
-                            [cartId, user.username, productEl.sellingPrice],
+                            [user.username, productEl.sellingPrice],
                             (err: Error | null) => {
                               if (err) {
                                 reject(err);
                                 return;
                               }
 
-                              // Insert the cart item for the product
-                              const insertCartItemQuery =
-                                "INSERT INTO cartItems (cartId, productModel, quantityInCart) VALUES (?, ?, 1)";
-                              db.run(
-                                insertCartItemQuery,
-                                [cartId, product],
-                                (err: Error | null) => {
+                              // Find the current unpaid cart for the user after the cartId was generated
+                              const cartQuery =
+                              "SELECT * FROM carts WHERE customer = ? AND paid = 0";
+                              db.get(
+                                cartQuery,
+                                [user.username],
+                                (err: Error | null, row: any) => {
                                   if (err) {
                                     reject(err);
                                     return;
                                   }
-                                  resolve(true);
-                                  return;
+
+
+                                  // Insert the cart item for the product
+                                  const insertCartItemQuery =
+                                    "INSERT INTO cartItems (cart_id, product_model, quantity_in_cart) VALUES (?, ?, 1)";
+                                  db.run(
+                                    insertCartItemQuery,
+                                    [row.id, product],
+                                    (err: Error | null) => {
+                                      if (err) {
+                                        reject(err);
+                                        return;
+                                      }
+                                      resolve(true);
+                                      return;
+                                    }
+                                  );
                                 }
                               );
                             }
                           );
-                        }
-                      );
+                      
                     } else {
                       cartId = row.id;
 
                       // Update the total price in the database (carts table)
                       const updateTotalCartQuery =
-                        "UPDATE carts SET total = total + ? WHERE Id = ?";
+                        "UPDATE carts SET total = total + ? WHERE id = ?";
                       db.run(
                         updateTotalCartQuery,
                         [productEl.sellingPrice, cartId],
@@ -153,7 +153,7 @@ class CartDAO {
                           // If the product doesn't exist, add it to the cart in the database (cartItems table)
                           if (!row) {
                             const insertCartItemQuery =
-                              "INSERT INTO cartItems (cartId, product_model, quantity_in_cart) VALUES (?, ?, 1)";
+                              "INSERT INTO cartItems (cart_id, product_model, quantity_in_cart) VALUES (?, ?, 1)";
                             db.run(
                               insertCartItemQuery,
                               [cartId, product],
@@ -215,7 +215,7 @@ class CartDAO {
 
         // Find the current unpaid cart for the user
         const cartQuery =
-          "SELECT * FROM carts WHERE customer = ? AND paid = false";
+          "SELECT * FROM carts WHERE customer = ? AND paid = 0";
         db.get(cartQuery, [user.username], (err: Error | null, row: any) => {
           if (err) {
             reject(err);
@@ -351,7 +351,7 @@ class CartDAO {
 
               // Update the total state of the cart in the database (carts table)
               const updateTotalCartQuery =
-                "UPDATE carts SET paid = 1, paymentDate = CURRENT_DATE WHERE Id = ?";
+                "UPDATE carts SET paid = 1, paymentDate = CURRENT_DATE WHERE id = ?";
               db.run(updateTotalCartQuery, [cartId], (err: Error | null) => {
                 if (err) {
                   reject(err);
@@ -543,7 +543,7 @@ class CartDAO {
                           } else {
                             // Update the total price in the database (carts table)
                             const updateTotalCartQuery =
-                              "UPDATE carts SET total = total - ? WHERE Id = ?";
+                              "UPDATE carts SET total = total - ? WHERE id = ?";
                             db.run(
                               updateTotalCartQuery,
                               [productEl.sellingPrice, cartId],
@@ -634,7 +634,7 @@ class CartDAO {
 
               // Update the total price in the database to zero (carts table)
               const updateTotalCartQuery =
-                "UPDATE carts SET total = 0 WHERE Id = ?";
+                "UPDATE carts SET total = 0 WHERE id = ?";
               db.run(updateTotalCartQuery, [cartId], (err: Error | null) => {
                 if (err) {
                   reject(err);
