@@ -241,43 +241,30 @@ class CartDAO {
             cartId = row.id;
 
             // Select all the products in the current cart (cartItems table)
-            const cartItemQuery = "SELECT * FROM cartItems WHERE cart_id = ?";
+            const getCartItemsQuery = "SELECT  ci.quantity_in_cart, p.model, p.category, p.sellingPrice FROM cartItems ci, products p WHERE ci.product_model=p.model AND ci.cart_id=?";
             db.all(
-              cartItemQuery,
+              getCartItemsQuery,
               [cartId],
               (err: Error | null, rows: any[]) => {
                 if (err) {
                   reject(err);
                   return;
                 }
-                rows.forEach(function (row) {
-                  // Find the product information for each row
-                  const findProductsQuery =
-                    "SELECT * FROM products WHERE model = ?";
-                  db.get(
-                    findProductsQuery,
-                    [row.product_model],
-                    (err: Error | null, product: Product) => {
-                      if (err) {
-                        reject(err);
-                        return;
-                      }
-                      // For each product in the cart, add the element in cart.product[]
-                      cart.products.push(
-                        new ProductInCart(
-                          row.product_model,
-                          row.quantity_in_cart,
-                          product.category,
-                          product.sellingPrice
-                        )
-                      );
-                    }
-                  );
-                });
+                else { 
+                  cart.products = ( rows.map( (row) => 
+                                                new ProductInCart( 
+                                                      row.model, 
+                                                      row.quantity_in_cart, 
+                                                      row.category, 
+                                                      row.sellingPrice 
+                                                    ) 
+                                          ) 
+                                ); 
+                } 
+                resolve(cart);
+                return; 
               }
             );
-            resolve(cart);
-            return;
           }
         });
       } catch (error) {
@@ -570,7 +557,7 @@ class CartDAO {
                                       "DELETE FROM cartItems WHERE quantity_in_cart = 0";
                                     db.run(
                                       cartItemQuery,
-                                      [cartId, product],
+                                      [],
                                       (err: Error | null, row: any) => {
                                         if (err) {
                                           reject(err);
