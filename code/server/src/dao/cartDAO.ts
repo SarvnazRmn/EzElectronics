@@ -224,7 +224,7 @@ class CartDAO {
 
           // If there is no current cart, create a new empty one
           if (!row) {
-            const cart = new Cart(user.username, false, null, 0, null);
+            const cart = new Cart(user.username, false, "", 0, []);
             resolve(cart);
             return;
           }
