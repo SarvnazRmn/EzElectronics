@@ -76,51 +76,49 @@ class CartDAO {
 
                     // If there is no current cart, create a new one
                     if (!row) {
-                          // Insert a new cart with the automatically generated cartId
-                          const insertCartQuery =
-                            "INSERT INTO carts (customer, paid, paymentDate, total) VALUES (?, 0, NULL, ?)";
-                          db.run(
-                            insertCartQuery,
-                            [user.username, productEl.sellingPrice],
-                            (err: Error | null) => {
+                      // Insert a new cart with the automatically generated cartId
+                      const insertCartQuery =
+                        "INSERT INTO carts (customer, paid, paymentDate, total) VALUES (?, 0, NULL, ?)";
+                      db.run(
+                        insertCartQuery,
+                        [user.username, productEl.sellingPrice],
+                        (err: Error | null) => {
+                          if (err) {
+                            reject(err);
+                            return;
+                          }
+
+                          // Find the current unpaid cart for the user after the cartId was generated
+                          const cartQuery =
+                            "SELECT * FROM carts WHERE customer = ? AND paid = 0";
+                          db.get(
+                            cartQuery,
+                            [user.username],
+                            (err: Error | null, row: any) => {
                               if (err) {
                                 reject(err);
                                 return;
                               }
 
-                              // Find the current unpaid cart for the user after the cartId was generated
-                              const cartQuery =
-                              "SELECT * FROM carts WHERE customer = ? AND paid = 0";
-                              db.get(
-                                cartQuery,
-                                [user.username],
-                                (err: Error | null, row: any) => {
+                              // Insert the cart item for the product
+                              const insertCartItemQuery =
+                                "INSERT INTO cartItems (cart_id, product_model, quantity_in_cart) VALUES (?, ?, 1)";
+                              db.run(
+                                insertCartItemQuery,
+                                [row.id, product],
+                                (err: Error | null) => {
                                   if (err) {
                                     reject(err);
                                     return;
                                   }
-
-
-                                  // Insert the cart item for the product
-                                  const insertCartItemQuery =
-                                    "INSERT INTO cartItems (cart_id, product_model, quantity_in_cart) VALUES (?, ?, 1)";
-                                  db.run(
-                                    insertCartItemQuery,
-                                    [row.id, product],
-                                    (err: Error | null) => {
-                                      if (err) {
-                                        reject(err);
-                                        return;
-                                      }
-                                      resolve(true);
-                                      return;
-                                    }
-                                  );
+                                  resolve(true);
+                                  return;
                                 }
                               );
                             }
                           );
-                      
+                        }
+                      );
                     } else {
                       cartId = row.id;
 
@@ -214,8 +212,7 @@ class CartDAO {
         }
 
         // Find the current unpaid cart for the user
-        const cartQuery =
-          "SELECT * FROM carts WHERE customer = ? AND paid = 0";
+        const cartQuery = "SELECT * FROM carts WHERE customer = ? AND paid = 0";
         db.get(cartQuery, [user.username], (err: Error | null, row: any) => {
           if (err) {
             reject(err);
@@ -241,7 +238,8 @@ class CartDAO {
             cartId = row.id;
 
             // Select all the products in the current cart (cartItems table)
-            const getCartItemsQuery = "SELECT  ci.quantity_in_cart, p.model, p.category, p.sellingPrice FROM cartItems ci, products p WHERE ci.product_model=p.model AND ci.cart_id=?";
+            const getCartItemsQuery =
+              "SELECT  ci.quantity_in_cart, p.model, p.category, p.sellingPrice FROM cartItems ci, products p WHERE ci.product_model=p.model AND ci.cart_id=?";
             db.all(
               getCartItemsQuery,
               [cartId],
@@ -249,20 +247,19 @@ class CartDAO {
                 if (err) {
                   reject(err);
                   return;
+                } else {
+                  cart.products = rows.map(
+                    (row) =>
+                      new ProductInCart(
+                        row.model,
+                        row.quantity_in_cart,
+                        row.category,
+                        row.sellingPrice
+                      )
+                  );
                 }
-                else { 
-                  cart.products = ( rows.map( (row) => 
-                                                new ProductInCart( 
-                                                      row.model, 
-                                                      row.quantity_in_cart, 
-                                                      row.category, 
-                                                      row.sellingPrice 
-                                                    ) 
-                                          ) 
-                                ); 
-                } 
                 resolve(cart);
-                return; 
+                return;
               }
             );
           }
@@ -281,81 +278,83 @@ class CartDAO {
    *
    */
   checkoutCart(user: User): Promise<Boolean> {
-    return new Promise<boolean>((resolve, reject) => {
-      try {
-        let cartId: number;
+  return new Promise<boolean>((resolve, reject) => {
+    try {
+      // Check if the user is a customer
+      if (user.role !== "Customer") {
+        reject(new WrongUserCartError());
+        return;
+      } 
 
-        // Check if the user is a customer
-        if (user.role !== "Customer") {
-          reject(new WrongUserCartError());
+      // Find the current unpaid cart for the user
+      const cartQuery = "SELECT * FROM carts WHERE customer = ? AND paid = 0";
+      db.get(cartQuery, [user.username], (err: Error | null, row: any) => {
+        if (err) {
+          reject(err);
           return;
-        } else {
-          // Find the current unpaid cart for the user
-          const cartQuery =
-            "SELECT * FROM carts WHERE customer = ? AND paid = 0";
-          db.get(cartQuery, [user.username], (err: Error | null, row: any) => {
+        }
+
+        // If there is no current cart, return error
+        if (!row) {
+          reject(new CartNotFoundError());
+          return;
+        }
+
+        // If the cart is empty, return error
+        if (row.total === 0) {
+          reject(new EmptyCartError());
+          return;
+        }
+
+        const cartId = row.id;
+
+        // Check availability of all the products in the cart
+        const cartItemQuery = "SELECT p.model, ci.quantity_in_cart, p.quantity FROM cartItems ci, products p WHERE ci.cart_id = ? AND p.model = ci.product_model";
+        db.all(cartItemQuery, [cartId], async (err: Error | null, rows: any[]) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+
+          for (const row of rows) {
+            if (row.quantity < row.quantity_in_cart || row.quantity === 0) {
+              reject(new EmptyProductStockError());
+              return;
+            }
+          }
+
+          // Update the total state of the cart in the database (carts table)
+          const updateTotalCartQuery = "UPDATE carts SET paid = 1, paymentDate = CURRENT_DATE WHERE id = ?";
+          db.run(updateTotalCartQuery, [cartId], async (err: Error | null) => {
             if (err) {
               reject(err);
               return;
             }
 
-            // If there is no current cart, return error
-            else if (!row) {
-              reject(new CartNotFoundError());
-              return;
-            }
-
-            // If the cart is empty, return error
-            else if (row.total === 0) {
-              reject(new EmptyCartError());
-              return;
-            } else {
-              cartId = row.id;
-
-              // Check availability of all the products in the cart
-              const cartItemQuery =
-                "SELECT quantity_in_cart, quantity FROM cartItems, products WHERE cart_id = ? AND products.model = cartItems.model";
-              db.all(
-                cartItemQuery,
-                [cartId],
-                (err: Error | null, rows: any[]) => {
+            try {
+              await Promise.all(rows.map(row => new Promise<void>((resolve, reject) => {
+                const updateProductAmountQuery = "UPDATE products SET quantity = quantity - ? WHERE model = ?";
+                db.run(updateProductAmountQuery, [row.quantity_in_cart, row.model], (err: Error | null) => {
                   if (err) {
                     reject(err);
                     return;
                   }
-                  rows.forEach(function (row) {
-                    // Check if the quantity in stock is enough for the order
-                    if (
-                      row.quantity < row.quantity_in_cart ||
-                      row.quantity === 0
-                    ) {
-                      reject(new EmptyProductStockError());
-                      return;
-                    }
-                  });
-                }
-              );
+                  resolve();
+                });
+              })));
 
-              // Update the total state of the cart in the database (carts table)
-              const updateTotalCartQuery =
-                "UPDATE carts SET paid = 1, paymentDate = CURRENT_DATE WHERE id = ?";
-              db.run(updateTotalCartQuery, [cartId], (err: Error | null) => {
-                if (err) {
-                  reject(err);
-                  return;
-                }
-                resolve(true);
-                return;
-              });
+              resolve(true);
+            } catch (error) {
+              reject(error);
             }
           });
-        }
-      } catch (error) {
-        reject(error);
-        return;
-      }
-    });
-  }
+        });
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
 
   /**
    * Retrieves all paid carts for a specific customer.
@@ -377,7 +376,7 @@ class CartDAO {
 
         // Find all the paid carts for the user
         const cartQuery = "SELECT * FROM carts WHERE customer = ? AND paid = 1";
-        db.get(cartQuery, [user.username], (err: Error | null, rows: any[]) => {
+        db.all(cartQuery, [user.username], (err: Error | null, rows: any[]) => {
           if (err) {
             reject(err);
             return;
@@ -683,7 +682,7 @@ class CartDAO {
 
         // Find all the carts for the user
         const cartQuery = "SELECT * FROM carts";
-        db.get(cartQuery, [], (err: Error | null, rows: any[]) => {
+        db.all(cartQuery, [], (err: Error | null, rows: any[]) => {
           if (err) {
             reject(err);
             return;
