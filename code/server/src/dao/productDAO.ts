@@ -87,9 +87,10 @@ class ProductDAO {
     }
 	
 	
-	getProducts(grouping: string | null, category: string | null, model: string | null): Promise<Product> {
-        return new Promise<Product>((resolve, reject) => {
+	getProducts(grouping: string | null, category: string | null, model: string | null): Promise<Product[]> {
+        return new Promise<Product[]>((resolve, reject) => {
             try {
+				let products: Product[] = [];
 				if (grouping == "model") {
 					const sql = "SELECT * FROM products WHERE model = ?"
 					db.get(sql, [model], (err: Error | null, row: any) => {
@@ -99,23 +100,49 @@ class ProductDAO {
 						if (!row) {
 							reject(new ProductNotFoundError())
 						}
-						else resolve(Product)
+						else resolve(products)
 					})
 				} else if (grouping == "category") {
 					const sql = "SELECT * FROM products WHERE category = ?"
-					db.get(sql, [category], (err: Error | null, row: any) => {
+					db.get(sql, [category], (err: Error | null, rows: any[]) => {
 						if (err) {
 							reject(err)
 						}
-						else resolve(Product)
+						else {
+							rows.forEach(function (row) {
+								const product = new Product(
+									row.sellingPrice,
+									row.model,
+									row.category,
+									row.arrivalDate,
+									row.details,
+									row.quantity,
+								);
+								products.push(product);
+							}); 
+							resolve(products)
+						}
 					})
 				} else {
 					const sql = "SELECT * FROM products"
-					db.get(sql, [], (err: Error | null, row: any) => {
+					db.get(sql, [], (err: Error | null, rows: any[]) => {
 						if (err) {
 							reject(err)
 						}
-						else resolve(Product)
+						else {
+							rows.forEach(function (row) {
+								const product = new Product(
+									row.sellingPrice,
+									row.model,
+									row.category,
+									row.arrivalDate,
+									row.details,
+									row.quantity,
+								);
+								products.push(product);
+							}); 
+							resolve(products)
+						}
 					})
 				}
             } catch (error) {
@@ -125,9 +152,10 @@ class ProductDAO {
     }
 	
 	
-	getAvailableProducts(grouping: string | null, category: string | null, model: string | null): Promise<Product> {
-        return new Promise<Product>((resolve, reject) => {
+	getAvailableProducts(grouping: string | null, category: string | null, model: string | null): Promise<Product[]> {
+        return new Promise<Product[]>((resolve, reject) => {
             try {
+				let products: Product[] = [];
 				if (grouping == "model") {
 					const sql = "SELECT * FROM products WHERE model = ? AND quantity > 0"
 					db.get(sql, [model], (err: Error | null, row: any) => {
@@ -137,23 +165,49 @@ class ProductDAO {
 						if (!row) {
 							reject(new ProductNotFoundError())
 						}
-						else resolve(Product)
+						else resolve(products)
 					})
 				} else if (grouping == "category") {
 					const sql = "SELECT * FROM products WHERE category = ? AND quantity > 0"
-					db.get(sql, [category], (err: Error | null, row: any) => {
+					db.get(sql, [category], (err: Error | null, rows: any[]) => {
 						if (err) {
 							reject(err)
 						}
-						else resolve(Product)
+						else {
+							rows.forEach(function (row) {
+								const product = new Product(
+									row.sellingPrice,
+									row.model,
+									row.category,
+									row.arrivalDate,
+									row.details,
+									row.quantity,
+								);
+								products.push(product);
+							}); 
+							resolve(products)
+						}
 					})
 				} else {
 					const sql = "SELECT * FROM products WHERE quantity > 0"
-					db.get(sql, [], (err: Error | null, row: any) => {
+					db.get(sql, [], (err: Error | null, rows: any[]) => {
 						if (err) {
 							reject(err)
 						}
-						else resolve(Product)
+						else {
+							rows.forEach(function (row) {
+								const product = new Product(
+									row.sellingPrice,
+									row.model,
+									row.category,
+									row.arrivalDate,
+									row.details,
+									row.quantity,
+								);
+								products.push(product);
+							}); 
+							resolve(products)
+						}
 					})
 				}
             } catch (error) {
