@@ -11,7 +11,8 @@ class ProductDAO {
         return new Promise<boolean>((resolve, reject) => {
             try {
 				const arrivalD: Date = new Date(arrivalDate);
-				const currentD: Date = new Date().setHours(0, 0, 0, 0);
+				const currentD: Date = new Date();
+				currentD.setHours(0, 0, 0, 0);
 				if (arrivalD > currentD) {
 					reject(new ProductInvalidDate())
 				}
@@ -43,7 +44,8 @@ class ProductDAO {
 					}
 					const changeD: Date = new Date(changeDate);
 					const arrivalD: Date = new Date(row.arrivalDate);
-					const currentD: Date = new Date().setHours(0, 0, 0, 0);
+					const currentD: Date = new Date();
+					currentD.setHours(0, 0, 0, 0);
 					if (changeD < arrivalD) {
 						reject(new ProductInvalidDate())
 					}
@@ -84,10 +86,10 @@ class ProductDAO {
 					if (row.quantity < quantity) {
 						reject(new LowProductStockError())
 					}
-					// ....
 					const sellingD: Date = new Date(sellingDate);
 					const arrivalD: Date = new Date(row.arrivalDate);
-					const currentD: Date = new Date().setHours(0, 0, 0, 0);
+					const currentD: Date = new Date();
+					currentD.setHours(0, 0, 0, 0);
 					if (sellingD < arrivalD) {
 						reject(new ProductInvalidDate())
 					}
