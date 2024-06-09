@@ -56,11 +56,11 @@ class ProductRoutes {
          * - arrivalDate: string. It can be omitted. If present, it must be a valid date in the format YYYY-MM-DD that is not after the current date
          * It returns a 200 status code if the arrival was registered successfully.
          */
-        this.router.post( // arrival date > current da fare !!!!!!!!!!!!!!!!!!!
+        this.router.post(
             "/",
 			body("model").isString().isLength({ min: 1 }),
 		    body("details").isString(), 
-			body("arrivalDate").isDate({ format: "YYYY-MM-DD" }), // date in fomrmat YYYY-MM-DD
+			body("arrivalDate").isDate({ format: "YYYY-MM-DD" }).isBefore(new Date().toISOString().split('T')[0]), // date in fomrmat YYYY-MM-DD
 		    body("sellingPrice").isFloat({ gt: 0 }), // float > 0
 		    body("quantity").isInt({ gt: 0 }), // integer > 0
 		    body("category").isString().isIn(["Smartphone", "Laptop", "Appliance"]), 
@@ -83,7 +83,7 @@ class ProductRoutes {
         this.router.patch(
             "/:model",
 			param("model").isString().isLength({ min: 1 }),
-			body("changeDate").isDate({ format: "YYYY-MM-DD" }),
+			body("changeDate").isDate({ format: "YYYY-MM-DD" }).isBefore(new Date().toISOString().split('T')[0]),
 		    body("quantity").isInt({ gt: 0 }), // integer > 0
 		    this.errorHandler.validateRequest, 
 			this.authenticator.isAdminOrManager,
@@ -105,7 +105,7 @@ class ProductRoutes {
             "/:model/sell",
 			param("model").isString().isLength({ min: 1 }),
 		    body("quantity").isInt({ gt: 0 }), // integer > 0
-			body("sellingDate").isDate({ format: "YYYY-MM-DD" }),
+			body("sellingDate").isDate({ format: "YYYY-MM-DD" }).isBefore(new Date().toISOString().split('T')[0]),
 			this.errorHandler.validateRequest, 
 			this.authenticator.isAdminOrManager,
             (req: any, res: any, next: any) => this.controller.sellProduct(req.params.model, req.body.quantity, req.body.sellingDate)
@@ -151,6 +151,11 @@ class ProductRoutes {
          */
         this.router.get(
             "/available",
+			query("grouping").optional().isIn(["category", "model"]),
+			query("model").exists().isString().isLength({ min: 1 }).if(query("grouping").isIn(["category"])).not(),
+		    query("category").exists().isString().isIn(["Smartphone", "Laptop", "Appliance"]).if(query("grouping").isIn(["model"])).not(), 
+			this.errorHandler.validateRequest, 
+			this.authenticator.isAdminOrManager,
             (req: any, res: any, next: any) => this.controller.getAvailableProducts(req.query.grouping, req.query.category, req.query.model)
                 .then((products: any/*Product[]*/) => res.status(200).json(products))
                 .catch((err) => next(err))
