@@ -1,12 +1,24 @@
 import db from "../db/db"
-import { Product } from "../components/product"
+import { Product, Category } from "../components/product" 
 import { ProductNotFoundError, ProductAlreadyExistsError, ProductSoldError, EmptyProductStockError, LowProductStockError } from "../errors/productError";
 
 /**
  * A class that implements the interaction with the database for all product-related operations.
  * You are free to implement any method you need here, as long as the requirements are satisfied.
  */
+function createProductFromRow(row: any): Product {
+	return new Product(
+		row.sellingPrice,
+		row.model,
+		row.category as Category,
+		row.arrivalDate,
+		row.details,
+		row.quantity
+	);
+}
+
 class ProductDAO {
+
 	registerProducts(model: string, category: string, quantity: number, details: string | null, sellingPrice: number, arrivalDate: string | null): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             try {
@@ -99,7 +111,7 @@ class ProductDAO {
 						if (!row) {
 							reject(new ProductNotFoundError())
 						}
-						else resolve(Product)
+						else resolve(createProductFromRow(row))
 					})
 				} else if (grouping == "category") {
 					const sql = "SELECT * FROM products WHERE category = ?"
@@ -107,7 +119,7 @@ class ProductDAO {
 						if (err) {
 							reject(err)
 						}
-						else resolve(Product)
+						else resolve(createProductFromRow(row))
 					})
 				} else {
 					const sql = "SELECT * FROM products"
@@ -115,7 +127,7 @@ class ProductDAO {
 						if (err) {
 							reject(err)
 						}
-						else resolve(Product)
+						else resolve(createProductFromRow(row))
 					})
 				}
             } catch (error) {
@@ -137,7 +149,7 @@ class ProductDAO {
 						if (!row) {
 							reject(new ProductNotFoundError())
 						}
-						else resolve(Product)
+						else resolve(createProductFromRow(row))
 					})
 				} else if (grouping == "category") {
 					const sql = "SELECT * FROM products WHERE category = ? AND quantity > 0"
@@ -145,7 +157,7 @@ class ProductDAO {
 						if (err) {
 							reject(err)
 						}
-						else resolve(Product)
+						else resolve(createProductFromRow(row))
 					})
 				} else {
 					const sql = "SELECT * FROM products WHERE quantity > 0"
@@ -153,7 +165,7 @@ class ProductDAO {
 						if (err) {
 							reject(err)
 						}
-						else resolve(Product)
+						else resolve(createProductFromRow(row))
 					})
 				}
             } catch (error) {
