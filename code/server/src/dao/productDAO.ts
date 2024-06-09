@@ -100,11 +100,22 @@ class ProductDAO {
 						if (!row) {
 							reject(new ProductNotFoundError())
 						}
-						else resolve(products)
+						else {
+							const product = new Product(
+										row.sellingPrice,
+										row.model,
+										row.category,
+										row.arrivalDate,
+										row.details,
+										row.quantity,
+								);
+							products.push(product);
+							resolve(products)
+						}
 					})
 				} else if (grouping == "category") {
 					const sql = "SELECT * FROM products WHERE category = ?"
-					db.get(sql, [category], (err: Error | null, rows: any[]) => {
+					db.all(sql, [category], (err: Error | null, rows: any[]) => {
 						if (err) {
 							reject(err)
 						}
@@ -125,7 +136,7 @@ class ProductDAO {
 					})
 				} else {
 					const sql = "SELECT * FROM products"
-					db.get(sql, [], (err: Error | null, rows: any[]) => {
+					db.all(sql, [], (err: Error | null, rows: any[]) => {
 						if (err) {
 							reject(err)
 						}
@@ -165,11 +176,22 @@ class ProductDAO {
 						if (!row) {
 							reject(new ProductNotFoundError())
 						}
-						else resolve(products)
+						else {
+							const product = new Product(
+									row.sellingPrice,
+									row.model,
+									row.category,
+									row.arrivalDate,
+									row.details,
+									row.quantity,
+								);
+							products.push(product);
+							resolve(products)
+						}
 					})
 				} else if (grouping == "category") {
 					const sql = "SELECT * FROM products WHERE category = ? AND quantity > 0"
-					db.get(sql, [category], (err: Error | null, rows: any[]) => {
+					db.all(sql, [category], (err: Error | null, rows: any[]) => {
 						if (err) {
 							reject(err)
 						}
@@ -190,7 +212,7 @@ class ProductDAO {
 					})
 				} else {
 					const sql = "SELECT * FROM products WHERE quantity > 0"
-					db.get(sql, [], (err: Error | null, rows: any[]) => {
+					db.all(sql, [], (err: Error | null, rows: any[]) => {
 						if (err) {
 							reject(err)
 						}
