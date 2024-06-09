@@ -59,8 +59,8 @@ class ProductRoutes {
         this.router.post(
             "/",
 			body("model").isString().isLength({ min: 1 }),
-		    body("details").isString(), 
-			body("arrivalDate").optional().isDate({ format: "YYYY-MM-DD" }), // date in fomrmat YYYY-MM-DD
+		    body("details").optional({ nullable: true }).isString().isLength({ min: 1 }), 
+			body("arrivalDate").optional({ nullable: true }).isDate({ format: "YYYY-MM-DD" }), // date in fomrmat YYYY-MM-DD
 		    body("sellingPrice").isFloat({ gt: 0 }), // float > 0
 		    body("quantity").isInt({ gt: 0 }), // integer > 0
 		    body("category").isString().isIn(["Smartphone", "Laptop", "Appliance"]), 
@@ -83,7 +83,7 @@ class ProductRoutes {
         this.router.patch(
             "/:model",
 			param("model").isString().isLength({ min: 1 }),
-			body("changeDate").optional().isDate({ format: "YYYY-MM-DD" }),
+			body("changeDate").optional({ nullable: true }).isDate({ format: "YYYY-MM-DD" }),
 		    body("quantity").isInt({ gt: 0 }), // integer > 0
 		    this.errorHandler.validateRequest, 
 			this.authenticator.isAdminOrManager,
@@ -105,7 +105,7 @@ class ProductRoutes {
             "/:model/sell",
 			param("model").isString().isLength({ min: 1 }),
 		    body("quantity").isInt({ gt: 0 }), // integer > 0
-			body("sellingDate").optional().isDate({ format: "YYYY-MM-DD" }),
+			body("sellingDate").optional({ nullable: true }).isDate({ format: "YYYY-MM-DD" }),
 			this.errorHandler.validateRequest, 
 			this.authenticator.isAdminOrManager,
             (req: any, res: any, next: any) => this.controller.sellProduct(req.params.model, req.body.quantity, req.body.sellingDate)
@@ -127,9 +127,9 @@ class ProductRoutes {
          */
         this.router.get(
             "/", 
-			query("grouping").optional().isString().isIn(["category", "model"]),
-			query("model").optional().isString().isLength({ min: 1 }),
-		    query("category").optional().isString().isIn(["Smartphone", "Laptop", "Appliance"]), 
+			query("grouping").optional({ nullable: true }).isString().isIn(["category", "model"]),
+			query("model").optional({ nullable: true }).isString().isLength({ min: 1 }),
+		    query("category").optional({ nullable: true }).isString().isIn(["Smartphone", "Laptop", "Appliance"]), 
 			this.errorHandler.validateRequest, 
 			this.authenticator.isAdminOrManager,
             (req: any, res: any, next: any) => this.controller.getProducts(req.query.grouping, req.query.category, req.query.model)
@@ -151,9 +151,9 @@ class ProductRoutes {
          */
         this.router.get(
             "/available",
-			query("grouping").optional().isString().isIn(["category", "model"]),
-			query("model").optional().isString().isLength({ min: 1 }),
-		    query("category").optional().isString().isIn(["Smartphone", "Laptop", "Appliance"]), 
+			query("grouping").optional({ nullable: true }).isString().isIn(["category", "model"]),
+			query("model").optional({ nullable: true }).isString().isLength({ min: 1 }),
+		    query("category").optional({ nullable: true }).isString().isIn(["Smartphone", "Laptop", "Appliance"]), 
 			this.errorHandler.validateRequest, 
 			this.authenticator.isAdminOrManager,
             (req: any, res: any, next: any) => this.controller.getAvailableProducts(req.query.grouping, req.query.category, req.query.model)
