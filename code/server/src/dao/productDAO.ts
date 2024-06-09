@@ -1,6 +1,6 @@
 import db from "../db/db"
 import { Product } from "../components/product"
-import { ProductNotFoundError, ProductAlreadyExistsError, ProductSoldError, EmptyProductStockError, LowProductStockError } from "../errors/productError";
+import { ProductNotFoundError, ProductAlreadyExistsError, ProductSoldError, EmptyProductStockError, LowProductStockError, ProductInvalidDate, ProductInvalidGrouping} from "../errors/productError";
 
 /**
  * A class that implements the interaction with the database for all product-related operations.
@@ -10,6 +10,11 @@ class ProductDAO {
 	registerProducts(model: string, category: string, quantity: number, details: string | null, sellingPrice: number, arrivalDate: string | null): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             try {
+				const arrivalD: Date = new Date(arrivalDate);
+				const currentD: Date = new Date().setHours(0, 0, 0, 0);
+				if (arrivalD > currentD) {
+					reject(new ProductInvalidDate())
+				}
                 const sql = "INSERT INTO products(model, category, quantity, details, sellingPrice, arrivalDate) VALUES(?, ?, ?, ?, ?, ?)"
                 db.get(sql, [model, category, quantity, details, sellingPrice, arrivalDate], (err: Error | null) => {
                     if (err) {
@@ -28,21 +33,30 @@ class ProductDAO {
 	changeProductQuantity(model: string, newQuantity: number, changeDate: string | null): Promise<number> {
         return new Promise<number>((resolve, reject) => {
             try {
-                const sql = "SELECT quantity FROM products WHERE model = ?"
-                db.get(sql, [model], (err: Error | null, stock: any) => {
+                const sql = "SELECT arrivalDate, quantity FROM products WHERE model = ?"
+                db.get(sql, [model], (err: Error | null, row: any) => {
                     if (err) {
 						reject(err)
                     }
-					if (!stock) {
+					if (!row.quantity) {
 						reject(new ProductNotFoundError())
 					}
+					const changeD: Date = new Date(changeDate);
+					const arrivalD: Date = new Date(row.arrivalDate);
+					const currentD: Date = new Date().setHours(0, 0, 0, 0);
+					if (changeD < arrivalD) {
+						reject(new ProductInvalidDate())
+					}
+					if (changeD > currentD) {
+						reject(new ProductInvalidDate())
+					}
                     else {
-						const sql = "UPDATE products SET quantity = ? WHERE model = ?"
-						db.get(sql, [newQuantity, model], (err: Error | null) => {
+						const sql = "UPDATE products SET quantity = ?, arrivalDate = changeDate WHERE model = ?"
+						db.get(sql, [newQuantity, changeDate, model], (err: Error | null) => {
 							if (err) {
 								reject(err)
 							}
-							else resolve(stock + newQuantity);
+							else resolve(row.quantity + newQuantity);
 						})
 					}
                 })
@@ -56,19 +70,29 @@ class ProductDAO {
 	sellProduct(model: string, quantity: number, sellingDate: string | null): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             try {
-                const sql = "SELECT quantity FROM products WHERE model = ?"
-                db.get(sql, [model], (err: Error | null, stock: any) => {
+                const sql = "SELECT arrivalDate, quantity FROM products WHERE model = ?"
+                db.get(sql, [model], (err: Error | null, row: any) => {
                     if (err) {
 						reject(err)
                     }
-					if (!stock) {
+					if (!row.quantity) {
 						reject(new ProductNotFoundError())
 					}
-					if (stock == 0) {
+					if (row.quantity == 0) {
 						reject(new EmptyProductStockError())
 					}
-					if (stock < quantity) {
+					if (row.quantity < quantity) {
 						reject(new LowProductStockError())
+					}
+					// ....
+					const sellingD: Date = new Date(sellingDate);
+					const arrivalD: Date = new Date(row.arrivalDate);
+					const currentD: Date = new Date().setHours(0, 0, 0, 0);
+					if (sellingD < arrivalD) {
+						reject(new ProductInvalidDate())
+					}
+					if (sellingD > currentD) {
+						reject(new ProductInvalidDate())
 					}
                     else {
 						const sql = "UPDATE products SET quantity = quantity - ? WHERE model = ?"
@@ -92,6 +116,9 @@ class ProductDAO {
             try {
 				let products: Product[] = [];
 				if (grouping == "model") {
+					if (model == "" || category != "") {
+						reject(new ProductInvalidGrouping())
+					}
 					const sql = "SELECT * FROM products WHERE model = ?"
 					db.get(sql, [model], (err: Error | null, row: any) => {
 						if (err) {
@@ -114,6 +141,9 @@ class ProductDAO {
 						}
 					})
 				} else if (grouping == "category") {
+					if (model != "" || category == "") {
+							reject(new ProductInvalidGrouping())
+					}
 					const sql = "SELECT * FROM products WHERE category = ?"
 					db.all(sql, [category], (err: Error | null, rows: any[]) => {
 						if (err) {
@@ -135,6 +165,9 @@ class ProductDAO {
 						}
 					})
 				} else {
+					if (model != "" || category != "") {
+							reject(new ProductInvalidGrouping())
+					}
 					const sql = "SELECT * FROM products"
 					db.all(sql, [], (err: Error | null, rows: any[]) => {
 						if (err) {
@@ -168,6 +201,9 @@ class ProductDAO {
             try {
 				let products: Product[] = [];
 				if (grouping == "model") {
+					if (model == "" || category != "") {
+							reject(new ProductInvalidGrouping())
+					}
 					const sql = "SELECT * FROM products WHERE model = ? AND quantity > 0"
 					db.get(sql, [model], (err: Error | null, row: any) => {
 						if (err) {
@@ -190,6 +226,9 @@ class ProductDAO {
 						}
 					})
 				} else if (grouping == "category") {
+					if (model != "" || category == "") {
+							reject(new ProductInvalidGrouping())
+					}
 					const sql = "SELECT * FROM products WHERE category = ? AND quantity > 0"
 					db.all(sql, [category], (err: Error | null, rows: any[]) => {
 						if (err) {
@@ -211,6 +250,9 @@ class ProductDAO {
 						}
 					})
 				} else {
+					if (model != "" || category != "") {
+							reject(new ProductInvalidGrouping())
+					}
 					const sql = "SELECT * FROM products WHERE quantity > 0"
 					db.all(sql, [], (err: Error | null, rows: any[]) => {
 						if (err) {

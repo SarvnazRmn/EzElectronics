@@ -60,7 +60,7 @@ class ProductRoutes {
             "/",
 			body("model").isString().isLength({ min: 1 }),
 		    body("details").isString(), 
-			body("arrivalDate").isDate({ format: "YYYY-MM-DD" }).isBefore(new Date().toISOString().split('T')[0]), // date in fomrmat YYYY-MM-DD
+			body("arrivalDate").optional('null').isDate({ format: "YYYY-MM-DD" }), // date in fomrmat YYYY-MM-DD
 		    body("sellingPrice").isFloat({ gt: 0 }), // float > 0
 		    body("quantity").isInt({ gt: 0 }), // integer > 0
 		    body("category").isString().isIn(["Smartphone", "Laptop", "Appliance"]), 
@@ -83,7 +83,7 @@ class ProductRoutes {
         this.router.patch(
             "/:model",
 			param("model").isString().isLength({ min: 1 }),
-			body("changeDate").isDate({ format: "YYYY-MM-DD" }).isBefore(new Date().toISOString().split('T')[0]),
+			body("changeDate").optional('null').isDate({ format: "YYYY-MM-DD" }),
 		    body("quantity").isInt({ gt: 0 }), // integer > 0
 		    this.errorHandler.validateRequest, 
 			this.authenticator.isAdminOrManager,
@@ -105,7 +105,7 @@ class ProductRoutes {
             "/:model/sell",
 			param("model").isString().isLength({ min: 1 }),
 		    body("quantity").isInt({ gt: 0 }), // integer > 0
-			body("sellingDate").isDate({ format: "YYYY-MM-DD" }).isBefore(new Date().toISOString().split('T')[0]),
+			body("sellingDate").optional('null').isDate({ format: "YYYY-MM-DD" }),
 			this.errorHandler.validateRequest, 
 			this.authenticator.isAdminOrManager,
             (req: any, res: any, next: any) => this.controller.sellProduct(req.params.model, req.body.quantity, req.body.sellingDate)
@@ -126,10 +126,10 @@ class ProductRoutes {
          * It returns an array of Product objects.
          */
         this.router.get(
-            "/",
-			query("grouping").optional().isIn(["category", "model"]),
-			query("model").exists().isString().isLength({ min: 1 }).if(query("grouping").isIn(["category"])).not(),
-		    query("category").exists().isString().isIn(["Smartphone", "Laptop", "Appliance"]).if(query("grouping").isIn(["model"])).not(), 
+            "/", 
+			query("grouping").optional('null').isString.isIn(["category", "model"]),
+			query("model").optional('null').isString().isLength({ min: 1 }),
+		    query("category").optional('null').isString().isIn(["Smartphone", "Laptop", "Appliance"]), 
 			this.errorHandler.validateRequest, 
 			this.authenticator.isAdminOrManager,
             (req: any, res: any, next: any) => this.controller.getProducts(req.query.grouping, req.query.category, req.query.model)
@@ -151,9 +151,9 @@ class ProductRoutes {
          */
         this.router.get(
             "/available",
-			query("grouping").optional().isIn(["category", "model"]),
-			query("model").exists().isString().isLength({ min: 1 }).if(query("grouping").isIn(["category"])).not(),
-		    query("category").exists().isString().isIn(["Smartphone", "Laptop", "Appliance"]).if(query("grouping").isIn(["model"])).not(), 
+			query("grouping").optional('null').isString().isIn(["category", "model"]),
+			query("model").optional('null').isString().isLength({ min: 1 }),
+		    query("category").optional('null').isString().isIn(["Smartphone", "Laptop", "Appliance"]), 
 			this.errorHandler.validateRequest, 
 			this.authenticator.isAdminOrManager,
             (req: any, res: any, next: any) => this.controller.getAvailableProducts(req.query.grouping, req.query.category, req.query.model)
