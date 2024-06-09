@@ -3,6 +3,8 @@ const PRODUCT_ALREADY_EXISTS = "The product already exists"
 const PRODUCT_SOLD = "Product already sold"
 const EMPTY_PRODUCT_STOCK = "Product stock is empty"
 const LOW_PRODUCT_STOCK = "Product stock cannot satisfy the requested quantity"
+const PRODUCT_INVALID_DATE = "Date is not a valid one"
+const PRODUCT_INVALID_GROUPING = "Grouping settings are not compliant"
 
 /**
  * Represents an error that occurs when a product is not found.
@@ -68,4 +70,26 @@ class LowProductStockError extends Error {
     }
 }
 
-export { ProductNotFoundError, ProductAlreadyExistsError, ProductSoldError, EmptyProductStockError, LowProductStockError }
+class ProductInvalidDate extends Error {
+    customMessage: string
+    customCode: number
+
+    constructor() {
+        super()
+        this.customMessage = PRODUCT_INVALID_DATE
+        this.customCode = 400
+    }
+}
+
+class ProductInvalidGrouping extends Error {
+    customMessage: string
+    customCode: number
+
+    constructor() {
+        super()
+        this.customMessage = PRODUCT_INVALID_GROUPING
+        this.customCode = 422
+    }
+}
+
+export { ProductNotFoundError, ProductAlreadyExistsError, ProductSoldError, EmptyProductStockError, LowProductStockError, ProductInvalidDate, ProductInvalidGrouping}
