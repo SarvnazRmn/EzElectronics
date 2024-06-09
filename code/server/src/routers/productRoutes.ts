@@ -59,7 +59,7 @@ class ProductRoutes {
         this.router.post(
             "/",
 			body("model").isString().isLength({ min: 1 }),
-		    body("details").optional({ nullable: true }).isString().isLength({ min: 1 }), 
+		    body("details").optional({ nullable: true }).isString(), 
 			body("arrivalDate").optional({ nullable: true }).isDate({ format: "YYYY-MM-DD" }), // date in fomrmat YYYY-MM-DD
 		    body("sellingPrice").isFloat({ gt: 0 }), // float > 0
 		    body("quantity").isInt({ gt: 0 }), // integer > 0
