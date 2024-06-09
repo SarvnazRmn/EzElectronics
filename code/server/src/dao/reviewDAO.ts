@@ -23,7 +23,7 @@ class ReviewDAO {
         return new Promise<void>((resolve, reject) => {
             
             try {
-                const checkReviewSql = "SELECT COUNT(*) as count FROM ProductReview WHERE product_model = ? AND user = ?"
+                const checkReviewSql = "SELECT COUNT(*) as count FROM reviews WHERE model = ? AND user = ?"
                 db.get(checkReviewSql, [model, user.username], (err: Error | null, row: any) => {
                     if (err) {
                         reject(err)
@@ -35,8 +35,8 @@ class ReviewDAO {
                     }
                 })
                 const now = dayjs().format('YYYY-MM-DD')
-                const sql = "INSERT INTO reviews (model, user, score, date, comment) VALUES (?, ?, ?, ?, ?)";
-                db.run(sql, [model, user.username, score, now, comment], (err: Error | null) => {
+                const sql = "INSERT INTO reviews (model, user, score, comment, date) VALUES (?, ?, ?, ?, ?)";
+                db.run(sql, [model, user.username, score, comment, now], (err: Error | null) => {
                     if (err) {
                     if (err)
                         reject(err)
@@ -60,7 +60,7 @@ return new Promise<ProductReview[]>((resolve, reject) => {
                 reject(err);
                 return;
             }
-            if (!rows) {
+            if (!rows|| rows.length === 0) {
                 reject(new NoReviewProductError())
                 return
                 }
@@ -83,7 +83,7 @@ return new Promise<ProductReview[]>((resolve, reject) => {
 deleteReview(model: string, user: User) :Promise<void> { 
     return new Promise<void>((resolve, reject) => {
         try {
-            const checkProductSql = "SELECT * FROM products where model = ?"
+            const checkProductSql = "SELECT * FROM reviews where model = ?"
             db.get(checkProductSql, [model], (err: Error | null, row: any) =>{
             if (err) {
                 reject(err)
@@ -94,7 +94,7 @@ deleteReview(model: string, user: User) :Promise<void> {
                 return
             }
             })
-            const checkReviewSql = "SELECT * FROM ProductReview WHERE product_model = ? AND user = ?"
+            const checkReviewSql = "SELECT * FROM reviews WHERE model = ? AND user = ?"
             db.get(checkReviewSql, [model, user.username], (err: Error | null, row: any) => {
             if (err) {
                 reject(err)
@@ -124,7 +124,7 @@ deleteReview(model: string, user: User) :Promise<void> {
     deleteReviewsOfProduct(model: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             try {
-                const checkProductSql = "SELECT * FROM products where model = ?"
+                const checkProductSql = "SELECT * FROM reviews where model = ?"
                 db.get(checkProductSql, [model], (err: Error | null, row: any) =>{
                 if (err) {
                     reject(err)
