@@ -659,89 +659,69 @@ class CartDAO {
     return new Promise<Cart[]>((resolve, reject) => {
       try {
         let carts: Cart[] = [];
-        let cartId: number;
-
-        // Find all the carts for the user
+  
+        // Find all the paid carts for the user
         const cartQuery = "SELECT * FROM carts";
-        db.all(cartQuery, [], (err: Error | null, rows: any[]) => {
+        db.all(cartQuery, [], (err: Error | null, cartRows: any[]) => {
           if (err) {
             reject(err);
             return;
           }
-
-          // If there is no carts, return empty array
-          if (!rows) {
+  
+          // If there are no paid carts, return empty array
+          if (!cartRows || cartRows.length === 0) {
             resolve(carts);
             return;
           }
-          // If there are carts, return all the cart information
-          else {
-            rows.forEach(function (row) {
+  
+          // Create an array of promises to fetch products for each cart
+          const cartPromises = cartRows.map(cartRow => {
+            return new Promise<Cart>((resolve, reject) => {
               const cart = new Cart(
-                row.customer,
-                row.paid,
-                row.paymentDate,
-                row.total,
+                cartRow.customer,
+                cartRow.paid,
+                cartRow.paymentDate,
+                cartRow.total,
                 []
               );
-              cartId = row.id;
-
+  
+              const cartId = cartRow.id;
+  
               // Select all the products in the current cart (cartItems table)
-              const cartItemQuery = "SELECT * FROM cartItems WHERE cart_id = ?";
-              db.all(
-                cartItemQuery,
-                [cartId],
-                (err: Error | null, itemRows: any[]) => {
-                  if (err) {
-                    reject(err);
-                    return;
-                  }
-                  itemRows.forEach(function (itemRow) {
-                    // Find the product information for each row
-                    const findProductsQuery =
-                      "SELECT * FROM products WHERE model = ?";
-                    db.get(
-                      findProductsQuery,
-                      [itemRow.product_model],
-                      (err: Error | null, product: Product) => {
-                        if (err) {
-                          reject(err);
-                          return;
-                        }
-                        // Push the new product found in the cart.products[] list
-                        cart.products.push(
-                          new ProductInCart(
-                            itemRow.product_model,
-                            itemRow.quantity_in_cart,
-                            product.category,
-                            product.sellingPrice
-                          )
-                        );
-                      }
-                    );
-                  });
+              const getCartItemsQuery =
+                "SELECT ci.quantity_in_cart, p.model, p.category, p.sellingPrice FROM cartItems ci, products p WHERE ci.product_model = p.model AND ci.cart_id = ?";
+              db.all(getCartItemsQuery, [cartId], (err: Error | null, productRows: any[]) => {
+                if (err) {
+                  reject(err);
+                  return;
                 }
-              );
-
-              // Push the new cart found in the carts[] list
-              const tmpCart = new Cart(
-                cart.customer,
-                cart.paid,
-                cart.paymentDate,
-                cart.total,
-                cart.products
-              );
-
-              carts.push(tmpCart);
+  
+                cart.products = productRows.map(productRow =>
+                  new ProductInCart(
+                    productRow.model,
+                    productRow.quantity_in_cart,
+                    productRow.category,
+                    productRow.sellingPrice
+                  )
+                );
+  
+                resolve(cart);
+              });
             });
-
-            resolve(carts);
-            return;
-          }
+          });
+  
+          // Wait for all cart product fetching promises to complete
+          Promise.all(cartPromises)
+            .then(fetchedCarts => {
+              carts = fetchedCarts;
+              resolve(carts);
+            })
+            .catch(err => {
+              reject(err);
+            });
         });
       } catch (error) {
         reject(error);
-        return;
       }
     });
   }
