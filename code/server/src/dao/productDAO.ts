@@ -315,7 +315,7 @@ class ProductDAO {
 										reject(err)
 									}
 									else {
-										const sql = "DELETE products WHERE model = ?"
+										const sql = "DELETE FROM products WHERE model = ?"
 										db.run(sql, [model], (err: Error | null) => {
 											if (err) {
 												reject(err)
