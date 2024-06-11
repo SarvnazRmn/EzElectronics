@@ -303,12 +303,28 @@ class ProductDAO {
 					if (!model) {
 						reject(new ProductNotFoundError())
                     } else {
-						const sql = "DELETE FROM products WHERE model = ?"
+						const sql = "DELETE FROM reviews WHERE model = ?"
 						db.run(sql, [model], (err: Error | null) => {
 							if (err) {
 								reject(err)
 							}
-							else resolve(true);
+							else {
+								const sql = "DELETE FROM cartItems WHERE product_model = ?"
+								db.run(sql, [model], (err: Error | null) => {
+									if (err) {
+										reject(err)
+									}
+									else {
+										const sql = "DELETE products WHERE model = ?"
+										db.run(sql, [model], (err: Error | null) => {
+											if (err) {
+												reject(err)
+											}
+											else resolve(true);
+										})
+									}
+								})
+							}
 						})
 					}
                 })
@@ -322,12 +338,28 @@ class ProductDAO {
 	deleteAllProducts(): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             try {
-                const sql = "DELETE FROM products"
+                const sql = "DELETE FROM reviews"
                 db.run(sql, [], (err: Error | null) => {
                     if (err) {
 						reject(err)
                     }
-                    else resolve(true);
+                    else {
+						const sql = "DELETE FROM cartItems"
+						db.run(sql, [], (err: Error | null) => {
+							if (err) {
+								reject(err)
+							}
+							else {
+								const sql = "DELETE FROM products"
+								db.run(sql, [], (err: Error | null) => {
+									if (err) {
+										reject(err)
+									}
+									else resolve(true);
+								})
+							}
+						})
+					}
                 })
             } catch (error) {
                 reject(error)
