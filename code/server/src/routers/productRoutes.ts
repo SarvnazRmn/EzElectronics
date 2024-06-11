@@ -155,7 +155,7 @@ class ProductRoutes {
 			query("model").optional({ nullable: true }).isString().isLength({ min: 1 }),
 		    query("category").optional({ nullable: true }).isString().isIn(["Smartphone", "Laptop", "Appliance"]), 
 			this.errorHandler.validateRequest, 
-			this.authenticator.isAdminOrManager,
+			this.authenticator.isCustomer,
             (req: any, res: any, next: any) => this.controller.getAvailableProducts(req.query.grouping, req.query.category, req.query.model)
                 .then((products: any/*Product[]*/) => res.status(200).json(products))
                 .catch((err) => next(err))
