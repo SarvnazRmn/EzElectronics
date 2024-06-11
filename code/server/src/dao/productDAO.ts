@@ -11,16 +11,16 @@ class ProductDAO {
         return new Promise<boolean>((resolve, reject) => {
             try {
 				const currentD: Date = new Date();
+				currentD.setHours(12, 0, 0, 0);
 				if (!arrivalDate) {
 					arrivalDate = currentD.toISOString().split('T')[0];
 				}
 				const arrivalD: Date = new Date(arrivalDate);
-				currentD.setHours(0, 0, 0, 0);
 				if (arrivalD > currentD) {
 					reject(new ProductInvalidDate())
 				}
                 const sql = "INSERT INTO products(model, category, quantity, details, sellingPrice, arrivalDate) VALUES(?, ?, ?, ?, ?, ?)"
-                db.get(sql, [model, category, quantity, details, sellingPrice, arrivalDate], (err: Error | null) => {
+                db.run(sql, [model, category, quantity, details, sellingPrice, arrivalDate], (err: Error | null) => {
                     if (err) {
                         if (err.message.includes("UNIQUE constraint failed: product.model")) reject(new ProductAlreadyExistsError())
                         reject(err)
@@ -42,16 +42,16 @@ class ProductDAO {
                     if (err) {
 						reject(err)
                     }
-					if (!row.quantity) {
+					if (!row) {
 						reject(new ProductNotFoundError())
 					}
 					const currentD: Date = new Date();
+					currentD.setHours(12, 0, 0, 0);
 					if (!changeDate) {
 						changeDate = currentD.toISOString().split('T')[0];
 					}
 					const changeD: Date = new Date(changeDate);
 					const arrivalD: Date = new Date(row.arrivalDate);
-					currentD.setHours(0, 0, 0, 0);
 					if (changeD < arrivalD) {
 						reject(new ProductInvalidDate())
 					}
@@ -59,8 +59,8 @@ class ProductDAO {
 						reject(new ProductInvalidDate())
 					}
                     else {
-						const sql = "UPDATE products SET quantity = ?, arrivalDate = changeDate WHERE model = ?"
-						db.get(sql, [newQuantity, changeDate, model], (err: Error | null) => {
+						const sql = "UPDATE products SET quantity = quantity + ?, arrivalDate = ? WHERE model = ?"
+						db.run(sql, [newQuantity, changeDate, model], (err: Error | null) => {
 							if (err) {
 								reject(err)
 							}
@@ -83,7 +83,7 @@ class ProductDAO {
                     if (err) {
 						reject(err)
                     }
-					if (!row.quantity) {
+					if (!row) {
 						reject(new ProductNotFoundError())
 					}
 					if (row.quantity == 0) {
@@ -93,12 +93,12 @@ class ProductDAO {
 						reject(new LowProductStockError())
 					}
 					const currentD: Date = new Date();
+					currentD.setHours(12, 0, 0, 0);
 					if (!sellingDate) {
 						sellingDate = currentD.toISOString().split('T')[0];
 					}
 					const sellingD: Date = new Date(sellingDate);
 					const arrivalD: Date = new Date(row.arrivalDate);
-					currentD.setHours(0, 0, 0, 0);
 					if (sellingD < arrivalD) {
 						reject(new ProductInvalidDate())
 					}
@@ -107,7 +107,7 @@ class ProductDAO {
 					}
                     else {
 						const sql = "UPDATE products SET quantity = quantity - ? WHERE model = ?"
-						db.get(sql, [quantity, model], (err: Error | null) => {
+						db.run(sql, [quantity, model], (err: Error | null) => {
 							if (err) {
 								reject(err)
 							}
@@ -127,7 +127,7 @@ class ProductDAO {
             try {
 				let products: Product[] = [];
 				if (grouping == "model") {
-					if (model == "" || category != "") {
+					if (!model || category) {
 						reject(new ProductInvalidGrouping())
 					}
 					const sql = "SELECT * FROM products WHERE model = ?"
@@ -152,7 +152,7 @@ class ProductDAO {
 						}
 					})
 				} else if (grouping == "category") {
-					if (model != "" || category == "") {
+					if (model || !category) {
 							reject(new ProductInvalidGrouping())
 					}
 					const sql = "SELECT * FROM products WHERE category = ?"
@@ -176,7 +176,7 @@ class ProductDAO {
 						}
 					})
 				} else {
-					if (model != "" || category != "") {
+					if (model || category) {
 							reject(new ProductInvalidGrouping())
 					}
 					const sql = "SELECT * FROM products"
@@ -212,7 +212,7 @@ class ProductDAO {
             try {
 				let products: Product[] = [];
 				if (grouping == "model") {
-					if (model == "" || category != "") {
+					if (!model || category) {
 							reject(new ProductInvalidGrouping())
 					}
 					const sql = "SELECT * FROM products WHERE model = ? AND quantity > 0"
@@ -237,7 +237,7 @@ class ProductDAO {
 						}
 					})
 				} else if (grouping == "category") {
-					if (model != "" || category == "") {
+					if (model || !category) {
 							reject(new ProductInvalidGrouping())
 					}
 					const sql = "SELECT * FROM products WHERE category = ? AND quantity > 0"
@@ -261,7 +261,7 @@ class ProductDAO {
 						}
 					})
 				} else {
-					if (model != "" || category != "") {
+					if (model || category) {
 							reject(new ProductInvalidGrouping())
 					}
 					const sql = "SELECT * FROM products WHERE quantity > 0"
@@ -304,7 +304,7 @@ class ProductDAO {
 						reject(new ProductNotFoundError())
                     } else {
 						const sql = "DELETE FROM products WHERE model = ?"
-						db.get(sql, [model], (err: Error | null) => {
+						db.run(sql, [model], (err: Error | null) => {
 							if (err) {
 								reject(err)
 							}
@@ -323,7 +323,7 @@ class ProductDAO {
         return new Promise<boolean>((resolve, reject) => {
             try {
                 const sql = "DELETE FROM products"
-                db.get(sql, [], (err: Error | null) => {
+                db.run(sql, [], (err: Error | null) => {
                     if (err) {
 						reject(err)
                     }
