@@ -1,4 +1,4 @@
-import { describe, test, expect, jest } from "@jest/globals";
+import { describe, test, expect, jest, beforeEach } from "@jest/globals";
 
 import db from "../../src/db/db";
 import { Database } from "sqlite3"
@@ -14,9 +14,9 @@ import {
     ProductInvalidDate, 
     ProductInvalidGrouping 
 } from "../../src/errors/productError";
-import { error } from "console";
+import { error, log } from "console";
 
-jest.mock("../../src/db/db");
+jest.mock("../../src/db/db.ts");
 
 describe("ProductDAO", () => {
     let productDAO = new ProductDAO();
@@ -298,7 +298,7 @@ describe("ProductDAO", () => {
 
             const result = await productDAO.getProducts("model", null, "model1");
             expect(result).toEqual([new Product(100, "model1", Category.LAPTOP, "2024-06-06", "details1", 10)]);
-
+            
             mockDBAll.mockRestore();
         });
 
