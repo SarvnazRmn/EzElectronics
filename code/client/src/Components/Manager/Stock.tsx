@@ -335,6 +335,7 @@ function Stock() {
                                 }}>Product operations</Button>
                                 <Button variant="outline-success" onClick={() => {
                                     setCurrentModel(product.model)
+                                    setReviews([])
                                     setShowReviews(true)
                                 }}>See product reviews</Button>
                                 <Button variant="danger" onClick={() => {
