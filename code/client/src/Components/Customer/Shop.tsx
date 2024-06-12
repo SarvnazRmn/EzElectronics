@@ -203,6 +203,7 @@ function Shop() {
                                         }} >Add product to cart</Button>
                                         <Button variant="outline-success" onClick={() => {
                                             setCurrentModel(product.model)
+                                            setReviews([]);
                                             setShowReviews(true)
                                         }} >See product reviews</Button>
                                     </Card.Body>

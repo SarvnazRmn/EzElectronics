@@ -1,3 +1,4 @@
+import { ProductReview } from "../components/review";
 import { User } from "../components/user";
 import ReviewDAO from "../dao/reviewDAO";
 
@@ -19,7 +20,7 @@ class ReviewController {
      * @returns A Promise that resolves to nothing
      */
 
-    async addReview(model: string, user: User, score: number, comment: string) /**:Promise<void> */ {
+    async addReview(model: string, user: User, score: number, comment: string) :Promise<void> {
         return this.dao.addReview(model, user, score, comment)
     }
 
@@ -30,7 +31,7 @@ class ReviewController {
      */
 
 
-    async getProductReviews(model: string) /**:Promise<ProductReview[]> */ {
+    async getProductReviews(model: string) :Promise<ProductReview[]> {
         return this.dao.getProductReviews(model)
      }
     /**
@@ -41,7 +42,7 @@ class ReviewController {
      */
 
 
-    async deleteReview(model: string, user: User) /**:Promise<void> */ {
+    async deleteReview(model: string, user: User) :Promise<void> {
         this.dao.deleteReview(model, user)
      }
     /**
@@ -51,7 +52,7 @@ class ReviewController {
      */
 
 
-    async deleteReviewsOfProduct(model: string) /**:Promise<void> */ {
+    async deleteReviewsOfProduct(model: string) :Promise<void> {
         this.dao.deleteReviewsOfProduct(model)
      }
 

@@ -19,7 +19,7 @@ class ReviewDAO {
   */
 
     
-    addReview(model: string, user: User, score: number, comment: string) /**:Promise<void> */ {
+    addReview(model: string, user: User, score: number, comment: string) :Promise<void> {
         return new Promise<void>((resolve, reject) => {
             
             try {
@@ -51,35 +51,34 @@ class ReviewDAO {
             }
 
 
-getProductReviews(model: string): Promise<ProductReview[]> {
-return new Promise<ProductReview[]>((resolve, reject) => {
-    try {
-        const sql = "SELECT * FROM reviews WHERE model = ?";
-        db.all(sql, [model], (err: Error | null, rows: any[]) => {
-            if (err) {
-                reject(err);
-                return;
+    getProductReviews(model: string): Promise<ProductReview[]> {
+        return new Promise<ProductReview[]>((resolve, reject) => {
+            try {
+                const sql = "SELECT * FROM reviews WHERE model = ?";
+                db.all(sql, [model], (err: Error, rows: any[]) => {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+                    if (!rows || rows.length === 0) {
+                        reject(new NoReviewProductError());
+                        return;
+                    }
+                    const reviews: ProductReview[] = rows.map(row => new ProductReview(
+                        row.model,
+                        row.user,
+                        row.score,
+                        row.date,
+                        row.comment
+                    ));
+                    resolve(reviews);
+                });
+            } catch (error) {
+                reject(error);
             }
-            if (!rows|| rows.length === 0) {
-                reject(new NoReviewProductError())
-                return
-                }
-            const reviews: ProductReview[] = rows.map(row => new ProductReview(
-                row.model,
-                row.user,
-                row.score,
-                row.date,
-                row.comment
-            ));
-            resolve(reviews);
         });
-    } catch (error) {
-        reject(error);
     }
-        });
-}
-
-
+            
 deleteReview(model: string, user: User) :Promise<void> { 
     return new Promise<void>((resolve, reject) => {
         try {
