@@ -1,3 +1,4 @@
+import  {Product}  from "../components/product";
 import ProductDAO from "../dao/productDAO";
 
 /**
