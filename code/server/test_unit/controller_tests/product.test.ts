@@ -3,8 +3,9 @@ import ProductController from '../../src/controllers/productController';
 import ProductDAO from '../../src/dao/productDAO';
 import { Product, Category } from "../../src/components/product";
 
-jest.mock('../../src/dao/productDAO');
+jest.mock("../../src/dao/productDAO");
 
+/*
 const mockProduct = new Product (
     100,
     "mockModel",
@@ -13,27 +14,18 @@ const mockProduct = new Product (
     "details",
     10
 )
-
-describe('ProductController', () => {
-    let productController: ProductController;
-
-    beforeEach(() => {
-        // Clear all instances and calls to constructor and all methods of ProductDAO mock
-        jest.clearAllMocks();
-        jest.resetAllMocks();
-        // Initialize ProductController with mocked ProductDAO
-        productController = new ProductController();
-    });
+*/
 
     test('registerProducts - It should return true', async () => {
-        const model = 'model1';
-        const category = 'Laptop';
+        const model = "model1";
+        const category = "Laptop";
         const quantity = 10;
-        const details = 'Test details';
+        const details = "Test details";
         const sellingPrice = 100;
-        const arrivalDate = '2024-06-06';
+        const arrivalDate = "2024-06-06";
 
         jest.spyOn(ProductDAO.prototype, 'registerProducts').mockResolvedValueOnce(true);
+        const productController = new ProductController();
 
         const response = await productController.registerProducts(model, category, quantity, details, sellingPrice, arrivalDate);
 
@@ -48,6 +40,7 @@ describe('ProductController', () => {
         const changeDate = '2024-06-10';
 
         jest.spyOn(ProductDAO.prototype, 'changeProductQuantity').mockResolvedValueOnce(newQuantity);
+        const productController = new ProductController();
 
         const response = await productController.changeProductQuantity(model, newQuantity, changeDate);
 
@@ -62,6 +55,7 @@ describe('ProductController', () => {
         const sellingDate = '2024-06-10';
 
         jest.spyOn(ProductDAO.prototype, 'sellProduct').mockResolvedValueOnce(true);
+        const productController = new ProductController();
 
         const response = await productController.sellProduct(model, quantity, sellingDate);
 
@@ -79,7 +73,8 @@ describe('ProductController', () => {
         ];
 
         jest.spyOn(ProductDAO.prototype, 'getProducts').mockResolvedValueOnce(testProducts);
-
+        const productController = new ProductController();
+        
         const response = await productController.getProducts(grouping, category, null);
 
         expect(ProductDAO.prototype.getProducts).toHaveBeenCalledTimes(1);
@@ -91,6 +86,7 @@ describe('ProductController', () => {
         const model = 'model1';
 
         jest.spyOn(ProductDAO.prototype, 'deleteProduct').mockResolvedValueOnce(true);
+        const productController = new ProductController();
 
         const response = await productController.deleteProduct(model);
 
@@ -101,11 +97,12 @@ describe('ProductController', () => {
 
     test('deleteAllProducts - It should return true if all products are successfully deleted', async () => {
         jest.spyOn(ProductDAO.prototype, 'deleteAllProducts').mockResolvedValueOnce(true);
+        const productController = new ProductController();
 
         const response = await productController.deleteAllProducts();
 
         expect(ProductDAO.prototype.deleteAllProducts).toHaveBeenCalledTimes(1);
         expect(response).toBe(true);
     });
-});
+
 

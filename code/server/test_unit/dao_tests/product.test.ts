@@ -296,8 +296,7 @@ describe("ProductDAO", () => {
                 return {} as Database;
             });
 
-            const result = await productDAO.getProducts("model", null, "model1");
-            expect(result).toEqual([new Product(100, "model1", Category.LAPTOP, "2024-06-06", "details1", 10)]);
+             expect(await productDAO.getProducts("model", null, "model1")).toEqual([new Product(100, "model1", Category.LAPTOP, "2024-06-06", "details1", 10)]);
             
             mockDBAll.mockRestore();
         });
