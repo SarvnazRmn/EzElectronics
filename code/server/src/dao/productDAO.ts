@@ -18,14 +18,22 @@ class ProductDAO {
 				const arrivalD: Date = new Date(arrivalDate);
 				if (arrivalD > currentD) {
 					reject(new ProductInvalidDate())
+					return;
 				}
                 const sql = "INSERT INTO products(model, category, quantity, details, sellingPrice, arrivalDate) VALUES(?, ?, ?, ?, ?, ?)"
                 db.run(sql, [model, category, quantity, details, sellingPrice, arrivalDate], (err: Error | null) => {
                     if (err) {
-                        if (err.message.includes("UNIQUE constraint failed: product.model")) reject(new ProductAlreadyExistsError())
+                        if (err.message.includes("UNIQUE constraint failed: product.model")) {
+							reject(new ProductAlreadyExistsError())
+							return;
+						}
                         reject(err)
+						return;
                     }
-                    else resolve(true);
+                    else {
+						resolve(true);
+						return;
+					}
                 })
             } catch (error) {
                 reject(error)
@@ -41,9 +49,11 @@ class ProductDAO {
                 db.get(sql, [model], (err: Error | null, row: any) => {
                     if (err) {
 						reject(err)
+						return;
                     }
 					if (!row) {
 						reject(new ProductNotFoundError())
+						return;
 					}
 					const currentD: Date = new Date();
 					currentD.setHours(12, 0, 0, 0);
@@ -54,17 +64,23 @@ class ProductDAO {
 					const arrivalD: Date = new Date(row.arrivalDate);
 					if (changeD < arrivalD) {
 						reject(new ProductInvalidDate())
+						return;
 					}
 					if (changeD > currentD) {
 						reject(new ProductInvalidDate())
+						return;
 					}
                     else {
 						const sql = "UPDATE products SET quantity = quantity + ?, arrivalDate = ? WHERE model = ?"
 						db.run(sql, [newQuantity, changeDate, model], (err: Error | null) => {
 							if (err) {
 								reject(err)
+								return;
 							}
-							else resolve(row.quantity + newQuantity);
+							else {
+								resolve(row.quantity + newQuantity);
+								return;
+							}
 						})
 					}
                 })
@@ -82,15 +98,19 @@ class ProductDAO {
                 db.get(sql, [model], (err: Error | null, row: any) => {
                     if (err) {
 						reject(err)
+						return;
                     }
 					if (!row) {
 						reject(new ProductNotFoundError())
+						return;
 					}
 					if (row.quantity == 0) {
 						reject(new EmptyProductStockError())
+						return;
 					}
 					if (row.quantity < quantity) {
 						reject(new LowProductStockError())
+						return;
 					}
 					const currentD: Date = new Date();
 					currentD.setHours(12, 0, 0, 0);
@@ -101,17 +121,23 @@ class ProductDAO {
 					const arrivalD: Date = new Date(row.arrivalDate);
 					if (sellingD < arrivalD) {
 						reject(new ProductInvalidDate())
+						return;
 					}
 					if (sellingD > currentD) {
 						reject(new ProductInvalidDate())
+						return;
 					}
                     else {
 						const sql = "UPDATE products SET quantity = quantity - ? WHERE model = ?"
 						db.run(sql, [quantity, model], (err: Error | null) => {
 							if (err) {
 								reject(err)
+								return;
 							}
-							else resolve(true);
+							else {
+								resolve(true);
+								return;
+							}
 						})
 					}
                 })
@@ -129,14 +155,17 @@ class ProductDAO {
 				if (grouping == "model") {
 					if (!model || category) {
 						reject(new ProductInvalidGrouping())
+						return;
 					}
 					const sql = "SELECT * FROM products WHERE model = ?"
 					db.get(sql, [model], (err: Error | null, row: any) => {
 						if (err) {
 							reject(err)
+							return;
 						}
 						if (!row) {
 							reject(new ProductNotFoundError())
+							return;
 						}
 						else {
 							const product = new Product(
@@ -149,16 +178,19 @@ class ProductDAO {
 								);
 							products.push(product);
 							resolve(products)
+							return;
 						}
 					})
 				} else if (grouping == "category") {
 					if (model || !category) {
 							reject(new ProductInvalidGrouping())
+							return;
 					}
 					const sql = "SELECT * FROM products WHERE category = ?"
 					db.all(sql, [category], (err: Error | null, rows: any[]) => {
 						if (err) {
 							reject(err)
+							return;
 						}
 						else {
 							rows.forEach(function (row) {
@@ -173,16 +205,19 @@ class ProductDAO {
 								products.push(product);
 							}); 
 							resolve(products)
+							return;
 						}
 					})
 				} else {
 					if (model || category) {
 							reject(new ProductInvalidGrouping())
+							return;
 					}
 					const sql = "SELECT * FROM products"
 					db.all(sql, [], (err: Error | null, rows: any[]) => {
 						if (err) {
 							reject(err)
+							return;
 						}
 						else {
 							rows.forEach(function (row) {
@@ -197,6 +232,7 @@ class ProductDAO {
 								products.push(product);
 							}); 
 							resolve(products)
+							return;
 						}
 					})
 				}
@@ -214,14 +250,17 @@ class ProductDAO {
 				if (grouping == "model") {
 					if (!model || category) {
 							reject(new ProductInvalidGrouping())
+							return;
 					}
 					const sql = "SELECT * FROM products WHERE model = ? AND quantity > 0"
 					db.get(sql, [model], (err: Error | null, row: any) => {
 						if (err) {
 							reject(err)
+							return;
 						}
 						if (!row) {
 							reject(new ProductNotFoundError())
+							return;
 						}
 						else {
 							const product = new Product(
@@ -234,16 +273,19 @@ class ProductDAO {
 								);
 							products.push(product);
 							resolve(products)
+							return;
 						}
 					})
 				} else if (grouping == "category") {
 					if (model || !category) {
 							reject(new ProductInvalidGrouping())
+							return;
 					}
 					const sql = "SELECT * FROM products WHERE category = ? AND quantity > 0"
 					db.all(sql, [category], (err: Error | null, rows: any[]) => {
 						if (err) {
 							reject(err)
+							return;
 						}
 						else {
 							rows.forEach(function (row) {
@@ -258,16 +300,19 @@ class ProductDAO {
 								products.push(product);
 							}); 
 							resolve(products)
+							return;
 						}
 					})
 				} else {
 					if (model || category) {
 							reject(new ProductInvalidGrouping())
+							return;
 					}
 					const sql = "SELECT * FROM products WHERE quantity > 0"
 					db.all(sql, [], (err: Error | null, rows: any[]) => {
 						if (err) {
 							reject(err)
+							return;
 						}
 						else {
 							rows.forEach(function (row) {
@@ -282,6 +327,7 @@ class ProductDAO {
 								products.push(product);
 							}); 
 							resolve(products)
+							return;
 						}
 					})
 				}
@@ -299,28 +345,36 @@ class ProductDAO {
                 db.get(sql, [model], (err: Error | null, model: any) => {
                     if (err) {
 						reject(err)
+						return;
                     }
 					if (!model) {
 						reject(new ProductNotFoundError())
+						return;
                     } else {
 						const sql = "DELETE FROM reviews WHERE model = ?"
 						db.run(sql, [model], (err: Error | null) => {
 							if (err) {
 								reject(err)
+								return;
 							}
 							else {
 								const sql = "DELETE FROM cartItems WHERE product_model = ?"
 								db.run(sql, [model], (err: Error | null) => {
 									if (err) {
 										reject(err)
+										return;
 									}
 									else {
 										const sql = "DELETE FROM products WHERE model = ?"
 										db.run(sql, [model], (err: Error | null) => {
 											if (err) {
 												reject(err)
+												return;
 											}
-											else resolve(true);
+											else {
+												resolve(true);
+												return;
+											}
 										})
 									}
 								})
@@ -342,20 +396,26 @@ class ProductDAO {
                 db.run(sql, [], (err: Error | null) => {
                     if (err) {
 						reject(err)
+						return;
                     }
                     else {
 						const sql = "DELETE FROM cartItems"
 						db.run(sql, [], (err: Error | null) => {
 							if (err) {
 								reject(err)
+								return;
 							}
 							else {
 								const sql = "DELETE FROM products"
 								db.run(sql, [], (err: Error | null) => {
 									if (err) {
 										reject(err)
+										return;
 									}
-									else resolve(true);
+									else {
+										resolve(true);
+										return;
+									}
 								})
 							}
 						})
