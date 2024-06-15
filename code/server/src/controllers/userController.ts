@@ -1,6 +1,7 @@
 import { User } from "../components/user"
 import UserDAO from "../dao/userDAO"
 import { UserNotAdminError, UserIsAdminError, UnauthorizedUserError } from "../errors/userError";
+import * as userError from '../errors/userError';
 
 
 /**
@@ -40,7 +41,7 @@ class UserController {
      * @param role - The role of the users to retrieve. It can only be one of the three allowed types ("Manager", "Customer", "Admin")
      * @returns A Promise that resolves to an array of users with the specified role.
      */
-    async getUsersByRole(role: string) /**:Promise<User[]> */ { 
+    async getUsersByRole(role: string) :Promise<User[]> { 
         return await this.dao.getUsersByRole(role);
     }
 
@@ -53,9 +54,13 @@ class UserController {
      * @returns A Promise that resolves to the user with the specified username.
      */
     async getUserByUsername(user: User, username: string) :Promise<User> {
-        return await this.dao.getUserByUsername(username);
-        
-     }
+        if (user.name === username || user.role === "Admin"){
+            return await this.dao.getUserByUsername(username);
+        }
+        else {
+            throw new userError.UnauthorizedUserError();
+        }   
+    }
 
     /**
      * Deletes a specific user
@@ -65,8 +70,17 @@ class UserController {
      * @param username - The username of the user to delete. The user must exist.
      * @returns A Promise that resolves to true if the user has been deleted.
      */
-    async deleteUser(user: User, username: string) { 
-        return await this.dao.deleteUser(username);
+    async deleteUser(user: User, username: string) {
+        let userToDelete: User = await this.dao.getUserByUsername(username);
+        if (user.username != username && user.role != "Admin") {
+			throw new UserNotAdminError();
+		}
+        if (user.role === "Admin" && userToDelete.role === "Admin" && user.name !== userToDelete.name ) {
+			throw new UserIsAdminError();
+		}
+        else {
+            return await this.dao.deleteUser(username);
+        }   
     }
 
     /**
@@ -88,7 +102,17 @@ class UserController {
      * @returns A Promise that resolves to the updated user
      */
     async updateUserInfo(user: User, name: string, surname: string, address: string, birthdate: string, username: string) :Promise<User> {
-        return await this.dao.updateUserInfo(username, name, surname, address, birthdate);
+        let usertoUpdate: User = await this.dao.getUserByUsername(username);
+		if (user.username != username && user.role != "Admin") {
+			throw new UserNotAdminError();
+		}
+		if (user.role === "Admin" && usertoUpdate.role === "Admin" && user.username != username) {
+			throw new UnauthorizedUserError();
+		}
+        else {
+            await this.dao.updateUserInfo(username, name, surname, address, birthdate);
+            return this.dao.getUserByUsername(username);
+        }
     }
 }
 

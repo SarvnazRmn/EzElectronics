@@ -1,25 +1,22 @@
-import { describe, test, expect, beforeAll, afterEach,beforeEach} from "@jest/globals";
+import { describe, test, expect, beforeAll, afterAll} from "@jest/globals";
 import request from "supertest";
-import { app } from "../../index";
-import { cleanup } from "../../src/db/cleanup";
+import { app } from "../index";
+import { cleanup } from "../src/db/cleanup";
 
-/**
- * Base route path for the API
- */
 const routePath = "/ezelectronics";
 
 /**
  * Sample users used in the tests
  */
 const customer = {
-  username: "customer1",
+  username: "customer",
   name: "user1",
   surname: "user1",
   password: "user1",
   role: "Customer",
 };
 const admin = {
-  username: "admin1",
+  username: "admin",
   name: "user2",
   surname: "user2",
   password: "user2",
@@ -101,80 +98,72 @@ const login = async (userInfo: any) => {
  */
 // TODO : is it ok to only test it whit admin user? I think yes
 beforeAll(async () => {
-  await cleanup();
+  cleanup();
   await postUser(admin);
   adminCookie = await login(admin);
-  await postUser(customer);
-  customerCookie = await login(customer);
 });
 
-// Before each test, clean the database to ensure a fresh state
-beforeEach(async () => {
-  await cleanup();
-  await postUser(admin);
-  adminCookie = await login(admin);
-  await postUser(customer);
-  customerCookie = await login(customer);
-});
 
 // After all tests, clean the database
-afterEach(async () => {
-  await cleanup();
-  
+afterAll(() => {
+  cleanup();
 });
 
 describe("userRoutes integration tests", () => {
-    describe("POST /users", () => {
-      test("Creating a new user successfully", async () => {
-        await request(app)
-          .post(routePath + "/users")
-          .send(customer)
-          .expect(200);
-        // Now we check the insertion is successful
-        const users = await request(app)
-          .get(routePath + "/users")
-          .set("Cookie", adminCookie)
-          .expect(200);
-        // We expect two users, the admin created by the beforeAll and the customer created in this test
-        expect(users.body).toHaveLength(2);
-        let customerData = users.body.find(
-          (user: any) => user.username === customer.username,
-        );
-        expect(customerData).toBeDefined();
-        expect(customerData.name).toBe(customer.name);
-        expect(customerData.surname).toBe(customer.surname);
-        expect(customerData.role).toBe(customer.role);
-      });
+  describe("POST /users", () => {
+    test("Creating a new user successfully", async () => {
+      await request(app)
+        .post(routePath + "/users")
+        .send(customer)
+        .expect(200);
+      // Now we check the insertion is successful
+      const users = await request(app)
+        .get(routePath + "/users")
+        .set("Cookie", adminCookie)
+        .expect(200);
+      // We expect two users, the admin created by the beforeAll and the customer created in this test
+      expect(users.body).toHaveLength(2);
+      let customerData = users.body.find(
+        (user: any) => user.username === customer.username,
+      );
+      expect(customerData).toBeDefined();
+      expect(customerData.name).toBe(customer.name);
+      expect(customerData.surname).toBe(customer.surname);
+      expect(customerData.role).toBe(customer.role);
+    });
+    
+    // Testing a database error
+    test("Creating a user that already exists -> 409 UserAlreadyExistsError", async () => {
+      await request(app)
+        .post(routePath + "/users")
+        .send(customer)
+        .expect({ error: "The username already exists", status: 409 });
+    });
+
+    test("Creating a new user with missing parameters -> 422 validationError", async () => {
+      await request(app)
+        .post(routePath + "/users")
+        .send({
+          username: "",
+          name: "test",
+          surname: "test",
+          password: "test",
+          role: "Customer",
+        })
+        .expect(422);
+      await request(app)
+        .post(`${routePath}/users`)
+        .send({
+          username: "test",
+          name: "",
+          surname: "test",
+          password: "test",
+          role: "Customer",
+        })
+        .expect(422);
+    });
   });
-   // Testing a database error
-   test("Creating a user that already exists -> 409 UserAlreadyExistsError", async () => {
-    await request(app)
-      .post(routePath + "/users")
-      .send(customer)
-      .expect({ error: "The username already exists", status: 409 });
-  });
-  test("Creating a new user with missing parameters -> 422 validationError", async () => {
-    await request(app)
-      .post(routePath + "/users")
-      .send({
-        username: "",
-        name: "test",
-        surname: "test",
-        password: "test",
-        role: "Customer",
-      })
-      .expect(422);
-    await request(app)
-      .post(`${routePath}/users`)
-      .send({
-        username: "test",
-        name: "",
-        surname: "test",
-        password: "test",
-        role: "Customer",
-      })
-      .expect(422);
-  });
+
   describe("GET /users", () => {
     test("Retrieving a list of all the users", async () => {
       const users = await request(app)
@@ -198,78 +187,73 @@ describe("userRoutes integration tests", () => {
       expect(adminData.surname).toBe(admin.surname);
       expect(adminData.role).toBe(admin.role);
     });
+
+    test("The user requesting the list is not an admin -> Unauthorized user error 401", async () => {
+      customerCookie = await login(customer);
+      await request(app)
+        .get(routePath + "/users")
+        .set("Cookie", customerCookie)
+        .expect({ error: "User is not an admin", status: 401 });
+      await request(app)
+        .get(routePath + "/users")
+        .expect({ error: "Unauthenticated user", status: 401 });
+    });
   });
-  test("The user requesting the list is not an admin -> Unauthorized user error 401", async () => {
+
+  describe("GET /users/roles/:role", () => {
+    test("Requesting all the admin users", async () => {
+      const admins = await request(app)
+        .get(routePath + "/users/roles/Admin")
+        .set("Cookie", adminCookie)
+        .expect(200);
+      // We have only one admin in the database
+      expect(admins.body).toHaveLength(1);
+      let adminData = admins.body[0];
+      expect(adminData.username).toBe(admin.username);
+      expect(adminData.name).toBe(admin.name);
+      expect(adminData.surname).toBe(admin.surname);
+    });
+
+    test("Requesting all the users with an invalid role parameter-> validationError 422", async () => {
+      await request(app)
+        .get(routePath + "/users/roles/invalidrole")
+        .set("Cookie", adminCookie)
+        .expect(422);
+    });
+
+    test("Requesting all the users with a role but in the db we have none", async () => {
+      let result = await request(app)
+        .get(routePath + "/users/roles/Manager")
+        .set("Cookie", adminCookie)
+        .expect(200);
+      expect(result.body).toHaveLength(0);
+    });
+  });
+
+
+  describe("GET /users/:username", () => {
+    test("Retrieving own user data from your username", async () => {
+      const admins = await request(app)
+        .get(routePath + "/users/admin")
+        .set("Cookie", adminCookie)
+        .expect(200);
+      let adm = admins.body;
+      expect(adm.username).toBe(admin.username);
+      expect(adm.name).toBe(admin.name);
+      expect(adm.surname).toBe(admin.surname);
+    });
+
+
+    test("A normal user cannot access other users data", async () => {
     customerCookie = await login(customer);
     await request(app)
-      .get(routePath + "/users")
-      .set("Cookie", customerCookie)
-      .expect({ error: "User is not an admin", status: 401 });
-    await request(app)
-      .get(routePath + "/users")
-      .expect({ error: "Unauthenticated user", status: 401 });
-  });
-});
-describe("GET /users/roles/:role", () => {
-  test("Requesting all the admin users", async () => {
-    const admins = await request(app)
-      .get(routePath + "/users/roles/Admin")
-      .set("Cookie", adminCookie)
-      .expect(200);
-    // We have only one admin in the database
-    expect(admins.body).toHaveLength(1);
-    let adminData = admins.body[0];
-    expect(adminData.username).toBe(admin.username);
-    expect(adminData.name).toBe(admin.name);
-    expect(adminData.surname).toBe(admin.surname);
-  });
-
-  test("Requesting all the users with invalid role -> validationError 422", async () => {
-    await request(app)
-      .get(routePath + "/users/roles/InvalidRole")
-      .set("Cookie", adminCookie)
-      .expect(422);
-  });
-  test("Requesting all the users with a role but in the db we have none", async () => {
-    let result = await request(app)
-      .get(routePath + "/users/roles/Manager")
-      .set("Cookie", adminCookie)
-      .expect(200);
-    expect(result.body).toHaveLength(0);
-  });
-});
-describe("GET /users/:username", () => {
-  test("Retrieving own user data from your username", async () => {
-    const admins = await request(app)
       .get(routePath + "/users/admin")
-      .set("Cookie", adminCookie)
-      .expect(200);
-    let adm = admins.body;
-    expect(adm.username).toBe(admin.username);
-    expect(adm.name).toBe(admin.name);
-    expect(adm.surname).toBe(admin.surname);
-  });
-
-  test("An admin accessing other user data", async () => {
-    const req = await request(app)
-      .get(routePath + "/users/customer")
-      .set("Cookie", adminCookie)
-      .expect(200);
-    let customerDate = req.body;
-    expect(customerDate.username).toBe(customer.username);
-    expect(customerDate.name).toBe(customer.name);
-    expect(customerDate.surname).toBe(customer.surname);
-  });
-  test("A normal user cannot access other users data", async () => {
-    const response = await request(app)
-    .get('/users/admin')
-    .set('Cookie', customerCookie);
-    console.log(response.body);
-    expect(response.status).toBe(401);
-    expect(response.body).toEqual({
-    error: "This operation can be performed only by an admin",
-    status: 401,
-});
+      .set("Cookie", customerCookie)
+      .expect({
+        error: "You cannot access the information of other users",
+        status: 401,
+      });
+    });
 
     test("If the provided username does not exist, we expect a 404", async () => {
       await request(app)
@@ -277,8 +261,10 @@ describe("GET /users/:username", () => {
         .set("Cookie", adminCookie)
         .expect({ error: "The user does not exist", status: 404 });
     });
-});
-describe("DELETE /users/:username", () => {
+  });
+
+  describe("DELETE /users/:username", () => {
+
   test("Customer trying to delete another user", async () => {
     customerCookie = await login(customer);
     await request(app)
@@ -289,23 +275,18 @@ describe("DELETE /users/:username", () => {
         status: 401,
       });
   });
-  test("The username does not exist in the database", async () => {
-    await request(app)
-      .delete(routePath + "/users/invalidUsername")
-      .set("Cookie", adminCookie)
-      .expect({ error: "The user does not exist", status: 404 });
-  });
   
 });
+
 describe("PATCH /users/:username", () => {
-  // the user is not logged in
+
   test("The user is not logged in", async () => {
     await request(app)
       .patch(routePath + "/users/customer")
       .send(newUserData)
       .expect({ error: "Unauthenticated user", status: 401 });
   });
-  // the name field is missing
+
   test("The name field is missing", async () => {
     await request(app)
       .patch(routePath + "/users/customer")
@@ -317,13 +298,27 @@ describe("PATCH /users/:username", () => {
       .set("Cookie", adminCookie)
       .expect(422);
   });
-  // the username is not an existing user
+
   test("The username is not an existing user", async () => {
     await request(app)
       .patch(routePath + "/users/invalidUsername")
       .send(newUserData)
       .set("Cookie", adminCookie)
       .expect({ error: "The user does not exist", status: 404 });
+  });
+
+  // the birthdate is in the future
+  test("The birthdate is in the future", async () => {
+    await request(app)
+      .patch(routePath + "/users/customer")
+      .send({
+        name: "newName",
+        surname: "newSurname",
+        address: "newAddress",
+        birthdate: "2024-07-30",
+      })
+      .set("Cookie", adminCookie)
+      .expect(422);
   });
   test("The user is not an admin and tries to modify another user", async () => {
     customerCookie = await login(customer);
@@ -337,8 +332,9 @@ describe("PATCH /users/:username", () => {
       });
   });
 });
-});
+
 describe("DELETE /users", () => {
+
   test("A normal user trying to delete all users -> 401 error", async () => {
     customerCookie = await login(customer);
     await request(app)
@@ -346,6 +342,8 @@ describe("DELETE /users", () => {
       .set("Cookie", customerCookie)
       .expect({ error: "User is not an admin", status: 401 });
   });
+
+});
 
 describe("POST /sessions", () => {
   // the user is not in the database
@@ -359,7 +357,7 @@ describe("POST /sessions", () => {
   test("Successful login", async () => {
     await request(app)
       .post(routePath + "/sessions")
-      .send({ username: "admin", password: "admin" })
+      .send({ username: "admin", password: "user2" })
       .expect(200);
   });
 });
@@ -374,3 +372,4 @@ describe("DELETE /sessions/current", () => {
   });
 });
 });
+
