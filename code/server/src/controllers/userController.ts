@@ -75,7 +75,7 @@ class UserController {
         if (user.username != username && user.role != "Admin") {
 			throw new UserNotAdminError();
 		}
-        if (user.role === "Admin" && userToDelete.role === "Admin") {
+        if (user.role === "Admin" && userToDelete.role === "Admin" && user.name !== userToDelete.name ) {
 			throw new UserIsAdminError();
 		}
         else {
