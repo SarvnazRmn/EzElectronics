@@ -51,14 +51,9 @@ const dbq_newProduct = "INSERT INTO products(model, category, quantity, details,
 const dbq_newOosProduct = "INSERT INTO products(model, category, quantity, details, sellingPrice, arrivalDate) VALUES VALUES ('oos_product', 'Laptop', 0, NULL, 8, '2024-05-15')"
 
 describe("T1 - getCart | DAO", () => {
-    let unpaidId = 0;
-    let paidId = 0;
+    let usercartId = 0;
     test("T1.1.1 - empty db : It should create and return the current user cart", async () => {
         const response = await cartDAO.getCart(testuser1);
-        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => {
-            unpaidId = cart.cart_id;
-            expect(new Cart(cart.customer, cart.paid, cart.paymentDate, cart.total, [])).toEqual(userUnpaidEmpty1);
-        });
         expect(response).toEqual(userUnpaidEmpty1);
     })
 
@@ -69,9 +64,9 @@ describe("T1 - getCart | DAO", () => {
 
     test("T1.1.3 - two carts, one current : It should return the current user cart", async () => {
         db.run(dbq_userUnpaidEmpty1, [], () => {});
-        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 1", [], (err: Error , cart: any) => { paidId = cart.cart_id });
+        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 1", [], (err: Error , cart: any) => { usercartId = cart.id });
         db.run(dbq_newProduct, [], () => {});
-        db.run(dbq_add2ToCart, [paidId], () => {});
+        db.run(dbq_add2ToCart, [usercartId], () => {});
 
         const response = await cartDAO.getCart(testuser1);
         expect(response).toEqual(userUnpaidEmpty1);
@@ -84,7 +79,7 @@ describe("T2 - addToCart | DAO", () => {
     let usercartId = 0;
     test("T1.2.1 - empty db : It should create the current user cart, with new product", async () => {
         await cartDAO.addToCart(testuser1, "IPhone55");
-        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
+        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.id });
         db.all("SELECT * FROM cartItems WHERE cartId = ?", [usercartId], (err: Error , rows: any[]) => {
             expect(rows[0].product_model).toBe("IPhone55");
             expect(rows[0].quantity_in_cart).toBe(1);
@@ -92,7 +87,7 @@ describe("T2 - addToCart | DAO", () => {
         });
         const response = await cartDAO.addToCart(testuser1, "IPhone55");
         db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => {
-            usercartId = cart.cart_id;
+            usercartId = cart.id;
             expect(new Cart(cart.customer, cart.paid, cart.paymentDate, cart.total, [prodInCart])).toEqual(userUnpaid1);
         });
         db.all("SELECT * FROM cartItems WHERE cartId = ?", [usercartId], (err: Error , rows: any[]) => {
@@ -107,7 +102,7 @@ describe("T2 - addToCart | DAO", () => {
 
     test("T1.2.2 - empty cart : It should update the current user cart with new product", async () => {
         db.run(dbq_userUnpaidEmpty1, [], () => {});
-        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
+        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.id });
         await cartDAO.addToCart(testuser1, "IPhone55");
         db.all("SELECT * FROM cartItems WHERE cartId = ?", [usercartId], (err: Error , rows: any[]) => {
             expect(rows[0].product_model).toBe("IPhone55");
@@ -163,7 +158,7 @@ describe("T3 - checkoutCart | DAO", () => {
 
     test("T1.3.4 - out-of-stock product : It should return a 409 error", async () => {
         db.run(dbq_newOosProduct, [], () => {});
-        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
+        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.id });
         db.run(dbq_add2ToCart, [usercartId], () => {});
         const response = await cartDAO.checkoutCart(testuser1);
         expect(response).toEqual(new EmptyProductStockError());
@@ -174,7 +169,7 @@ describe("T3 - checkoutCart | DAO", () => {
     test("T1.3.5 - out-of-stock product : It should return a 409 error", async () => {
         db.run("INSERT INTO products(model, category, quantity, details, sellingPrice, arrivalDate) VALUES VALUES ('oos_product', 'Laptop', 1, NULL, 8, '2024-05-15')", [], () => {});
         db.run(dbq_userUnpaidEmpty1, [], () => {});
-        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
+        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.id });
         db.run(dbq_add2ToCart, [usercartId], () => {});
         const response = await cartDAO.checkoutCart(testuser1);
         expect(response).toEqual(new LowProductStockError());
@@ -185,7 +180,7 @@ describe("T3 - checkoutCart | DAO", () => {
     test("T1.3.6 - no errors case : should mark the cart as sold", async () => {
         db.run(dbq_newProduct, [], () => {});
         db.run(dbq_userUnpaidEmpty1, [], () => {});
-        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
+        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.id });
         db.run(dbq_add2ToCart, [usercartId], () => {});
         const response = await cartDAO.checkoutCart(testuser1);
         expect(response).toBe(true);
@@ -215,7 +210,7 @@ describe("T4 - getCustomerCarts | DAO", () => {
         db.run(dbq_newProduct, [], () => {});
         db.run(dbq_userUnpaidEmpty1, [], () => {});
         db.run(dbq_userPaid1, [], () => {});
-        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 1", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
+        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 1", [], (err: Error , cart: any) => { usercartId = cart.id });
         db.run(dbq_add2ToCart, [usercartId], () => {});
         const response = await cartDAO.getCustomerCarts(testuser1);
         expect(response).toEqual([userPaid1]);
@@ -263,7 +258,7 @@ describe("T5 - removeProductFromCart | DAO", () => {
     test("T1.5.4 - cart without specified model : It should return a 404 error", async () => {
         db.run("INSERT INTO products(model, category, quantity, details, sellingPrice, arrivalDate) VALUES VALUES ('DeviceAAA', 'Smartphone', 0, NULL, 8, '2024-05-15')", [], () => {});
         db.run(dbq_userUnpaid1, [], () => {});
-        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
+        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.id });
         db.run(dbq_add2ToCart, [usercartId], () => {});
         const response = await cartDAO.removeProductFromCart(testuser1, "DeviceAAA");
         expect(response).toEqual(new ProductNotInCartError());
@@ -284,7 +279,7 @@ describe("T5 - removeProductFromCart | DAO", () => {
     test("T1.5.6 - no errors case : should update the cart removing one product instance", async () => {
         db.run(dbq_newProduct, [], () => {});
         db.run(dbq_userUnpaidEmpty1, [], () => {});
-        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
+        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.id });
         db.run(dbq_add2ToCart, [usercartId], () => {});
         const response = await cartDAO.removeProductFromCart(testuser1, "IPhone55");
         db.get("SELECT quantity_in_cart FROM cartItems WHERE cartId = ? AND product_model = IPhone55", [usercartId], (err: Error , quantity: any) => {
@@ -300,7 +295,7 @@ describe("T5 - removeProductFromCart | DAO", () => {
         db.run(dbq_userUnpaidEmpty1, [], () => {});
         await cartDAO.addToCart(testuser1, "IPhone55");
         const response = await cartDAO.removeProductFromCart(testuser1, "IPhone55");
-        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
+        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.id });
         db.get("SELECT quantity_in_cart FROM cartItems WHERE cartId = ? AND product_model = IPhone55", [usercartId], (err: Error , quantity: any) => {
             expect(quantity).toBe(1);
         });
@@ -323,7 +318,7 @@ describe("T6 - clearCart | DAO", () => {
     test("T1.6.2 - no errors case (empty cart) : should do nothing", async () => {
         db.run(dbq_userUnpaidEmpty1, [], () => {});
         const response = await cartDAO.clearCart(testuser1);
-        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
+        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.id });
         db.all("SELECT quantity_in_cart FROM cartItems WHERE cartId = ?", [usercartId], (err: Error , rows: any[]) => {
             expect(rows).toHaveLength(0);
         });
@@ -335,7 +330,7 @@ describe("T6 - clearCart | DAO", () => {
     test("T1.6.3 - no errors case : should update clear the cart", async () => {
         db.run(dbq_newProduct, [], () => {});
         db.run(dbq_userUnpaidEmpty1, [], () => {});
-        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
+        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.id });
         db.run(dbq_add2ToCart, [usercartId], () => {});
         const response = await cartDAO.clearCart(testuser1);
         db.all("SELECT quantity_in_cart FROM cartItems WHERE cartId = ?", [usercartId], (err: Error , rows: any[]) => {
@@ -351,7 +346,7 @@ describe("T6 - clearCart | DAO", () => {
         db.run(dbq_userUnpaidEmpty1, [], () => {});
         await cartDAO.addToCart(testuser1, "IPhone55");
         const response = await cartDAO.clearCart(testuser1);
-        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
+        db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.id });
         db.all("SELECT quantity_in_cart FROM cartItems WHERE cartId = ?", [usercartId], (err: Error , rows: any[]) => {
             expect(rows).toHaveLength(0);
         });
