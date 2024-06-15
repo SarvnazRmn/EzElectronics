@@ -158,26 +158,18 @@ class ProductDAO {
 						return;
 					}
 					const sql = "SELECT * FROM products WHERE model = ?"
-					db.get(sql, [model], (err: Error | null, row: any) => {
+					db.all(sql, [model], (err: Error | null, rows: any[]) => {
 						if (err) {
 							reject(err)
 							return;
 						}
-						if (!row) {
+						if (!rows.length) {
 							reject(new ProductNotFoundError())
 							return;
 						}
 						else {
-							const product = new Product(
-										row.sellingPrice,
-										row.model,
-										row.category,
-										row.arrivalDate,
-										row.details,
-										row.quantity,
-								);
-							products.push(product);
-							resolve(products)
+							resolve([new Product( rows[0].sellingPrice, rows[0].model, rows[0].category, rows[0].arrivalDate, rows[0].details, rows[0].quantity),]);
+							
 							return;
 						}
 					})
@@ -283,26 +275,18 @@ class ProductDAO {
 							return;
 					}
 					const sql = "SELECT * FROM products WHERE model = ? AND quantity > 0"
-					db.get(sql, [model], (err: Error | null, row: any) => {
+					db.all(sql, [model], (err: Error | null, rows: any[]) => {
 						if (err) {
 							reject(err)
 							return;
 						}
-						if (!row) {
+						if (!rows.length) {
 							reject(new ProductNotFoundError())
 							return;
 						}
 						else {
-							const product = new Product(
-									row.sellingPrice,
-									row.model,
-									row.category,
-									row.arrivalDate,
-									row.details,
-									row.quantity,
-								);
-							products.push(product);
-							resolve(products)
+							resolve([new Product( rows[0].sellingPrice, rows[0].model, rows[0].category, rows[0].arrivalDate, rows[0].details, rows[0].quantity),]);
+							
 							return;
 						}
 					})

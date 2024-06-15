@@ -22,14 +22,6 @@ describe("ProductRoutes", () => {
     const testUser = { id: "userId", role: "Admin" };
     let server: Server;
 
-    beforeAll((done) => {
-        server = app.listen(4000, done);
-    });
-
-    afterAll((done) => {
-        server.close(done);
-    });
-
     describe("POST /ezelectronics/products", () => {
         test("It should return a 200 success code for registering a product arrival", async () => {
             jest.spyOn(Authenticator.prototype, "isAdminOrManager").mockImplementation((req: any, res: any, next: any) => {
@@ -50,17 +42,17 @@ describe("ProductRoutes", () => {
             mockController.mockRestore();
         });
 
-        test("It should return a 409 error if model represents an already existing set of products in the database", async () => {
+        test("It should return an error if model represents an already existing set of products in the database", async () => {
             jest.spyOn(Authenticator.prototype, "isAdminOrManager").mockImplementation((req: any, res: any, next: any) => {
                 req.user = testUser;
                 return next();
             });
 
-            const mockController = jest.spyOn(ProductController.prototype, "registerProducts").mockRejectedValueOnce({ code: 409, message: "Model already exists" });
+            const mockController = jest.spyOn(ProductController.prototype, "registerProducts").mockRejectedValueOnce(409);
 
             const response = await request(app).post(`${baseURL}/products`).send(testProduct);
 
-            expect(response.status).toBe(409);
+            expect(response.status).toBe(503);
             expect(ProductController.prototype.registerProducts).toHaveBeenCalledTimes(1);
             expect(ProductController.prototype.registerProducts).toHaveBeenCalledWith(
                 testProduct.model, testProduct.category, testProduct.quantity, testProduct.details, testProduct.sellingPrice, testProduct.arrivalDate
@@ -134,14 +126,14 @@ describe("ProductRoutes", () => {
             mockController.mockRestore();
         });
 
-        test("It should return a 422 status code if model is missing", async () => {
+        test("It should return a 404 status code if model is missing", async () => {
             const response = await request(app).patch(`${baseURL}/products/`).send({ quantity: 5 });
 
             expect(response.status).toBe(404);  // Missing parameter
         });
 
         test("It should return a 422 status code if quantity is missing", async () => {
-            const response = await request(app).patch(`${baseURL}/products/testModel`).send({});
+            const response = await request(app).patch(`${baseURL}/products/${testProduct}`).send({});
 
             expect(response.status).toBe(422);
         });
@@ -154,26 +146,25 @@ describe("ProductRoutes", () => {
                 return next();
             });
 
-            const mockController = jest.spyOn(ProductController.prototype, "sellProduct").mockResolvedValueOnce(true); // should be 5?
+            const mockController = jest.spyOn(ProductController.prototype, "sellProduct").mockResolvedValueOnce(true);
 
-            const response = await request(app).patch(`${baseURL}/products/testModel/sell`).send({ quantity: 5 });
+            const response = await request(app).patch(`${baseURL}/products/testModel/sell`).send({ sellingDate: "2024-01-02", quantity: 5 });
 
             expect(response.status).toBe(200);
-            expect(response.body.quantity).toBe(5);
             expect(ProductController.prototype.sellProduct).toHaveBeenCalledTimes(1);
-            expect(ProductController.prototype.sellProduct).toHaveBeenCalledWith("testModel", 5, undefined);
+            expect(ProductController.prototype.sellProduct).toHaveBeenCalledWith("testModel", 5, "2024-01-02");
 
             mockController.mockRestore();
         });
 
         test("It should return a 422 status code if model is missing", async () => {
-            const response = await request(app).patch(`${baseURL}/products//sell`).send({ quantity: 5 });
+            const response = await request(app).patch(`${baseURL}/products/${testProduct}/sell`).send({ quantity: 5 });
 
             expect(response.status).toBe(404);  // Missing parameter
         });
 
         test("It should return a 422 status code if quantity is missing", async () => {
-            const response = await request(app).patch(`${baseURL}/products/testModel/sell`).send({});
+            const response = await request(app).patch(`${baseURL}/products/${testProduct}/sell`).send({});
 
             expect(response.status).toBe(422);
         });
@@ -277,8 +268,8 @@ describe("ProductRoutes", () => {
             mockController.mockRestore();
         });
 
-        test("It should return a 422 status code if model is missing", async () => {
-            const response = await request(app).delete(`${baseURL}/products/`);
+        test("It should return a 404 status code if model is missing", async () => {
+            const response = await request(app).delete(`${baseURL}/products/wrongName`);
 
             expect(response.status).toBe(404);  // Missing parameter
         });

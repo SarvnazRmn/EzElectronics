@@ -50,8 +50,20 @@ describe("ProductDAO", () => {
             mockDBRun.mockRestore();
         });
 
+        test("should reject with Error if there is a database error", async () => {
+            const mockDBRun = jest.spyOn(db, "run").mockImplementation((sql, params, callback) => {
+                callback(new Error("QueryError"));
+                return {} as Database;
+            });
+
+            await expect(productDAO.registerProducts("model", Category.LAPTOP, 10, "details", 100, "2024-06-07"))
+                .rejects.toThrow(Error("QueryError"));
+
+            mockDBRun.mockRestore();
+        });
+
         test("should reject with ProductInvalidDate if the arrival date is after the current date", async () => {
-            await expect(productDAO.registerProducts("model", Category.LAPTOP, 10, "details", 100, "2024-07-07"))
+            await expect(productDAO.registerProducts("model", Category.LAPTOP, 10, "details", 100, "2025-07-07"))
                 .rejects.toThrow(ProductInvalidDate);
         });
 
@@ -86,6 +98,23 @@ describe("ProductDAO", () => {
             mockDBRun.mockRestore();
         });
 
+        test("should reject with Error if there is a database error", async () => {
+            const mockDBGet = jest.spyOn(db, "get").mockImplementation((sql, params, callback) => {
+                callback(null, { arrivalDate: "2024-06-06", quantity: 5 });
+                return {} as Database;
+            });
+            const mockDBRun = jest.spyOn(db, "run").mockImplementation((sql, params, callback) => {
+                callback(new Error("QueryError"));
+                return {} as Database;
+            });
+
+            await expect(productDAO.changeProductQuantity("model", 5, "2024-06-07"))
+            .rejects.toThrow(Error("QueryError"));
+
+            mockDBGet.mockRestore();
+            mockDBRun.mockRestore();
+        });
+
         test("should reject with ProductNotFoundError if the product does not exist", async () => {
             const mockDBGet = jest.spyOn(db, "get").mockImplementation((sql, params, callback) => {
                 callback(null, null);
@@ -96,6 +125,18 @@ describe("ProductDAO", () => {
                 .rejects.toThrow(ProductNotFoundError);
 
             mockDBGet.mockRestore();
+        });
+
+        test("should reject with Error if there is a database error", async () => {
+            const mockDBGet = jest.spyOn(db, "get").mockImplementation((sql, params, callback) => {
+                callback(new Error("QueryError"));
+                return {} as Database;
+            });
+
+            await expect(productDAO.changeProductQuantity("nonexistingmodel", 5, "2024-06-07"))
+                .rejects.toThrow(Error("QueryError"));
+
+                mockDBGet.mockRestore();
         });
 
         test("should reject with ProductInvalidDate if the change date is before the product's arrival date", async () => {
@@ -153,6 +194,33 @@ describe("ProductDAO", () => {
 
             const result = await productDAO.sellProduct("model", 5, "2024-06-07");
             expect(result).toBe(true);
+
+            mockDBGet.mockRestore();
+            mockDBRun.mockRestore();
+        });
+
+        test("should reject with Error if there is a database error", async () => {
+            const mockDBGet = jest.spyOn(db, "get").mockImplementation((sql, params, callback) => {
+                callback(new Error("QueryError"));
+                return {} as Database;
+            });
+
+            await expect(productDAO.sellProduct("model", 5, "2024-06-07")).rejects.toThrow(Error("QueryError"));
+
+            mockDBGet.mockRestore();
+        });
+
+        test("should reject with Error if there is a database error", async () => {
+            const mockDBGet = jest.spyOn(db, "get").mockImplementation((sql, params, callback) => {
+                callback(null, { arrivalDate: "2024-06-06", quantity: 10 });
+                return {} as Database;
+            });
+            const mockDBRun = jest.spyOn(db, "run").mockImplementation((sql, params, callback) => {
+                callback(new Error("QueryError"));
+                return {} as Database;
+            });
+
+            await expect(productDAO.sellProduct("model", 5, "2024-06-07")).rejects.toThrow(Error("QueryError"));
 
             mockDBGet.mockRestore();
             mockDBRun.mockRestore();
@@ -275,22 +343,6 @@ describe("ProductDAO", () => {
                         arrivalDate: "2024-06-06",
                         details: "details1",
                         quantity: 10
-                    },
-                    {
-                        sellingPrice: 150,
-                        model: "model2",
-                        category: Category.SMARTPHONE,
-                        arrivalDate: "2024-06-07",
-                        details: "details2",
-                        quantity: 5
-                    },
-                    {
-                        sellingPrice: 300,
-                        model: "model3",
-                        category: Category.APPLIANCE,
-                        arrivalDate: "2021-01-01",
-                        details: "details3",
-                        quantity: 5
                     }
                 ]);
                 return {} as Database;
@@ -313,32 +365,7 @@ describe("ProductDAO", () => {
 
         test("should reject with ProductNotFoundError for a valid model grouping of a non-existing product", async () => {
             const mockDBAll = jest.spyOn(db, "all").mockImplementation((sql, params, callback) => {
-                callback(null, [
-                    {
-                        sellingPrice: 100,
-                        model: "model1",
-                        category: Category.LAPTOP,
-                        arrivalDate: "2024-06-06",
-                        details: "details1",
-                        quantity: 10
-                    },
-                    {
-                        sellingPrice: 150,
-                        model: "model2",
-                        category: Category.SMARTPHONE,
-                        arrivalDate: "2024-06-07",
-                        details: "details2",
-                        quantity: 5
-                    },
-                    {
-                        sellingPrice: 300,
-                        model: "model3",
-                        category: Category.APPLIANCE,
-                        arrivalDate: "2021-01-01",
-                        details: "details3",
-                        quantity: 5
-                    }
-                ]);
+                callback(null, []);
                 return {} as Database;
             });
 
@@ -358,22 +385,6 @@ describe("ProductDAO", () => {
                         arrivalDate: "2024-06-06",
                         details: "details1",
                         quantity: 10
-                    },
-                    {
-                        sellingPrice: 150,
-                        model: "model2",
-                        category: Category.APPLIANCE,
-                        arrivalDate: "2024-06-07",
-                        details: "details2",
-                        quantity: 5
-                    },
-                    {
-                        sellingPrice: 200,
-                        model: "model3",
-                        category: Category.SMARTPHONE,
-                        arrivalDate: "2024-06-08",
-                        details: "details3",
-                        quantity: 1
                     },
                     {
                         sellingPrice: 15,
@@ -486,22 +497,6 @@ describe("ProductDAO", () => {
                         arrivalDate: "2024-06-06",
                         details: "details1",
                         quantity: 10
-                    },
-                    {
-                        sellingPrice: 150,
-                        model: "model2",
-                        category: Category.SMARTPHONE,
-                        arrivalDate: "2024-06-07",
-                        details: "details2",
-                        quantity: 5
-                    },
-                    {
-                        sellingPrice: 300,
-                        model: "model3",
-                        category: Category.APPLIANCE,
-                        arrivalDate: "2021-01-01",
-                        details: "details3",
-                        quantity: 5
                     }
                 ]);
                 return {} as Database;
@@ -513,32 +508,14 @@ describe("ProductDAO", () => {
             mockDBAll.mockRestore();
         });
 
-        //[TO DO] (throws productNotFound, should it be empty array?)
-        test("should resolve with a list of products for a valid model grouping (model stock is empty)", async () => {
+        test("should reject with ProductNotFoundError for a valid model grouping (model stock is empty)", async () => {
             const mockDBAll = jest.spyOn(db, "all").mockImplementation((sql, params, callback) => {
-                callback(null, [
-                    {
-                        sellingPrice: 100,
-                        model: "model1",
-                        category: Category.LAPTOP,
-                        arrivalDate: "2024-06-06",
-                        details: "details1",
-                        quantity: 0
-                    },
-                    {
-                        sellingPrice: 150,
-                        model: "model2",
-                        category: Category.SMARTPHONE,
-                        arrivalDate: "2024-06-07",
-                        details: "details2",
-                        quantity: 5
-                    }
-                ]);
+                callback(null, []);
                 return {} as Database;
             });
 
-            const result = await productDAO.getAvailableProducts("model", null, "model1");
-            expect(result).rejects.toThrow(ProductNotFoundError);
+            await expect(productDAO.getAvailableProducts("model", null, "model4"))
+                .rejects.toThrow(ProductNotFoundError);
 
             mockDBAll.mockRestore();
         });
@@ -555,32 +532,7 @@ describe("ProductDAO", () => {
 
         test("should reject with ProductNotFoundError for a valid model grouping of a non-existing product", async () => {
             const mockDBAll = jest.spyOn(db, "all").mockImplementation((sql, params, callback) => {
-                callback(null, [
-                    {
-                        sellingPrice: 100,
-                        model: "model1",
-                        category: Category.LAPTOP,
-                        arrivalDate: "2024-06-06",
-                        details: "details1",
-                        quantity: 10
-                    },
-                    {
-                        sellingPrice: 150,
-                        model: "model2",
-                        category: Category.SMARTPHONE,
-                        arrivalDate: "2024-06-07",
-                        details: "details2",
-                        quantity: 5
-                    },
-                    {
-                        sellingPrice: 300,
-                        model: "model3",
-                        category: Category.APPLIANCE,
-                        arrivalDate: "2021-01-01",
-                        details: "details3",
-                        quantity: 5
-                    }
-                ]);
+                callback(null, []);
                 return {} as Database;
             });
 
@@ -600,22 +552,6 @@ describe("ProductDAO", () => {
                         arrivalDate: "2024-06-06",
                         details: "details1",
                         quantity: 10
-                    },
-                    {
-                        sellingPrice: 150,
-                        model: "model2",
-                        category: Category.APPLIANCE,
-                        arrivalDate: "2024-06-07",
-                        details: "details2",
-                        quantity: 5
-                    },
-                    {
-                        sellingPrice: 200,
-                        model: "model3",
-                        category: Category.LAPTOP,
-                        arrivalDate: "2024-06-08",
-                        details: "details3",
-                        quantity: 0
                     },
                     {
                         sellingPrice: 15,
@@ -661,14 +597,6 @@ describe("ProductDAO", () => {
                     },
                     {
                         sellingPrice: 150,
-                        model: "model2",
-                        category: Category.SMARTPHONE,
-                        arrivalDate: "2024-06-07",
-                        details: "details2",
-                        quantity: 0
-                    },
-                    {
-                        sellingPrice: 150,
                         model: "model3",
                         category: Category.APPLIANCE,
                         arrivalDate: "2024-06-08",
@@ -682,7 +610,7 @@ describe("ProductDAO", () => {
             const result = await productDAO.getAvailableProducts(null, null, null);
             expect(result).toEqual([
                 new Product(100, "model1", Category.LAPTOP, "2024-06-06", "details1", 10),
-                new Product(150, "model3", Category.APPLIANCE, "2024-06-07", "details3", 5)
+                new Product(150, "model3", Category.APPLIANCE, "2024-06-08", "details3", 5)
             ]);
 
             mockDBAll.mockRestore();
@@ -716,38 +644,38 @@ describe("ProductDAO", () => {
 
     });
 
-    describe("deleteProduct", () => {
-        test("should resolve true on successful deletion", async () => {
-            const mockDBRun = jest.spyOn(db, "run").mockImplementation((sql, params, callback) => {
-                callback(null, [
-                    {
-                        sellingPrice: 1000,
-                        model: "model",
-                        category: Category.APPLIANCE,
-                        arrivalDate: "2023-06-06",
-                        details: "details1",
-                        quantity: 10
-                    }
-                ]);
-                return {} as Database;
-            });
+    describe('deleteProduct', () => {
+        test('should resolve true on successful deletion of a product', async () => {
+            const mockDBGet = jest.spyOn(db, 'get').mockImplementation(
+                (sql, param, callback) => {
+                    callback(null, { model: 'iphone' });
+                    return {} as Database;
+                }
+            );
 
-            const result = await productDAO.deleteProduct("model");
+            const mockDBRun = jest.spyOn(db, 'run').mockImplementation(
+                (sql, param, callback) => {
+                    callback(null);
+                    return {} as Database;
+                }
+            );
+
+            const result = await productDAO.deleteProduct('iphone');
+
             expect(result).toBe(true);
-
-            mockDBRun.mockRestore();
         });
 
-        test("should reject with ProductNotFoundError if the product does not exist", async () => {
-            const mockDBRun = jest.spyOn(db, "run").mockImplementation((sql, params, callback) => {
-                callback(new Error("SQLITE_CONSTRAINT: FOREIGN KEY constraint failed"));
-                return {} as Database;
-            });
+        test('should reject with ProductNotFoundError if the product does not exist', async () => {
+            const mockDBGet = jest.spyOn(db, 'get').mockImplementation(
+                (sql, param, callback) => {
+                    callback(null, null);
+                    return {} as Database;
+                }
+            );
 
-            await expect(productDAO.deleteProduct("nonexistingmodel"))
-                .rejects.toThrow(ProductNotFoundError);
+            await expect(productDAO.deleteProduct('nonexistent')).rejects.toThrow(ProductNotFoundError);
 
-            mockDBRun.mockRestore();
+            mockDBGet.mockRestore();
         });
     });
 
@@ -763,5 +691,6 @@ describe("ProductDAO", () => {
 
             mockDBRun.mockRestore();
         });
+        
     });
 });
