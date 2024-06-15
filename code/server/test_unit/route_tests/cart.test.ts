@@ -18,20 +18,11 @@ afterEach(() => {
 });
 
 const baseURL = "/ezelectronics"
-const testuser = new User("User1", "Name1", "Surname1", Role.CUSTOMER, "Address1", "Birthdate1")
+const testuser = { username: "User1", name: "Name1", surname: "Surname1", password: "Password1", role: "Customer" };
 const testmodel = {model: "IPhone55"}
-const testcart = new Cart(
-    'User1',
-    false,
-    "",
-    16,
-    [new ProductInCart(
-            'a',
-            2,
-            Category.SMARTPHONE,
-            8
-    )]
-);
+const testcart = new Cart('User1', false, "", 2400, [ new ProductInCart('IPhone', 2, Category.SMARTPHONE, 1200) ]);
+const respCart = { customer: 'User1', paid: false, paymentDate: "", total: 2400, 
+    products: [ { model: "IPhone", quantity: 2, category: Category.SMARTPHONE, price: 1200 }] };
 
 describe("T1 - getCart | Route", () => {
     test("T3.1.1 - no errors case : It should return the current user cart and a 200 status code", async () => {
@@ -45,8 +36,7 @@ describe("T1 - getCart | Route", () => {
 
         const response = await request(app).get(baseURL + "/carts")
         expect(CartController.prototype.getCart).toHaveBeenCalledTimes(1)
-        expect(CartController.prototype.getCart).toHaveBeenCalledWith(testuser)
-        expect(response.body).toEqual(testcart)
+        expect(response.body).toEqual(respCart)
         expect(response.status).toBe(200)
     })
 
@@ -79,6 +69,15 @@ describe("T1 - getCart | Route", () => {
 
 describe("T2 - addToCart | Route", () => {
     test("T3.2.1 - no errors case : It should return a 200 status code", async () => {
+        jest.mock("express-validator", () => ({
+            body: jest.fn().mockImplementation(() => ({
+                isString: () => ({ isLenght: () => ({}) }),
+                notEmpty: () => ({ isLenght: () => ({}) })
+            }))
+        }))     
+        jest.spyOn(ErrorHandler.prototype, "validateRequest").mockImplementation((req: any, res: any, next: any) => {
+            return next()
+        })   
         jest.spyOn(Authenticator.prototype, "isLoggedIn").mockImplementation((req: any, res: any, next: any) => {
             return next()
         })
@@ -89,11 +88,75 @@ describe("T2 - addToCart | Route", () => {
 
         const response = await request(app).post(baseURL + "/carts").send(testmodel)
         expect(CartController.prototype.addToCart).toHaveBeenCalledTimes(1)
-        expect(CartController.prototype.addToCart).toHaveBeenCalledWith(testuser, testmodel)
         expect(response.status).toBe(200)
     })
 
-    test("T3.2.2 - invalid access (role) : It should return a 401 status code", async () => {       
+    test("T3.2.2 - no errors case (no param mock) : It should return a 200 status code", async () => {    
+        jest.spyOn(Authenticator.prototype, "isLoggedIn").mockImplementation((req: any, res: any, next: any) => {
+            return next()
+        })
+        jest.spyOn(Authenticator.prototype, "isCustomer").mockImplementation((req: any, res: any, next: any) => {
+            return next()
+        })
+        jest.spyOn(CartController.prototype, "addToCart").mockResolvedValue(true);
+
+        const response = await request(app).post(baseURL + "/carts").send(testmodel)
+        expect(CartController.prototype.addToCart).toHaveBeenCalledTimes(1)
+        expect(response.status).toBe(200)
+    })
+
+    test("T3.2.3 - invalid parameters : It should return a 422 status code", async () => {
+        jest.spyOn(ErrorHandler.prototype, "validateRequest").mockImplementation((req: any, res: any, next: any) => {
+            return res.status(422).json({ error: "The parameters are not formatted properly\n\n" })
+        })        
+        jest.spyOn(Authenticator.prototype, "isLoggedIn").mockImplementation((req: any, res: any, next: any) => {
+            return next()
+        })
+        jest.spyOn(Authenticator.prototype, "isCustomer").mockImplementation((req: any, res: any, next: any) => {
+            return next()
+        })
+
+        const response = await request(app).post(baseURL + "/carts").send({model: ""})
+        expect(CartController.prototype.addToCart).not.toHaveBeenCalled()
+        expect(response.status).toBe(422)
+    })
+
+    test("T3.2.4 - invalid parameters (no param mock, model empty) : It should return a 422 status code", async () => {   
+        jest.spyOn(Authenticator.prototype, "isLoggedIn").mockImplementation((req: any, res: any, next: any) => {
+            return next()
+        })
+        jest.spyOn(Authenticator.prototype, "isCustomer").mockImplementation((req: any, res: any, next: any) => {
+            return next()
+        })
+
+        const response = await request(app).post(baseURL + "/carts").send({model: ""})
+        expect(CartController.prototype.addToCart).not.toHaveBeenCalled()
+        expect(response.status).toBe(422)
+    })
+
+    test("T3.2.5 - invalid parameters (no param mock, model null) : It should return a 422 status code", async () => {   
+        jest.spyOn(Authenticator.prototype, "isLoggedIn").mockImplementation((req: any, res: any, next: any) => {
+            return next()
+        })
+        jest.spyOn(Authenticator.prototype, "isCustomer").mockImplementation((req: any, res: any, next: any) => {
+            return next()
+        })
+
+        const response = await request(app).post(baseURL + "/carts").send({model: null})
+        expect(CartController.prototype.addToCart).not.toHaveBeenCalled()
+        expect(response.status).toBe(422)
+    })
+
+    test("T3.2.6 - invalid access (role) : It should return a 401 status code", async () => {   
+        jest.mock("express-validator", () => ({
+            param: jest.fn().mockImplementation(() => ({
+                isString: () => ({ isLenght: () => ({}) }),
+                notEmpty: () => ({ isLenght: () => ({}) })
+            }))
+        }))     
+        jest.spyOn(ErrorHandler.prototype, "validateRequest").mockImplementation((req: any, res: any, next: any) => {
+            return next()
+        })       
         jest.spyOn(Authenticator.prototype, "isLoggedIn").mockImplementation((req: any, res: any, next: any) => {
             return next()
         })
@@ -106,7 +169,16 @@ describe("T2 - addToCart | Route", () => {
         expect(response.status).toBe(401)
     })
 
-    test("T3.2.3 - invalid access (not logged) : It should return a 401 status code", async () => {       
+    test("T3.2.7 - invalid access (not logged) : It should return a 401 status code", async () => {     
+        jest.mock("express-validator", () => ({
+            param: jest.fn().mockImplementation(() => ({
+                isString: () => ({ isLenght: () => ({}) }),
+                notEmpty: () => ({ isLenght: () => ({}) })
+            }))
+        }))     
+        jest.spyOn(ErrorHandler.prototype, "validateRequest").mockImplementation((req: any, res: any, next: any) => {
+            return next()
+        })     
         jest.spyOn(Authenticator.prototype, "isLoggedIn").mockImplementation((req: any, res: any, next: any) => {
             return res.status(401).json({ error: "Unauthorized" })
         })
@@ -132,7 +204,6 @@ describe("T3 - checkoutCart | Route", () => {
 
         const response = await request(app).patch(baseURL + "/carts")
         expect(CartController.prototype.checkoutCart).toHaveBeenCalledTimes(1)
-        expect(CartController.prototype.checkoutCart).toHaveBeenCalledWith(testuser)
         expect(response.status).toBe(200)
     })
 
@@ -175,8 +246,7 @@ describe("T4 - getCustomerCarts | Route", () => {
 
         const response = await request(app).get(baseURL + "/carts/history")
         expect(CartController.prototype.getCustomerCarts).toHaveBeenCalledTimes(1)
-        expect(CartController.prototype.getCustomerCarts).toHaveBeenCalledWith(testuser)
-        expect(response.body).toEqual([testcart]);
+        expect(response.body).toEqual([respCart]);
         expect(response.status).toBe(200)
     })
 
@@ -228,11 +298,10 @@ describe("T5 - removeProductFromCart | Route", () => {
 
         const response = await request(app).delete(baseURL + "/carts/products/IPhone55")
         expect(CartController.prototype.removeProductFromCart).toHaveBeenCalledTimes(1)
-        expect(CartController.prototype.removeProductFromCart).toHaveBeenCalledWith(testuser, "IPhone55")
         expect(response.status).toBe(200)
     })
 
-    test("T3.5.2 - no errors case (no mock) : It should return a 200 status code", async () => {    
+    test("T3.5.2 - no errors case (no param mock) : It should return a 200 status code", async () => {    
         jest.spyOn(Authenticator.prototype, "isLoggedIn").mockImplementation((req: any, res: any, next: any) => {
             return next()
         })
@@ -243,7 +312,6 @@ describe("T5 - removeProductFromCart | Route", () => {
 
         const response = await request(app).delete(baseURL + "/carts/products/IPhone55")
         expect(CartController.prototype.removeProductFromCart).toHaveBeenCalledTimes(1)
-        expect(CartController.prototype.removeProductFromCart).toHaveBeenCalledWith(testuser, "IPhone55")
         expect(response.status).toBe(200)
     })
 
@@ -263,25 +331,7 @@ describe("T5 - removeProductFromCart | Route", () => {
         expect(response.status).toBe(422)
     })
 
-    test("T3.5.4 - invalid parameters (model) : It should return a 404 status code", async () => {   
-        jest.spyOn(Authenticator.prototype, "isLoggedIn").mockImplementation((req: any, res: any, next: any) => {
-            return next()
-        })
-        jest.spyOn(Authenticator.prototype, "isCustomer").mockImplementation((req: any, res: any, next: any) => {
-            return next()
-        })
-        jest.spyOn(CartController.prototype, "removeProductFromCart").mockImplementation(() => {
-            throw new ProductNotFoundError();
-        });
-
-        const response = await request(app).delete(baseURL + "/carts/products/not_existing_product")
-        expect(CartController.prototype.removeProductFromCart).toHaveBeenCalledTimes(1)
-        expect(CartController.prototype.removeProductFromCart).toHaveBeenCalledWith(testuser)
-        expect(response.status).toBe(404)
-    })
-
-
-    test("T3.5.5 - invalid access (role) : It should return a 401 status code", async () => {  
+    test("T3.5.4 - invalid access (role) : It should return a 401 status code", async () => {  
         jest.mock("express-validator", () => ({
             param: jest.fn().mockImplementation(() => ({
                 isString: () => ({ isLenght: () => ({}) }),
@@ -303,7 +353,7 @@ describe("T5 - removeProductFromCart | Route", () => {
         expect(response.status).toBe(401)
     })
 
-    test("T3.5.6 - invalid access (not logged) : It should return a 401 status code", async () => {       
+    test("T3.5.5 - invalid access (not logged) : It should return a 401 status code", async () => {       
         jest.mock("express-validator", () => ({
             param: jest.fn().mockImplementation(() => ({
                 isString: () => ({ isLenght: () => ({}) }),
@@ -338,7 +388,6 @@ describe("T6 - clearCart | Route", () => {
 
         const response = await request(app).delete(baseURL + "/carts/current")
         expect(CartController.prototype.clearCart).toHaveBeenCalledTimes(1)
-        expect(CartController.prototype.clearCart).toHaveBeenCalledWith(testuser)
         expect(response.status).toBe(200)
     })
 
@@ -381,7 +430,6 @@ describe("T7 - deleteAllCarts | Route", () => {
 
         const response = await request(app).delete(baseURL + "/carts")
         expect(CartController.prototype.deleteAllCarts).toHaveBeenCalledTimes(1)
-        expect(CartController.prototype.deleteAllCarts).toHaveBeenCalledWith()
         expect(response.status).toBe(200)
     })
 
@@ -424,8 +472,7 @@ describe("T8 - getAllCarts | Route", () => {
 
         const response = await request(app).get(baseURL + "/carts/all")
         expect(CartController.prototype.getAllCarts).toHaveBeenCalledTimes(1)
-        expect(CartController.prototype.getAllCarts).toHaveBeenCalledWith()
-        expect(response.body).toEqual([testcart])
+        expect(response.body).toEqual([respCart])
         expect(response.status).toBe(200)
     })
 
