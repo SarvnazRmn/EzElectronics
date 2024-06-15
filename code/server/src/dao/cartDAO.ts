@@ -58,7 +58,7 @@ class CartDAO {
               }
 
               // Check if the product quantity is greater than 0
-              else if (productEl.quantity === 0) {
+              else if (productEl.quantity <= 0) {
                 reject(new EmptyProductStockError());
                 return;
               } else {

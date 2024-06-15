@@ -25,8 +25,7 @@ class CartController {
      */
     async addToCart(user: User, product: string): Promise<Boolean> { 
         try {
-            const success = await this.dao.addToCart(user, product);
-            return success;
+            return await this.dao.addToCart(user, product);
         } catch (error) {
             throw error;
         }
@@ -40,8 +39,7 @@ class CartController {
      */
     async getCart(user: User): Promise<Cart> { 
         try {
-            const cart = await this.dao.getCart(user);
-            return cart;
+            return await this.dao.getCart(user);
         } catch (error) {
             throw error;
         }
@@ -55,8 +53,7 @@ class CartController {
      */
     async checkoutCart(user: User): Promise<Boolean> { 
         try {
-            const success = await this.dao.checkoutCart(user);
-            return success;
+            return await this.dao.checkoutCart(user);
         } catch (error) {
             throw error;
         }
@@ -70,8 +67,7 @@ class CartController {
      */
     async getCustomerCarts(user: User): Promise<Cart[]> {
         try {
-            const carts = await this.dao.getCustomerCarts(user);
-            return carts;
+            return await this.dao.getCustomerCarts(user);
         } catch (error) {
             throw error;
         }
@@ -85,8 +81,7 @@ class CartController {
      */
     async removeProductFromCart(user: User, product: string): Promise<Boolean> { 
         try {
-            const success = await this.dao.removeProductFromCart(user, product);
-            return success;
+            return await this.dao.removeProductFromCart(user, product);
         } catch (error) {
             throw error;
         }
@@ -100,8 +95,7 @@ class CartController {
      */
     async clearCart(user: User): Promise<Boolean> { 
         try {
-            const success = await this.dao.clearCart(user);
-            return success;
+            return await this.dao.clearCart(user);
         } catch (error) {
             throw error;
         }
@@ -113,8 +107,7 @@ class CartController {
      */
     async deleteAllCarts(): Promise<Boolean> { 
         try {
-            const success = await this.dao.deleteAllCarts();
-            return success;
+            return await this.dao.deleteAllCarts();
         } catch (error) {
             throw error;
         }
@@ -126,8 +119,7 @@ class CartController {
      */
     async getAllCarts(): Promise<Cart[]> { 
         try {
-            const carts = await this.dao.getAllCarts();
-            return carts;
+            return await this.dao.getAllCarts();
         } catch (error) {
             throw error;
         }
