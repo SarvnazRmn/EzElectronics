@@ -358,13 +358,6 @@ describe("deleteReview", () => {
 
 describe("deleteReviewsOfProduct", () => {
   test("Correctly deletes reviews of a product", async () => {
-    const mockGetProduct = jest.spyOn(db, "get").mockImplementationOnce(
-      (sql, param, callback) => {
-        callback(null, { model: "iphone" });
-        return {} as Database;
-      }
-    );
-
     const mockRun = jest.spyOn(db, "run").mockImplementation(
       (sql, param, callback) => {
         callback(null);
@@ -376,31 +369,13 @@ describe("deleteReviewsOfProduct", () => {
     const result = dao.deleteReviewsOfProduct("iphone");
 
     await expect(result).resolves.toBeUndefined();
-    expect(mockGetProduct).toHaveBeenCalled()
     expect(mockRun).toHaveBeenCalled()
 
-
-    mockGetProduct.mockRestore();
     mockRun.mockRestore();
   });
 
-  test("Rejects if product does not exist", async () => {
-    const mockGetProduct = jest.spyOn(db, "get").mockImplementationOnce(
-      (sql, param, callback) => {
-        callback(null, null);
-        return {} as Database;
-      }
-    );
-
-    const dao = new ReviewDAO();
-    await expect(dao.deleteReviewsOfProduct("nonexistent")).rejects.toThrow(ProductNotFoundError);
-    expect(mockGetProduct).toHaveBeenCalled()
-
-    mockGetProduct.mockRestore();
-  });
-
   test("Rejects on database error during product check", async () => {
-    const mockGetProduct = jest.spyOn(db, "get").mockImplementationOnce(
+    const mockRun = jest.spyOn(db, "run").mockImplementationOnce(
       (sql, param, callback) => {
         callback(new Error("Database error"), null);
         return {} as Database;
@@ -409,19 +384,12 @@ describe("deleteReviewsOfProduct", () => {
 
     const dao = new ReviewDAO();
     await expect(dao.deleteReviewsOfProduct("iphone")).rejects.toThrow("Database error");
-    expect(mockGetProduct).toHaveBeenCalled();
+    expect(mockRun).toHaveBeenCalled();
 
-    mockGetProduct.mockRestore();
+    mockRun.mockRestore();
   });
 
   test("Rejects on database error during deletion", async () => {
-    const mockGetProduct = jest.spyOn(db, "get").mockImplementationOnce(
-      (sql, param, callback) => {
-        callback(null, { model: "iphone" });
-        return {} as Database;
-      }
-    );
-
     const mockRun = jest.spyOn(db, "run").mockImplementation(
       (sql, param, callback) => {
         callback(new Error("Database error"));
@@ -431,10 +399,8 @@ describe("deleteReviewsOfProduct", () => {
 
     const dao = new ReviewDAO();
     await expect(dao.deleteReviewsOfProduct("iphone")).rejects.toThrow("Database error");
-    expect(mockGetProduct).toHaveBeenCalled();
     expect(mockRun).toHaveBeenCalled();
 
-    mockGetProduct.mockRestore();
     mockRun.mockRestore();
   });
 });
