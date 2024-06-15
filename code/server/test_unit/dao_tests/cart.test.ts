@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeAll, afterAll, afterEach, jest } from "@jest/globals"
+import { describe, test, expect, beforeAll } from "@jest/globals"
 import CartDAO from "../../src/dao/cartDAO"
 import { User, Role} from "../../src/components/user"
 import { Cart, ProductInCart } from "../../src/components/cart"
@@ -20,16 +20,10 @@ import {
     EmptyProductStockError,
     LowProductStockError,
   } from "../../src/errors/productError";
-import { rejects } from "assert"
-
-afterEach(() => {
-    jest.clearAllMocks();
-});
 
 beforeAll(() => {
     cleanup()
 });
-
 
 const cartDAO = new CartDAO();
 
@@ -88,7 +82,7 @@ describe("T1 - getCart | DAO", () => {
 
 describe("T2 - addToCart | DAO", () => {
     let usercartId = 0;
-    test("T1.2.1 - empty db : It should create and return the current user cart, with new product", async () => {
+    test("T1.2.1 - empty db : It should create the current user cart, with new product", async () => {
         await cartDAO.addToCart(testuser1, "IPhone55");
         db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
         db.all("SELECT * FROM cartItems WHERE cartId = ?", [usercartId], (err: Error , rows: any[]) => {
@@ -106,12 +100,12 @@ describe("T2 - addToCart | DAO", () => {
             expect(rows[0].quantity_in_cart).toBe(2);
             expect(rows).toHaveLength(1);
         });
-        expect(response).toEqual(userUnpaid1);
+        expect(response).toBe(true);
 
         cleanup();
     })
 
-    test("T1.2.2 - empty cart : It should return the current user cart, with new product", async () => {
+    test("T1.2.2 - empty cart : It should update the current user cart with new product", async () => {
         db.run(dbq_userUnpaidEmpty1, [], () => {});
         db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
         await cartDAO.addToCart(testuser1, "IPhone55");
@@ -129,18 +123,18 @@ describe("T2 - addToCart | DAO", () => {
             expect(rows[0].quantity_in_cart).toBe(2);
             expect(rows).toHaveLength(1);
         });
-        expect(response).toEqual(userUnpaid1);
+        expect(response).toBe(true);
     })
 
     test("T1.2.3 - invalid model : It should return a 404 error", async () => {
         const response = await cartDAO.addToCart(testuser1, "non_existing_product");
-        expect(response).rejects.toEqual(new ProductNotFoundError());
+        expect(response).toEqual(new ProductNotFoundError());
     })
 
     test("T1.2.4 - product out-of-stock : It should return a 409 error", async () => {
         db.run(dbq_newOosProduct, [], () => {});
-        const response = await cartDAO.addToCart(testuser1, "non_existing_product");
-        expect(response).rejects.toEqual(new EmptyProductStockError());
+        const response = await cartDAO.addToCart(testuser1, "oos_product");
+        expect(response).toEqual(new EmptyProductStockError());
 
         cleanup();
     })
@@ -150,13 +144,13 @@ describe("T3 - checkoutCart | DAO", () => {
     let usercartId = 0;
     test("T1.3.1 - empty db : It should return a 404 error", async () => {
         const response = await cartDAO.checkoutCart(testuser1);
-        expect(response).rejects.toEqual(new CartNotFoundError());
+        expect(response).toEqual(new CartNotFoundError());
     })
 
     test("T1.3.2 - only paid cart : It should return a 404 error", async () => {
         db.run(dbq_userPaid1, [], () => {});
         const response = await cartDAO.checkoutCart(testuser1);
-        expect(response).rejects.toEqual(new CartNotFoundError());
+        expect(response).toEqual(new CartNotFoundError());
 
         cleanup()
     })
@@ -164,7 +158,7 @@ describe("T3 - checkoutCart | DAO", () => {
     test("T1.3.3 - empty cart : It should return a 400 error", async () => {
         db.run(dbq_userUnpaidEmpty1, [], () => {});
         const response = await cartDAO.checkoutCart(testuser1);
-        expect(response).rejects.toEqual(new EmptyCartError());
+        expect(response).toEqual(new EmptyCartError());
     })
 
     test("T1.3.4 - out-of-stock product : It should return a 409 error", async () => {
@@ -172,7 +166,7 @@ describe("T3 - checkoutCart | DAO", () => {
         db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
         db.run(dbq_add2ToCart, [usercartId], () => {});
         const response = await cartDAO.checkoutCart(testuser1);
-        expect(response).rejects.toEqual(new EmptyProductStockError());
+        expect(response).toEqual(new EmptyProductStockError());
 
         cleanup()
     })
@@ -183,7 +177,7 @@ describe("T3 - checkoutCart | DAO", () => {
         db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
         db.run(dbq_add2ToCart, [usercartId], () => {});
         const response = await cartDAO.checkoutCart(testuser1);
-        expect(response).rejects.toEqual(new LowProductStockError());
+        expect(response).toEqual(new LowProductStockError());
 
         cleanup();
     })
@@ -245,7 +239,7 @@ describe("T5 - removeProductFromCart | DAO", () => {
     let usercartId = 0;
     test("T1.5.1 - invalid model : It should return a 404 error", async () => {
         const response = await cartDAO.removeProductFromCart(testuser1, "non_existing_product");
-        expect(response).rejects.toEqual(new ProductNotFoundError());
+        expect(response).toEqual(new ProductNotFoundError());
 
         cleanup()
     })
@@ -253,7 +247,7 @@ describe("T5 - removeProductFromCart | DAO", () => {
     test("T1.5.2 - only paid cart : It should return a 404 error", async () => {
         db.run(dbq_userPaid1, [], () => {});
         const response = await cartDAO.removeProductFromCart(testuser1, "IPhone55");
-        expect(response).rejects.toEqual(new CartNotFoundError());
+        expect(response).toEqual(new CartNotFoundError());
 
         cleanup()
     })
@@ -261,7 +255,7 @@ describe("T5 - removeProductFromCart | DAO", () => {
     test("T1.5.3 - empty cart : It should return a 404 error", async () => {
         db.run(dbq_userUnpaidEmpty1, [], () => {});
         const response = await cartDAO.removeProductFromCart(testuser1, "IPhone55");
-        expect(response).rejects.toEqual(new CartNotFoundError());
+        expect(response).toEqual(new CartNotFoundError());
         
         cleanup();
     })
@@ -272,7 +266,7 @@ describe("T5 - removeProductFromCart | DAO", () => {
         db.get("SELECT * FROM carts WHERE customer = 'User1' AND paid = 0", [], (err: Error , cart: any) => { usercartId = cart.cart_id });
         db.run(dbq_add2ToCart, [usercartId], () => {});
         const response = await cartDAO.removeProductFromCart(testuser1, "DeviceAAA");
-        expect(response).rejects.toEqual(new ProductNotInCartError());
+        expect(response).toEqual(new ProductNotInCartError());
         
         cleanup();
     })
@@ -282,7 +276,7 @@ describe("T5 - removeProductFromCart | DAO", () => {
         db.run(dbq_userUnpaid1, [], () => {});
         cartDAO.addToCart(testuser1, "DeviceAAA");
         const response = await cartDAO.removeProductFromCart(testuser1, "DeviceAAA");
-        expect(response).rejects.toEqual(new ProductNotInCartError());
+        expect(response).toEqual(new ProductNotInCartError());
         
         cleanup();
     })
@@ -321,7 +315,7 @@ describe("T6 - clearCart | DAO", () => {
     test("T1.6.1 - only paid cart : It should return a 404 error", async () => {
         db.run(dbq_userPaid1, [], () => {});
         const response = await cartDAO.clearCart(testuser1);
-        expect(response).rejects.toEqual(new CartNotFoundError());
+        expect(response).toEqual(new CartNotFoundError());
 
         cleanup()
     })
