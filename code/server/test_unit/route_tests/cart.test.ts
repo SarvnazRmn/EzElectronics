@@ -231,7 +231,22 @@ describe("T5 - removeProductFromCart | Route", () => {
         expect(response.status).toBe(200)
     })
 
-    test("T3.5.2 - invalid parameters : It should return a 422 status code", async () => {
+    test("T3.5.2 - no errors case (no mock) : It should return a 200 status code", async () => {    
+        jest.spyOn(Authenticator.prototype, "isLoggedIn").mockImplementation((req: any, res: any, next: any) => {
+            return next()
+        })
+        jest.spyOn(Authenticator.prototype, "isCustomer").mockImplementation((req: any, res: any, next: any) => {
+            return next()
+        })
+        jest.spyOn(CartController.prototype, "removeProductFromCart").mockResolvedValue(true);
+
+        const response = await request(app).delete(baseURL + "/carts/products/IPhone55")
+        expect(CartController.prototype.removeProductFromCart).toHaveBeenCalledTimes(1)
+        expect(CartController.prototype.removeProductFromCart).toHaveBeenCalledWith(testuser, "IPhone55")
+        expect(response.status).toBe(200)
+    })
+
+    test("T3.5.3 - invalid parameters : It should return a 422 status code", async () => {
         jest.spyOn(ErrorHandler.prototype, "validateRequest").mockImplementation((req: any, res: any, next: any) => {
             return res.status(422).json({ error: "The parameters are not formatted properly\n\n" })
         })        
@@ -247,7 +262,7 @@ describe("T5 - removeProductFromCart | Route", () => {
         expect(response.status).toBe(422)
     })
 
-    test("T3.5.3 - invalid parameters (model) : It should return a 404 status code", async () => {   
+    test("T3.5.4 - invalid parameters (model) : It should return a 404 status code", async () => {   
         jest.spyOn(Authenticator.prototype, "isLoggedIn").mockImplementation((req: any, res: any, next: any) => {
             return next()
         })
@@ -261,7 +276,7 @@ describe("T5 - removeProductFromCart | Route", () => {
     })
 
 
-    test("T3.5.4 - invalid access (role) : It should return a 401 status code", async () => {  
+    test("T3.5.5 - invalid access (role) : It should return a 401 status code", async () => {  
         jest.mock("express-validator", () => ({
             param: jest.fn().mockImplementation(() => ({
                 isString: () => ({ isLenght: () => ({}) }),
@@ -283,7 +298,7 @@ describe("T5 - removeProductFromCart | Route", () => {
         expect(response.status).toBe(401)
     })
 
-    test("T3.5.5 - invalid access (not logged) : It should return a 401 status code", async () => {       
+    test("T3.5.6 - invalid access (not logged) : It should return a 401 status code", async () => {       
         jest.mock("express-validator", () => ({
             param: jest.fn().mockImplementation(() => ({
                 isString: () => ({ isLenght: () => ({}) }),
