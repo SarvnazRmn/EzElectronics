@@ -247,7 +247,7 @@ describe("T5 - removeProductFromCart | Route", () => {
         expect(response.status).toBe(422)
     })
 
-    test("T3.5.3 - invalid parameters (model) : It should return a 422 status code", async () => {   
+    test("T3.5.3 - invalid parameters (model) : It should return a 404 status code", async () => {   
         jest.spyOn(Authenticator.prototype, "isLoggedIn").mockImplementation((req: any, res: any, next: any) => {
             return next()
         })
@@ -257,7 +257,7 @@ describe("T5 - removeProductFromCart | Route", () => {
 
         const response = await request(app).delete(baseURL + "/carts/products")
         expect(CartController.prototype.removeProductFromCart).not.toHaveBeenCalled()
-        expect(response.status).toBe(422)
+        expect(response.status).toBe(404)
     })
 
 
