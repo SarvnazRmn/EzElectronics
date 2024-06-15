@@ -56,11 +56,12 @@ class UserRoutes {
          */
         this.router.post(
             "/",
-            body('username').isString().notEmpty(),
-            body('name').isString().notEmpty(),
-            body('surname').isString().notEmpty(),
-            body('password').isString().notEmpty(),
-            body('role').isString().notEmpty(),
+            body("username").isString().notEmpty(),
+            body("name").isString().notEmpty(),
+            body("surname").isString().notEmpty(),
+            body("password").isString().notEmpty(),
+            body("role").isString().notEmpty().isIn(["Manager", "Customer", "Admin"]), 
+
             this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => this.controller.createUser(req.body.username, req.body.name, req.body.surname, req.body.password, req.body.role)
                 .then(() => res.status(200).end())
@@ -91,6 +92,8 @@ class UserRoutes {
          */
         this.router.get(
             "/roles/:role",
+            param("role").isString().isIn(["Manager", "Customer", "Admin"]), 
+            this.errorHandler.validateRequest,
             this.authService.isLoggedIn,
             this.authService.isAdmin,
             (req: any, res: any, next: any) => this.controller.getUsersByRole(req.params.role)
@@ -124,32 +127,15 @@ class UserRoutes {
          */
         this.router.delete(
             "/:username",
+            param('username').isString().notEmpty(),
+            this.errorHandler.validateRequest,
             this.authService.isLoggedIn,
             (req: any, res: any, next: any) => {
-
-                const currentUser = req.user as User;
-                const { username } = req.params;
-
-                const isAdmin = currentUser.role == "Admin"
-
-                var isTargetUserAdmin = true
-
-                this.controller.getUserByUsername(currentUser, username)
-                    .then((user) => isTargetUserAdmin = user.address == "Admin")
-                    .catch((err: any) => next(err))
-                
-                // Admins can delete any user except other Admins
-                if (isAdmin && isTargetUserAdmin && currentUser.username !== username) {
-                    return res.status(403).json({ error: "Admins cannot delete other Admins" });
-                } else {
-                    if (currentUser.username !== username) {
-                        return res.status(403).json({ error: "You do not have permission to delete this user" });
-                    }
-                }
-                this.controller.deleteUser(req.user, req.params.username)
-                    .then(() => res.status(200).end())
-                    .catch((err: any) => next(err))
-            } 
+				this.controller
+					.deleteUser(req.user, req.params.username)
+					.then(() => res.status(200).end())
+					.catch((err: any) => next(err));
+			},
         )
 
         /**
@@ -188,11 +174,6 @@ class UserRoutes {
             this.errorHandler.validateRequest,
             (req: any, res: any, next: any) =>  {
                 try {
-                    const currentUser = req.user as User;
-                    const usernameToEdit = req.params.username;
-                    if (currentUser.role !== 'Admin' && currentUser.username !== usernameToEdit) {
-                        return res.status(403).json({ error: 'Unauthorized access' });
-                    }
                     this.controller.updateUserInfo(req.user, req.body.name, req.body.surname, req.body.address, req.body.birthdate, req.params.username)
                     .then((user: User) => res.status(200).json(user))
                     .catch((err: any) => next(err))
