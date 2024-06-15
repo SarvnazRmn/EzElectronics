@@ -247,21 +247,20 @@ describe("T5 - removeProductFromCart | Route", () => {
         expect(response.status).toBe(200)
     })
 
-    test("T3.5.3 - invalid parameters (model) : It should return a 404 status code", async () => {   
+    test("T3.5.3 - invalid parameters : It should return a 422 status code", async () => {
+        jest.spyOn(ErrorHandler.prototype, "validateRequest").mockImplementation((req: any, res: any, next: any) => {
+            return res.status(422).json({ error: "The parameters are not formatted properly\n\n" })
+        })        
         jest.spyOn(Authenticator.prototype, "isLoggedIn").mockImplementation((req: any, res: any, next: any) => {
             return next()
         })
         jest.spyOn(Authenticator.prototype, "isCustomer").mockImplementation((req: any, res: any, next: any) => {
             return next()
         })
-        jest.spyOn(CartController.prototype, "clearCart").mockImplementation(() => {
-            throw new ProductNotFoundError();
-        });
 
-        const response = await request(app).delete(baseURL + "/carts/products/not_existing_product")
-        expect(CartController.prototype.clearCart).toHaveBeenCalledTimes(1)
-        expect(CartController.prototype.clearCart).toHaveBeenCalledWith(testuser)
-        expect(response.status).toBe(404)
+        const response = await request(app).delete(baseURL + "/carts/products/IPhone55")
+        expect(CartController.prototype.removeProductFromCart).not.toHaveBeenCalled()
+        expect(response.status).toBe(422)
     })
 
     test("T3.5.4 - invalid parameters (model) : It should return a 404 status code", async () => {   
@@ -271,9 +270,13 @@ describe("T5 - removeProductFromCart | Route", () => {
         jest.spyOn(Authenticator.prototype, "isCustomer").mockImplementation((req: any, res: any, next: any) => {
             return next()
         })
+        jest.spyOn(CartController.prototype, "removeProductFromCart").mockImplementation(() => {
+            throw new ProductNotFoundError();
+        });
 
-        const response = await request(app).delete(baseURL + "/carts/products")
-        expect(CartController.prototype.removeProductFromCart).not.toHaveBeenCalled()
+        const response = await request(app).delete(baseURL + "/carts/products/not_existing_product")
+        expect(CartController.prototype.removeProductFromCart).toHaveBeenCalledTimes(1)
+        expect(CartController.prototype.removeProductFromCart).toHaveBeenCalledWith(testuser)
         expect(response.status).toBe(404)
     })
 
