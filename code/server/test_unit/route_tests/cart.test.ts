@@ -6,8 +6,6 @@ import { Cart, ProductInCart } from "../../src/components/cart"
 import { Category } from "../../src/components/product"
 import ErrorHandler from "../../src/helper"
 import Authenticator from "../../src/routers/auth"
-import { User, Role } from "../../src/components/user"
-import { ProductNotFoundError } from "../../src/errors/productError"
 
 jest.mock("../../src/helper")
 jest.mock("../../src/controllers/cartController")
@@ -18,7 +16,6 @@ afterEach(() => {
 });
 
 const baseURL = "/ezelectronics"
-const testuser = { username: "User1", name: "Name1", surname: "Surname1", password: "Password1", role: "Customer" };
 const testmodel = {model: "IPhone55"}
 const testcart = new Cart('User1', false, "", 2400, [ new ProductInCart('IPhone', 2, Category.SMARTPHONE, 1200) ]);
 const respCart = { customer: 'User1', paid: false, paymentDate: "", total: 2400, 
