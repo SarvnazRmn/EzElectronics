@@ -250,33 +250,24 @@ describe("GET /users/:username", () => {
     expect(adm.surname).toBe(admin.surname);
   });
 
-  test("An admin accessing other user data", async () => {
-    const req = await request(app)
-      .get(routePath + "/users/customer")
-      .set("Cookie", adminCookie)
-      .expect(200);
-    let customerDate = req.body;
-    expect(customerDate.username).toBe(customer.username);
-    expect(customerDate.name).toBe(customer.name);
-    expect(customerDate.surname).toBe(customer.surname);
-  });
-  test("A normal user cannot access other users data", async () => {
-    const response = await request(app)
-    .get('/users/admin')
-    .set('Cookie', customerCookie);
-    console.log(response.body);
-    expect(response.status).toBe(401);
-    expect(response.body).toEqual({
-    error: "This operation can be performed only by an admin",
-    status: 401,
-});
 
-    test("If the provided username does not exist, we expect a 404", async () => {
+      test("A normal user cannot access other users data", async () => {
+      customerCookie = await login(customer);
       await request(app)
-        .get(routePath + "/users/invalidUsername")
-        .set("Cookie", adminCookie)
-        .expect({ error: "The user does not exist", status: 404 });
+        .get(routePath + "/users/admin")
+        .set("Cookie", customerCookie)
+        .expect({
+          error: "This operation can be performed only by an admin",
+          status: 401,
+        });
     });
+
+  test("If the provided username does not exist, we expect a 404", async () => {
+    await request(app)
+      .get(routePath + "/users/invalidUsername")
+      .set("Cookie", adminCookie)
+      .expect({ error: "The user does not exist", status: 404 });
+  });
 });
 describe("DELETE /users/:username", () => {
   test("Customer trying to delete another user", async () => {
@@ -328,7 +319,7 @@ describe("PATCH /users/:username", () => {
   test("The user is not an admin and tries to modify another user", async () => {
     customerCookie = await login(customer);
     await request(app)
-      .patch(routePath + "/users/admin")
+      .patch(routePath + "/users/customer")
       .send(newUserData)
       .set("Cookie", customerCookie)
       .expect({
@@ -336,7 +327,6 @@ describe("PATCH /users/:username", () => {
         status: 401,
       });
   });
-});
 });
 describe("DELETE /users", () => {
   test("A normal user trying to delete all users -> 401 error", async () => {
