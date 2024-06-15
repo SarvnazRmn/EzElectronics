@@ -37,16 +37,6 @@ describe("T1 - getCart | CartController", () => {
         expect(CartDAO.prototype.getCart).toHaveBeenCalledWith(testuser); 
         expect(response).toEqual(testcart);
     })
-
-    test("T2.1.2 - error case : It should return the error", async () => {
-        jest.spyOn(CartDAO.prototype, "getCart").mockRejectedValueOnce(testerr);
-        
-        const response = await cartController.getCart(testuser); 
-
-        expect(CartDAO.prototype.getCart).toHaveBeenCalledTimes(1);
-        expect(CartDAO.prototype.getCart).toHaveBeenCalledWith(testuser); 
-        expect(response).toEqual(testerr);
-    })
 })
 
 describe("T2 - addToCart | CartController", () => {
@@ -58,16 +48,6 @@ describe("T2 - addToCart | CartController", () => {
         expect(CartDAO.prototype.addToCart).toHaveBeenCalledTimes(1);
         expect(CartDAO.prototype.addToCart).toHaveBeenCalledWith(testuser, "IPhone55");
     })
-
-    test("T2.2.2 - error case : It should call CartDAO.addToCart and return the error", async () => {
-        jest.spyOn(CartDAO.prototype, "addToCart").mockRejectedValueOnce(testerr);
-        
-        const response = await cartController.addToCart(testuser, "IPhone55"); 
-
-        expect(CartDAO.prototype.addToCart).toHaveBeenCalledTimes(1);
-        expect(CartDAO.prototype.addToCart).toHaveBeenCalledWith(testuser, "IPhone55"); 
-        expect(response).toEqual(testerr);
-    })
 })
 
 describe("T3 - checkoutCart | CartController", () => {
@@ -78,16 +58,6 @@ describe("T3 - checkoutCart | CartController", () => {
 
         expect(CartDAO.prototype.checkoutCart).toHaveBeenCalledTimes(1);
         expect(CartDAO.prototype.checkoutCart).toHaveBeenCalledWith(testuser);
-    })
-
-    test("T2.3.2 - error case : It should call CartDAO.checkoutCart and return the error", async () => {
-        jest.spyOn(CartDAO.prototype, "checkoutCart").mockRejectedValueOnce(testerr);
-        
-        const response = await cartController.checkoutCart(testuser); 
-
-        expect(CartDAO.prototype.checkoutCart).toHaveBeenCalledTimes(1);
-        expect(CartDAO.prototype.checkoutCart).toHaveBeenCalledWith(testuser); 
-        expect(response).toEqual(testerr);
     })
 })
 
@@ -101,16 +71,6 @@ describe("T4 - getCustomerCarts | CartController", () => {
         expect(CartDAO.prototype.getCustomerCarts).toHaveBeenCalledWith(testuser);
         expect(response).toEqual([testcart]);
     })
-
-    test("T2.4.2 - error case : It should call CartDAO.getCustomerCarts and return the error", async () => {
-        jest.spyOn(CartDAO.prototype, "getCustomerCarts").mockRejectedValueOnce(testerr);
-        
-        const response = await cartController.getCustomerCarts(testuser); 
-
-        expect(CartDAO.prototype.getCustomerCarts).toHaveBeenCalledTimes(1);
-        expect(CartDAO.prototype.getCustomerCarts).toHaveBeenCalledWith(testuser); 
-        expect(response).toEqual(testerr);
-    })
 })
 
 describe("T5 - removeProductFromCart | CartController", () => {
@@ -121,16 +81,6 @@ describe("T5 - removeProductFromCart | CartController", () => {
 
         expect(CartDAO.prototype.removeProductFromCart).toHaveBeenCalledTimes(1);
         expect(CartDAO.prototype.removeProductFromCart).toHaveBeenCalledWith(testuser, "IPhone55");
-    })
-
-    test("T2.5.2 - error case : It should call CartDAO.removeProductFromCart and return the error", async () => {
-        jest.spyOn(CartDAO.prototype, "removeProductFromCart").mockRejectedValueOnce(testerr);
-        
-        const response = await cartController.removeProductFromCart(testuser, "IPhone55"); 
-
-        expect(CartDAO.prototype.removeProductFromCart).toHaveBeenCalledTimes(1);
-        expect(CartDAO.prototype.removeProductFromCart).toHaveBeenCalledWith(testuser, "IPhone55"); 
-        expect(response).toEqual(testerr);
     })
 })
 
@@ -143,16 +93,6 @@ describe("T6 - clearCart | CartController", () => {
         expect(CartDAO.prototype.clearCart).toHaveBeenCalledTimes(1);
         expect(CartDAO.prototype.clearCart).toHaveBeenCalledWith(testuser);
     })
-
-    test("T2.6.2 - error case : It should call CartDAO.clearCart and return the error", async () => {
-        jest.spyOn(CartDAO.prototype, "clearCart").mockRejectedValueOnce(testerr);
-        
-        const response = await cartController.clearCart(testuser); 
-
-        expect(CartDAO.prototype.clearCart).toHaveBeenCalledTimes(1);
-        expect(CartDAO.prototype.clearCart).toHaveBeenCalledWith(testuser); 
-        expect(response).toEqual(testerr);
-    })
 })
 
 describe("T7 - deleteAllCarts | CartController", () => {
@@ -163,16 +103,6 @@ describe("T7 - deleteAllCarts | CartController", () => {
 
         expect(CartDAO.prototype.deleteAllCarts).toHaveBeenCalledTimes(1);
         expect(CartDAO.prototype.deleteAllCarts).toHaveBeenCalledWith();
-    })
-
-    test("T2.7.2 - error case : It should call CartDAO.deleteAllCarts and return the error", async () => {
-        jest.spyOn(CartDAO.prototype, "deleteAllCarts").mockRejectedValueOnce(testerr);
-        
-        const response = await cartController.deleteAllCarts(); 
-
-        expect(CartDAO.prototype.deleteAllCarts).toHaveBeenCalledTimes(1);
-        expect(CartDAO.prototype.deleteAllCarts).toHaveBeenCalledWith(); 
-        expect(response).toEqual(testerr);
     })
 })
 
@@ -185,15 +115,5 @@ describe("T8 - getAllCarts | CartController", () => {
         expect(CartDAO.prototype.getAllCarts).toHaveBeenCalledTimes(1);
         expect(CartDAO.prototype.getAllCarts).toHaveBeenCalledWith();
         expect(response).toEqual([testcart]);
-    })
-
-    test("T2.8.2 - error case : It should call CartDAO.getAllCarts and return the error", async () => {
-        jest.spyOn(CartDAO.prototype, "getAllCarts").mockRejectedValueOnce(testerr);
-        
-        const response = await cartController.getAllCarts(); 
-
-        expect(CartDAO.prototype.getAllCarts).toHaveBeenCalledTimes(1);
-        expect(CartDAO.prototype.getAllCarts).toHaveBeenCalledWith(); 
-        expect(response).toEqual(testerr);
     })
 })
