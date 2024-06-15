@@ -316,6 +316,20 @@ describe("PATCH /users/:username", () => {
       .set("Cookie", adminCookie)
       .expect({ error: "The user does not exist", status: 404 });
   });
+
+  // the birthdate is in the future
+  test("The birthdate is in the future", async () => {
+    await request(app)
+      .patch(routePath + "/users/customer")
+      .send({
+        name: "newName",
+        surname: "newSurname",
+        address: "newAddress",
+        birthdate: "2024-07-30",
+      })
+      .set("Cookie", adminCookie)
+      .expect(422);
+  });
   test("The user is not an admin and tries to modify another user", async () => {
     customerCookie = await login(customer);
     await request(app)
