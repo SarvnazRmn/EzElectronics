@@ -119,17 +119,6 @@ class ReviewDAO {
 
         return new Promise<void>((resolve, reject) => {
             try {
-                const checkProductSql = "SELECT * FROM reviews where model = ?"
-                db.get(checkProductSql, [model], (err: Error | null, row: any) =>{
-                if (err) {
-                    reject(err)
-                    return
-                }
-                if (!row) {
-                    reject(new ProductNotFoundError)
-                    return
-                }
-                })
                 const sql = "DELETE FROM reviews WHERE model = ?";
                 db.run(sql, [model], (err: Error | null) => {
                     if (err) {

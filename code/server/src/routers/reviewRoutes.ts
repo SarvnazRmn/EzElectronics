@@ -63,21 +63,17 @@ class ReviewRoutes {
          * It returns an array of reviews
          */
         this.router.get(
-            "/:model",
-            this.authenticator.isLoggedIn,
-            param('model').isString().isLength({ min: 1 }).withMessage('Model must be a non-empty string'),
-            this.errorHandler.validateRequest,
-            (req: any, res: any, next: any) => {
-                this.controller.getProductReviews(req.params.model)
-                    .then((reviews: ProductReview[]) => {
-                        if (reviews.length === 0) {
-                            res.status(404).json(reviews)
-                        }
-                        res.status(200).json(reviews)
-                    })
-                    .catch((err: Error) => next(err));
-            }
-        )
+			'/:model',
+			this.authenticator.isLoggedIn,
+			param('model').isString().notEmpty(),
+			this.errorHandler.validateRequest,
+			(req: any, res: any, next: any) =>
+				this.controller
+					.getProductReviews(req.params.model)
+					.then((reviews: ProductReview[]) => res.status(200).json(reviews))
+					.catch((err: Error) => next(err)),
+		);
+
     
         /**
          * Route for deleting the review made by a user for one product.
@@ -120,6 +116,7 @@ class ReviewRoutes {
         
             }
         );
+
         /**
          * Route for deleting all reviews of all products.
          * It requires the user to be authenticated and to be either an admin or a manager

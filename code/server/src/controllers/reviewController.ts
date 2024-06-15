@@ -1,13 +1,17 @@
 import { ProductReview } from "../components/review";
 import { User } from "../components/user";
 import ReviewDAO from "../dao/reviewDAO";
-
+import * as productError from '../errors/productError';
+import { Product } from "../components/product";
+import ProductDAO from "../dao/productDAO";
 
 class ReviewController {
     private dao: ReviewDAO
-   
+    private productDao = new ProductDAO();
+
     constructor() {
         this.dao = new ReviewDAO
+        this.productDao = new ProductDAO();
     }
 
 
@@ -21,6 +25,10 @@ class ReviewController {
      */
 
     async addReview(model: string, user: User, score: number, comment: string) :Promise<void> {
+        let productData: Product = await this.productDao.getProductByModel(model);
+		if (productData == null) {
+			throw new productError.ProductNotFoundError();
+		}
         return await this.dao.addReview(model, user, score, comment)
     }
 
@@ -29,10 +37,13 @@ class ReviewController {
      * @param model The model of the product to get reviews from
      * @returns A Promise that resolves to an array of ProductReview objects
      */
-
-
     async getProductReviews(model: string) :Promise<ProductReview[]> {
-        return await this.dao.getProductReviews(model)
+        let productData: Product = await this.productDao.getProductByModel(model);
+		if (productData == null) {
+			throw new productError.ProductNotFoundError();
+		}
+        return this.dao.getProductReviews(model);
+
      }
     /**
      * Deletes the review made by a user for a product
@@ -53,7 +64,11 @@ class ReviewController {
 
 
     async deleteReviewsOfProduct(model: string) :Promise<void> {
-        await this.dao.deleteReviewsOfProduct(model)
+        let productData: Product = await this.productDao.getProductByModel(model);
+		if (productData == null) {
+			throw new productError.ProductNotFoundError();
+		}
+        return await this.dao.deleteReviewsOfProduct(model)
      }
 
     /**
@@ -62,7 +77,7 @@ class ReviewController {
      */
 
     async deleteAllReviews():Promise<void> { 
-        await this.dao.deleteAllReviews();
+        return await this.dao.deleteAllReviews();
     }
 
 }

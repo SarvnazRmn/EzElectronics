@@ -242,6 +242,36 @@ class ProductDAO {
         })
     }
 	
+	getProductByModel(model: string): Promise<Product | null> {
+		return new Promise<Product | null>((resolve, reject) => {
+			try {
+				const sql = 'SELECT * FROM products WHERE model = ?';
+				db.get(sql, [model], (err: Error | null, row: any) => {
+					if (err) {
+						console.log(err.message);
+						return reject(err);
+					}
+					if (row) {
+						let product: Product = new Product(
+							row.sellingPrice,
+							row.model,
+							row.category,
+							row.arrivalDate,
+							row.details,
+							row.quantity,
+						);
+						return resolve(product);
+					}
+					if (!row) {
+						return resolve(null);
+					}
+				});
+			} catch (error) {
+				console.log(error.message);
+				reject(error);
+			}
+		});
+	}
 	
 	getAvailableProducts(grouping: string | null, category: string | null, model: string | null): Promise<Product[]> {
         return new Promise<Product[]>((resolve, reject) => {
