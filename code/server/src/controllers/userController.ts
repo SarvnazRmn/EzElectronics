@@ -24,7 +24,7 @@ class UserController {
      * @returns A Promise that resolves to true if the user has been created.
      */
     async createUser(username: string, name: string, surname: string, password: string, role: string) :Promise<Boolean> {
-        return this.dao.createUser(username, name, surname, password, role)
+        return await this.dao.createUser(username, name, surname, password, role)
     }
 
     /**
@@ -32,7 +32,7 @@ class UserController {
      * @returns A Promise that resolves to an array of users.
      */
     async getUsers() :Promise<User[]> { 
-        return this.dao.getAllUsers();
+        return await this.dao.getAllUsers();
     }
 
     /**
@@ -41,7 +41,7 @@ class UserController {
      * @returns A Promise that resolves to an array of users with the specified role.
      */
     async getUsersByRole(role: string) /**:Promise<User[]> */ { 
-        return this.dao.getUsersByRole(role);
+        return await this.dao.getUsersByRole(role);
     }
 
     /**
@@ -53,7 +53,7 @@ class UserController {
      * @returns A Promise that resolves to the user with the specified username.
      */
     async getUserByUsername(user: User, username: string) :Promise<User> {
-        return this.dao.getUserByUsername(username);
+        return await this.dao.getUserByUsername(username);
         
      }
 
@@ -66,7 +66,7 @@ class UserController {
      * @returns A Promise that resolves to true if the user has been deleted.
      */
     async deleteUser(user: User, username: string) { 
-        return this.dao.deleteUser(username);
+        return await this.dao.deleteUser(username);
     }
 
     /**
@@ -74,7 +74,7 @@ class UserController {
      * @returns A Promise that resolves to true if all non-Admin users have been deleted.
      */
     async deleteAll() {
-        return this.dao.deleteAllNonAdminUsers();
+        return await this.dao.deleteAllNonAdminUsers();
     }
 
     /**
@@ -88,7 +88,7 @@ class UserController {
      * @returns A Promise that resolves to the updated user
      */
     async updateUserInfo(user: User, name: string, surname: string, address: string, birthdate: string, username: string) :Promise<User> {
-        return this.dao.updateUserInfo(username, name, surname, address, birthdate);
+        return await this.dao.updateUserInfo(username, name, surname, address, birthdate);
     }
 }
 

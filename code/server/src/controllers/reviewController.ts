@@ -21,7 +21,7 @@ class ReviewController {
      */
 
     async addReview(model: string, user: User, score: number, comment: string) :Promise<void> {
-        return this.dao.addReview(model, user, score, comment)
+        return await this.dao.addReview(model, user, score, comment)
     }
 
     /**
@@ -32,7 +32,7 @@ class ReviewController {
 
 
     async getProductReviews(model: string) :Promise<ProductReview[]> {
-        return this.dao.getProductReviews(model)
+        return await this.dao.getProductReviews(model)
      }
     /**
      * Deletes the review made by a user for a product
@@ -43,7 +43,7 @@ class ReviewController {
 
 
     async deleteReview(model: string, user: User) :Promise<void> {
-        this.dao.deleteReview(model, user)
+        await this.dao.deleteReview(model, user)
      }
     /**
      * Deletes all reviews for a product
@@ -53,7 +53,7 @@ class ReviewController {
 
 
     async deleteReviewsOfProduct(model: string) :Promise<void> {
-        this.dao.deleteReviewsOfProduct(model)
+        await this.dao.deleteReviewsOfProduct(model)
      }
 
     /**
@@ -62,7 +62,7 @@ class ReviewController {
      */
 
     async deleteAllReviews():Promise<void> { 
-            await this.dao.deleteAllReviews();
+        await this.dao.deleteAllReviews();
     }
 
 }

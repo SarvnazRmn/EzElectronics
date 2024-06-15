@@ -69,7 +69,12 @@ class ReviewRoutes {
             this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => {
                 this.controller.getProductReviews(req.params.model)
-                    .then((reviews: ProductReview[]) => res.status(200).json(reviews))
+                    .then((reviews: ProductReview[]) => {
+                        if (reviews.length === 0) {
+                            res.status(404).json(reviews)
+                        }
+                        res.status(200).json(reviews)
+                    })
                     .catch((err: Error) => next(err));
             }
         )
