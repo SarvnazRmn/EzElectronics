@@ -105,21 +105,16 @@ class UserRoutes {
          * It returns the user.
          */
         this.router.get(
-            "/:username",
-            this.authService.isLoggedIn,
-            (req: any, res: any, next: any) => {
-                const currentUser = req.user as User;
-                const { username } = req.params;
-
-                if (currentUser.role !== "Admin" || currentUser.username !== username) {
-                    res.status(403).json({ error: "You do not have permission to retrieve this user's data" });
-                } else {
-                    this.controller.getUserByUsername(req.user, username)
-                        .then((user: User) => res.status(200).json(user))
-                        .catch((err) => next(err));
-                }
-            }
-        )
+			'/:username',
+			this.authService.isLoggedIn,
+			param('username').isString().notEmpty(),
+			(req: any, res: any, next: any) => {
+				this.controller
+					.getUserByUsername(req.user, req.params.username)
+					.then((user: User) => res.status(200).json(user))
+					.catch(err => next(err));
+			},
+		);
 
         /**
          * Route for deleting a user.
