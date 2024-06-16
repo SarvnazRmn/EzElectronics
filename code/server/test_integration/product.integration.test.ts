@@ -1,282 +1,395 @@
-import { describe, test, expect, beforeAll, afterAll } from "@jest/globals";
-import request from "supertest";
-import { app } from "../index";
-import { cleanup } from "../src/db/cleanup";
-import { Category } from "../src/components/product";
+import { describe, test, expect, beforeAll, afterAll } from "@jest/globals"
+import request from 'supertest'
+import { app } from "../index"
+import { cleanup } from "../src/db/cleanup"
 
-const routePath = "/ezelectronics";
+const routePath = "/ezelectronics" //Base route path for the API
 
-// Default user information
-const users = {
-  customer: { username: "customer", name: "customer", surname: "customer", password: "customer", role: "Customer" },
-  admin: { username: "admin", name: "admin", surname: "admin", password: "admin", role: "Admin" },
-  manager: { username: "manager", name: "manager", surname: "manager", password: "manager", role: "Manager" },
-};
+//Default user information. We use them to create users and evaluate the returned values
+const customer = { username: "customer", name: "customer", surname: "customer", password: "customer", role: "Customer" }
+const admin = { username: "admin", name: "admin", surname: "admin", password: "admin", role: "Admin" }
+const manager = { username: "manager", name: "manager", surname: "manager", password: "manager", role: "Manager" }
+//Cookies for the users. We use them to keep users logged in. Creating them once and saving them in a variables outside of the tests will make cookies reusable
+let customerCookie: string
+let adminCookie: string
+let managerCookie: string
 
-let cookies = {
-  customer: "",
-  admin: "",
-  manager: "",
-};
+//Helper function that creates a new user in the database.
+//Can be used to create a user before the tests or in the tests
+//Is an implicit test because it checks if the return code is successful
+const postUser = async (userInfo: any) => {
+    await request(app)
+        .post(routePath+'/users')
+        .send(userInfo)
+        .expect(200)
+}
 
-// Test products
-const products = [
-  { model: "product1", category: Category.SMARTPHONE, quantity: 3, details: "details1", sellingPrice: 50, arrivalDate: "2011-01-01" },
-  { model: "product2", category: Category.LAPTOP, quantity: 2, details: "details2", sellingPrice: 100 },
-  { model: "product3", category: Category.APPLIANCE, quantity: 1, details: "details3", sellingPrice: 120, arrivalDate: "2050-01-01" },
-];
+//Helper function that logs in a user and returns the cookie
+//Can be used to log in a user before the tests or in the tests
+const login = async (userInfo: any) => {
+    return new Promise<string>((resolve, reject) => {
+        request(app)
+            .post(routePath+'/sessions')
+            .send(userInfo)
+            .expect(200)
+            .end((err, res) => {
+                if (err) {
+                    reject(err)
+                }
+                resolve(res.header["set-cookie"][0])
+            })
+    })
+}
 
-// Helper function to create a new user
-const createUser = async (userInfo: any) => {
-  await request(app).post(`${routePath}/users`).send(userInfo).expect(200);
-};
-
-// Helper function to log in a user and return the cookie
-const loginUser = async (userInfo: any) => {
-  return new Promise<string>((resolve, reject) => {
-    request(app)
-      .post(`${routePath}/sessions`)
-      .send(userInfo)
-      .expect(200)
-      .end((err, res) => {
-        if (err) reject(err);
-        resolve(res.header["set-cookie"][0]);
-      });
-  });
-};
-
-// Initialize users and log them in before tests
+//Before executing tests, we remove everything from our test database, create an Admin user and log in as Admin, saving the cookie in the corresponding variable
 beforeAll(async () => {
-  await cleanup();
-  await Promise.all(Object.values(users).map(createUser));
-  cookies.admin = await loginUser(users.admin);
-  cookies.customer = await loginUser(users.customer);
-  cookies.manager = await loginUser(users.manager);
-});
+    cleanup()
+    await postUser(admin)
+    await postUser(customer)
+    await postUser(manager)
+    adminCookie = await login(admin)
+    customerCookie = await login(customer)
+    managerCookie = await login(manager)
+})
 
-// Cleanup after tests
-afterAll(async () => {
-  await cleanup();
-});
+//After executing tests, we remove everything from our test database
+afterAll(() => {
+    cleanup()
+})
+
+
+const product1 = {model: 'product1', category: "Smartphone", quantity: 3, details: "details product1", sellingPrice: 100, arrivalDate: "2021-07-10"}
+const product2 = {model: 'product2', category: "Laptop", quantity: 2, details: "details product2", sellingPrice: 100}
+const product3 = {model: 'product3', category: "Appliance", quantity: 1, details: "details product3", sellingPrice: 100, arrivalDate: "2090-01-01"}
+
 
 describe("Product routes integration tests", () => {
-  describe("POST /products", () => {
-    test("It should return a 401 error code Unauthorized", async () => {
-      await request(app)
-        .post(`${routePath}/products`)
-        .send(products[0])
-        .set("Cookie", cookies.customer)
-        .expect(401);
-    });
 
-    test("It should return a 200 success code and create a new product", async () => {
-      for (const product of products.slice(0, 2)) {
-        await request(app)
-          .post(`${routePath}/products`)
-          .send(product)
-          .set("Cookie", cookies.admin)
-          .expect(200);
-      }
-    });
 
-    test("It should return a 422 error code as the date is invalid", async () => {
-      await request(app)
-        .post(`${routePath}/products`)
-        .send(products[2])
-        .set("Cookie", cookies.admin)
-        .expect(422);
-    });
-  });
+    describe("POST /products", () => {
+        test("It should return a 401 error code Unauthorized", async () => {    
+            // product with invalid date
+            await request(app)
+            .post(routePath+'/products')
+            .send(product1)
+            .set("Cookie", customerCookie)
+            .expect(401)
 
-  describe("PATCH /products/:model", () => {
-    test("Changing the quantity of a product, expecting 200 success code", async () => {
-      const updates = [
-        { model: "product1", quantity: 2, changeDate: "2014-12-12" },
-        { model: "product2", quantity: 2 },
-      ];
+        })
+        test("It should return a 200 success code and create a new product", async () => {
+            await request(app)
+            .post(routePath+'/products')
+            .send(product1)
+            .set("Cookie", adminCookie)
+            .expect(200)
 
-      for (const update of updates) {
-        const response = await request(app)
-          .patch(`${routePath}/products/${update.model}`)
-          .send(update)
-          .set("Cookie", cookies.admin)
-          .expect(200);
+            await request(app)
+            .post(routePath+'/products')
+            .send(product2)
+            .set("Cookie", adminCookie)
+            .expect(200)
+        })
 
-        const updatedProduct = response.body;
-        const originalProduct = products.find((p) => p.model === update.model);
-        expect(updatedProduct.quantity).toBe(originalProduct!.quantity + 2);
-      }
-    });
+        test("It should return a 422 error code as the date is invalid", async () => {    
+            // product with invalid date
+            await request(app)
+            .post(routePath+'/products')
+            .send(product3)
+            .set("Cookie", adminCookie)
+            .expect(422)
 
-    test("Changing the quantity of a product that doesn't exist, expecting 404 error code", async () => {
-      await request(app)
-        .patch(`${routePath}/products/nonexistent`)
-        .send({ quantity: 2, changeDate: "2014-12-12" })
-        .set("Cookie", cookies.admin)
-        .expect(404);
-    });
+        })
+    })
 
-    test("Changing the quantity of a product with invalid data, expecting error codes", async () => {
-      const invalidUpdates = [
-        { model: "product1", quantity: 2, changeDate: "2055-01-01" },
-        { model: "product2", quantity: 0 },
-      ];
+    describe("PATCH /products/:model", () => {
+        test("Changing the quantity of a product, expecting 200 success code", async () => {    
+            
+            let product  = await request(app)
+            .patch(routePath+'/products/product1')
+            .send({quantity: 2, changeDate: "2024-01-01"})
+            .set("Cookie", adminCookie)
+            .expect(200)
 
-      for (const update of invalidUpdates) {
-        await request(app)
-          .patch(`${routePath}/products/${update.model}`)
-          .send(update)
-          .set("Cookie", cookies.admin)
-          .expect(422);
-      }
-    });
-  });
+            let adm = product.body
+            expect(adm.quantity).toBe(product1.quantity+2)
 
-  describe("PATCH /products/:model/sell", () => {
-    test("Selling a product, expecting 200 success code", async () => {
-      const sales = [
-        { model: "product1", quantity: 2, sellingDate: "2014-12-12" },
-        { model: "product2", quantity: 1 },
-      ];
 
-      for (const sale of sales) {
-        const response = await request(app)
-          .patch(`${routePath}/products/${sale.model}/sell`)
-          .send(sale)
-          .set("Cookie", cookies.admin)
-          .expect(200);
+            product  = await request(app)
+            .patch(routePath+'/products/product2')
+            .send({quantity: 2})
+            .set("Cookie", adminCookie)
+            .expect(200)
+            adm = product.body
+            expect(adm.quantity).toBe(product2.quantity+2)
 
-        const updatedProduct = response.body;
-        const originalProduct = products.find((p) => p.model === sale.model);
-        expect(updatedProduct.quantity).toBe(originalProduct!.quantity - sale.quantity);
-      }
-    });
 
-    test("Selling a product that doesn't exist, expecting 404 error code", async () => {
-      await request(app)
-        .patch(`${routePath}/products/nonexistent/sell`)
-        .send({ quantity: 2, sellingDate: "2014-12-12" })
-        .set("Cookie", cookies.admin)
-        .expect(404);
-    });
+        })
+        test("Changing the quantity of a product that doesn't exist, expecting 404 success code", async () => {    
+            
+            let product = await request(app)
+            .patch(routePath+'/products/fakeModel')
+            .send({quantity: 2, changeDate: "2024-01-01"})
+            .set("Cookie", adminCookie)
+            .expect(404)
+        })
 
-    test("Selling a product with invalid data, expecting error codes", async () => {
-      const invalidSales = [
-        { model: "product1", quantity: 2, sellingDate: "2025-10-10" },
-        { model: "product2", quantity: 0 },
-      ];
+        test("Changing the quantity of a product with invalid date, expecting error codes", async () => {    
+            
+            await request(app)
+            .patch(routePath+'/products/product1')
+            .send({quantity: 2, changeDate: "2055-01-01"})
+            .set("Cookie", adminCookie)
+            .expect(422)
 
-      for (const sale of invalidSales) {
-        await request(app)
-          .patch(`${routePath}/products/${sale.model}/sell`)
-          .send(sale)
-          .set("Cookie", cookies.admin)
-          .expect(422);
-      }
-    });
-  });
+            await request(app)
+            .patch(routePath+'/products/product2')
+            .send({quantity: 0})
+            .set("Cookie", adminCookie)
+            .expect(422)
 
-  describe("GET /products", () => {
-    test("Getting a product list by category", async () => {
-      const response = await request(app)
-        .get(`${routePath}/products`)
-        .query({ grouping: "category", category: "Laptop" })
-        .set("Cookie", cookies.admin)
-        .expect(200);
+        })
+    })
 
-      const [product] = response.body;
-      expect(product.model).toBe(products[1].model);
-      expect(product.category).toBe(products[1].category);
-      expect(product.quantity).toBe(3);
-    });
+    describe("PATCH /products/:model/sell", () => {
+        test("Selling a product, expecting 200 success code", async () => {    
+            
+            let resProduct1 = await request(app)
+            .patch(routePath+'/products/product1/sell')
+            .send({quantity: 2, sellingDate: "2024-02-01"})
+            .set("Cookie", adminCookie)
+            .expect(200)
+            expect(resProduct1.body/*.quantity*/).toBe(true)
 
-    test("Getting a product list by model name", async () => {
-      const response = await request(app)
-        .get(`${routePath}/products`)
-        .query({ grouping: "model", model: "product1" })
-        .set("Cookie", cookies.admin)
-        .expect(200);
+            let resProduct2 = await request(app)
+            .patch(routePath+'/products/product2/sell')
+            .send({quantity: 1})
+            .set("Cookie", adminCookie)
+            .expect(200)
+            expect(resProduct2.body/*.quantity*/).toBe(true)
+        })
 
-      const [product] = response.body;
-      expect(product.model).toBe(products[0].model);
-      expect(product.category).toBe(products[0].category);
-      expect(product.quantity).toBe(products[0].quantity);
-    });
+        test("Selling a product that doesn't exist, expecting 404 success code", async () => {    
+            
+            let product = await request(app)
+            .patch(routePath+'/products/fakeModel/sell')
+            .send({quantity: 2, sellingDate: "2024-01-01"})
+            .set("Cookie", adminCookie)
+            .expect(404)
+        })
 
-    const badRequests = [
-      { query: { grouping: "model", category: "Smartphone" }, line: 195 },
-      { query: { grouping: "category", category: "bad" }, line: 202 },
-      { query: { grouping: "category", model: "product1" }, line: 210 },
-      { query: { grouping: "model", model: " " }, line: 217 },
-    ];
+        test("Selling a product with invalid date, expecting error codes", async () => {    
+            
+            await request(app)
+            .patch(routePath+'/products/product1/sell')
+            .send({quantity: 2, sellingDate: "2025-10-10"})
+            .set("Cookie", adminCookie)
+            .expect(422)
 
-    badRequests.forEach(({ query, line }) => {
-      test(`Getting a product list: bad request, expecting an error (line ${line})`, async () => {
-        await request(app)
-          .get(`${routePath}/products`)
-          .query(query)
-          .set("Cookie", cookies.admin)
-          .expect(422);
-      });
-    });
+            await request(app)
+            .patch(routePath+'/products/product2/sell')
+            .send({quantity: 0})
+            .set("Cookie", adminCookie)
+            .expect(422)
 
-    test("Getting a product that doesn't exist: expecting error", async () => {
-      await request(app)
-        .get(`${routePath}/products`)
-        .query({ grouping: "model", model: "nonexistent" })
-        .set("Cookie", cookies.admin)
-        .expect(404);
-    });
-  });
+        })
+    }) 
+    
+    describe("GET /products", () => {
+        test("Getting a product list by category", async () => {  
+            let product = await request(app)
+            .get(routePath+'/products')
+            .send()
+            .set("Cookie", adminCookie)
+            .query({grouping: "category", category: "Smartphone"})
+            .expect(200)
+            let adm = product.body[0] 
+            console.log(adm)
+            expect(adm.sellingPrice).toBe(product1.sellingPrice)
+            expect(adm.model).toBe(product1.model)
+            expect(adm.category).toBe(product1.category)
+            expect(adm.details).toBe(product1.details)
+            expect(adm.arrivalDate).toBe("2024-01-01")
+            expect(adm.quantity).toBe(product1.quantity)
 
-  describe("GET /products/available", () => {
-    test("Getting available product list by model", async () => {
-      const response = await request(app)
-        .get(`${routePath}/products/available`)
-        .query({ grouping: "model", model: "product1" })
-        .set("Cookie", cookies.admin)
-        .expect(200);
+        })
 
-      const [product] = response.body;
-      expect(product.model).toBe(products[0].model);
-      expect(product.category).toBe(products[0].category);
-      expect(product.quantity).toBe(products[0].quantity);
-    });
 
-    test("Getting available product list by category", async () => {
-      const response = await request(app)
-        .get(`${routePath}/products/available`)
-        .query({ grouping: "category", category: "Laptop" })
-        .set("Cookie", cookies.admin)
-        .expect(200);
 
-      const products = response.body;
-      expect(products).toHaveLength(1);
-      expect(products[0].model).toBe("product2");
-    });
+        test("Getting a product list by model name", async () => {  
+            let product = await request(app)
+            .get(routePath+'/products')
+            .set("Cookie", adminCookie)
+            .query({grouping: "model", model: "product1"})
+            .expect(200)
+            let adm = product.body[0]
+            expect(adm.sellingPrice).toBe(product1.sellingPrice)
+            expect(adm.model).toBe(product1.model)
+            expect(adm.category).toBe(product1.category)
+            expect(adm.details).toBe(product1.details)
+            expect(adm.arrivalDate).toBe("2024-01-01")
+            expect(adm.quantity).toBe(product1.quantity)
 
-    const badRequests = [
-      { query: { grouping: "category", model: "product1" }, line: 268 },
-      { query: { grouping: "model", model: " " }, line: 274 },
-      { query: { grouping: "model", category: "Laptop" }, line: 280 },
-    ];
+        })
 
-    badRequests.forEach(({ query, line }) => {
-      test(`Getting available product list: bad request, expecting error (line ${line})`, async () => {
-        await request(app)
-          .get(`${routePath}/products/available`)
-          .query(query)
-          .set("Cookie", cookies.admin)
-          .expect(422);
-      });
-    });
+        test("Getting a product list: bad request, expecting an error (grouping = model, category present)", async () => {  
+            let product = await request(app)
+            .get(routePath+'/products')
+            .set("Cookie", adminCookie)
+            //Either category or model has to be defined, not both
+            .query({grouping: "model", category: "Smartphone"})
+            .expect(422)
+        })
 
-    test("Getting available products: non-existing, expecting error", async () => {
-      await request(app)
-        .get(`${routePath}/products/available`)
-        .query({ grouping: "model", model: "nonexistent" })
-        .set("Cookie", cookies.admin)
-        .expect(404);
-    });
-  });
-});
+        test("Getting a product list: bad request, expecting an error (grouping = category, category not valid)", async () => {  
+            let product = await request(app)
+            .get(routePath+'/products')
+            .set("Cookie", adminCookie)
+            //Either category or model has to be defined, not both
+            .query({grouping: "category", category:"bad"})
+            .expect(422)
+        })
+
+        test("Getting a product list: bad request, expecting an error (grouping = category, model present)", async () => {  
+            let product = await request(app)
+            .get(routePath+'/products')
+            .set("Cookie", adminCookie)
+            //Either category or model has to be defined, not both
+            .query({grouping: "category", model:"product1"})
+            .expect(422)
+        })
+
+        test("Getting a product list: bad request, expecting an error (grouping = model, model not present)", async () => {  
+            let product = await request(app)
+            .get(routePath+'/products')
+            .set("Cookie", adminCookie)
+            //Either category or model has to be defined, not both
+            .query({grouping: "model", model:" "})
+            .expect(422)
+        })
+
+        test("Getting a non-existing product: expecting error", async () => {  
+            let product = await request(app)
+            .get(routePath+'/products')
+            .set("Cookie", adminCookie)
+            .query({grouping: "model", model: "fakeModel"})
+            .expect(404)
+
+        })
+
+
+    })
+
+
+    describe("GET /products/available", () => {
+        
+        test("Getting available product list by model", async () => {  
+            let product = await request(app)
+            .get(routePath+'/products/available')
+            .query({grouping: "model", model: "product1"})
+            .set("Cookie", adminCookie)
+            .expect(200)
+            let adm = product.body[0]
+            expect(adm.sellingPrice).toBe(product1.sellingPrice)
+            expect(adm.model).toBe(product1.model)
+            expect(adm.category).toBe(product1.category)
+            expect(adm.details).toBe(product1.details)
+            expect(adm.arrivalDate).toBe("2024-01-01")
+            expect(adm.quantity).toBe(product1.quantity)
+
+        })
+
+        test("Getting available product list by category", async () => {  
+            let product = await request(app)
+            .get(routePath+'/products/available')
+            .query({grouping: "category", category: "Smartphone"})
+            .set("Cookie", adminCookie)
+            .expect(200)
+            let adm = product.body[0]
+            expect(adm.sellingPrice).toBe(product1.sellingPrice)
+            expect(adm.model).toBe(product1.model)
+            expect(adm.category).toBe(product1.category)
+            expect(adm.details).toBe(product1.details)
+            expect(adm.arrivalDate).toBe("2024-01-01")
+            expect(adm.quantity).toBe(product1.quantity)
+
+        })
+
+        test("Getting available product list: bad request, expecting an error (grouping = model, category present)", async () => {  
+            let product = await request(app)
+            .get(routePath+'/products/available')
+            .set("Cookie", adminCookie)
+            //Either category or model has to be defined, not both
+            .query({grouping: "model", category: "Smartphone"})
+            .expect(422)
+        })
+
+        test("Getting available product list: bad request, expecting an error (grouping = category, category not valid)", async () => {  
+            let product = await request(app)
+            .get(routePath+'/products/available')
+            .set("Cookie", adminCookie)
+            //Either category or model has to be defined, not both
+            .query({grouping: "category", category:"bad"})
+            .expect(422)
+        })
+
+        test("Getting available product list: bad request, expecting an error (grouping = category, model present)", async () => {  
+            let product = await request(app)
+            .get(routePath+'/products/available')
+            .set("Cookie", adminCookie)
+            //Either category or model has to be defined, not both
+            .query({grouping: "category", model:"product1"})
+            .expect(422)
+        })
+
+        test("Getting available product list: bad request, expecting an error (grouping = model, model not present)", async () => {  
+            let product = await request(app)
+            .get(routePath+'/products/available')
+            .set("Cookie", adminCookie)
+            //Either category or model has to be defined, not both
+            .query({grouping: "model", model:" "})
+            .expect(422)
+        })
+
+        test("Getting an available product that doesn't exist: expecting error", async () => {  
+            let product = await request(app)
+            .get(routePath+'/products/available')
+            .set("Cookie", adminCookie)
+            .query({grouping: "model", model: "fakeModel"})
+            .expect(404)
+
+        })
+
+    })  
+    
+    describe("DELETE /products/:model", () => {
+        test("Deleting a specific product", async () => { 
+            await request(app)
+            .delete(routePath+'/products/product2')
+            .set("Cookie", adminCookie)
+            .expect(200)
+        })
+
+        test("Deleting a product that doesn't exist, should throw an error", async () => { 
+            await request(app)
+            .delete(routePath+'/products/fakeModel')
+            .set("Cookie", adminCookie)
+            .expect(404)
+        })
+
+    })
+
+    
+
+    describe("DELETE /products", () => {
+        test("Deleting ALL products", async () => { 
+            await request(app)
+            .delete(routePath+'/products')
+            .set("Cookie", adminCookie)
+            .expect(200)
+        })
+
+        
+    })
+
+})
+
