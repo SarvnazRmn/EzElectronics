@@ -4,7 +4,9 @@ import { app } from "../../index";
 import ProductController from "../../src/controllers/productController";
 import Authenticator from "../../src/routers/auth";
 import { Product, Category } from "../../src/components/product"
+import { ProductNotFoundError, ProductAlreadyExistsError, ProductSoldError, EmptyProductStockError, LowProductStockError, ProductInvalidDate, ProductInvalidGrouping} from "../../src/errors/productError"
 import { Server } from "http";
+import { error } from "console";
 
 jest.mock("../../src/routers/auth");
 
@@ -199,6 +201,24 @@ describe("ProductRoutes", () => {
 
             expect(response.status).toBe(422);
         });
+
+        test("It should return an error message for catching an internal error", async () => {
+            jest.spyOn(Authenticator.prototype, "isAdminOrManager").mockImplementation((req: any, res: any, next: any) => {
+                req.user = testUser;
+                return next();
+            });
+
+            const mockController = jest.spyOn(ProductController.prototype, "getProducts").mockRejectedValueOnce(ProductInvalidGrouping);
+
+            const response = await request(app).get(`${baseURL}/products`);
+
+            expect(response.status).toBe(503);
+            expect(ProductController.prototype.getProducts).toHaveBeenCalledTimes(1);
+            expect(ProductController.prototype.getProducts).toHaveBeenCalledWith(undefined, undefined, undefined);
+
+            mockController.mockRestore();
+        });
+
     });
 
     describe("GET /ezelectronics/products/available", () => {

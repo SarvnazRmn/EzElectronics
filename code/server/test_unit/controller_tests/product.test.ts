@@ -69,7 +69,7 @@ const mockProduct = new Product (
         const category = 'Laptop';
         const testProducts = [
             { sellingPrice: 100, model: 'model1', category: Category.LAPTOP, arrivalDate: "2024-06-06", details: "details1", quantity: 5 },
-            { sellingPrice: 50, model: 'model2', category: Category.SMARTPHONE, arrivalDate: "2024-06-07", details: "details2", quantity: 7  }
+            { sellingPrice: 50, model: 'model2', category: Category.LAPTOP, arrivalDate: "2024-06-07", details: "details2", quantity: 0  }
         ];
 
         jest.spyOn(ProductDAO.prototype, 'getProducts').mockResolvedValueOnce(testProducts);
@@ -79,6 +79,24 @@ const mockProduct = new Product (
 
         expect(ProductDAO.prototype.getProducts).toHaveBeenCalledTimes(1);
         expect(ProductDAO.prototype.getProducts).toHaveBeenCalledWith(grouping, category, null);
+        expect(response).toEqual(testProducts);
+    });
+
+    test('getAvailableProducts - It should return an array of products', async () => {
+        const grouping = 'category';
+        const category = 'Laptop';
+        const testProducts = [
+            { sellingPrice: 100, model: 'model1', category: Category.LAPTOP, arrivalDate: "2024-06-06", details: "details1", quantity: 5 },
+            { sellingPrice: 50, model: 'model2', category: Category.LAPTOP, arrivalDate: "2024-06-07", details: "details2", quantity: 7  }
+        ];
+
+        jest.spyOn(ProductDAO.prototype, 'getAvailableProducts').mockResolvedValueOnce(testProducts);
+        const productController = new ProductController();
+        
+        const response = await productController.getAvailableProducts(grouping, category, null);
+
+        expect(ProductDAO.prototype.getAvailableProducts).toHaveBeenCalledTimes(1);
+        expect(ProductDAO.prototype.getAvailableProducts).toHaveBeenCalledWith(grouping, category, null);
         expect(response).toEqual(testProducts);
     });
 
